@@ -1,0 +1,168 @@
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/ui/select";
+import { Plus } from "lucide-react";
+import { api } from "@/trpc/react";
+import { toast } from "@/shared/hooks/use-toast";
+import { createPaymentSchema, type CreatePaymentInput } from "@/entities/payment";
+
+export function AddPaymentDialog() {
+  const [open, setOpen] = useState(false);
+  const utils = api.useUtils();
+
+  const { data: boarders } = api.boarder.getAll.useQuery({ isActive: true });
+
+  const form = useForm<CreatePaymentInput>({
+    resolver: zodResolver(createPaymentSchema),
+    defaultValues: {
+      boarderId: "",
+      amount: 0,
+      type: "RENT",
+      dueDate: new Date(),
+      description: "",
+    },
+  });
+
+  const createPayment = api.payment.create.useMutation({
+    onSuccess: () => {
+      toast({ title: "Payment created successfully" });
+      utils.payment.getAll.invalidate();
+      setOpen(false);
+      form.reset();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error creating payment",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const onSubmit = (values: CreatePaymentInput) => {
+    createPayment.mutate(values);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Payment
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create Payment</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="boarderId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Boarder</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select boarder" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {boarders?.map((boarder) => (
+                        <SelectItem key={boarder.id} value={boarder.id}>
+                          {boarder.firstName} {boarder.lastName}
+                          {boarder.room && ` - Room ${boarder.room.roomNumber}`}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount (₱)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} step="0.01" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Payment Type</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="RENT">Rent</SelectItem>
+                      <SelectItem value="UTILITY">Utility</SelectItem>
+                      <SelectItem value="DEPOSIT">Deposit</SelectItem>
+                      <SelectItem value="OTHER">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (Optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Payment description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full" disabled={createPayment.isPending}>
+              {createPayment.isPending ? "Creating..." : "Create Payment"}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}

@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ../../apps/web
+      dockerfile: ../../infrastructure/docker/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://bhms:bhms@db:5432/bhms
+      - AUTH_SECRET=${AUTH_SECRET}
+      - NEXTAUTH_URL=http://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: bhms
+      POSTGRES_PASSWORD: bhms
+      POSTGRES_DB: bhms
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bhms"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

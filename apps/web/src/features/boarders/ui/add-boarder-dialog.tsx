@@ -1,0 +1,204 @@
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/ui/form";
+import { Input } from "@/shared/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/ui/select";
+import { Plus } from "lucide-react";
+import { api } from "@/trpc/react";
+import { toast } from "@/shared/hooks/use-toast";
+import { createBoarderSchema, type CreateBoarderInput } from "@/entities/boarder";
+
+export function AddBoarderDialog() {
+  const [open, setOpen] = useState(false);
+  const utils = api.useUtils();
+
+  const { data: rooms } = api.room.getAll.useQuery({ status: "AVAILABLE" });
+
+  const form = useForm<CreateBoarderInput>({
+    resolver: zodResolver(createBoarderSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      emergencyContact: "",
+      emergencyPhone: "",
+      moveInDate: new Date(),
+      roomId: undefined,
+    },
+  });
+
+  const createBoarder = api.boarder.create.useMutation({
+    onSuccess: () => {
+      toast({ title: "Boarder added successfully" });
+      utils.boarder.getAll.invalidate();
+      utils.room.getAll.invalidate();
+      setOpen(false);
+      form.reset();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error adding boarder",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const onSubmit = (values: CreateBoarderInput) => {
+    createBoarder.mutate(values);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Boarder
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Add New Boarder</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="john@example.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone (Optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="09171234567" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="roomId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assign Room (Optional)</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a room" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {rooms?.map((room) => (
+                        <SelectItem key={room.id} value={room.id}>
+                          Room {room.roomNumber} (Floor {room.floor})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="emergencyContact"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Emergency Contact</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="emergencyPhone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Emergency Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Phone" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={createBoarder.isPending}>
+              {createBoarder.isPending ? "Adding..." : "Add Boarder"}
+            </Button>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  );
+}

@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+        working-directory: apps/web
+      - run: pnpm lint
+        working-directory: apps/web
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+        working-directory: apps/web
+      - run: pnpm prisma generate
+        working-directory: apps/web
+      - run: pnpm typecheck
+        working-directory: apps/web
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+        working-directory: apps/web
+      - run: pnpm prisma generate
+        working-directory: apps/web
+      - run: pnpm build
+        working-directory: apps/web
+        env:
+          DATABASE_URL: "postgresql://test:test@localhost:5432/test"
+          AUTH_SECRET: "test-secret-key-for-ci"

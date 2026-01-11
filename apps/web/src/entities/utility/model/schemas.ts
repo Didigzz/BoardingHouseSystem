@@ -1,0 +1,21 @@
+import { z } from "zod";
+
+export const createUtilityReadingSchema = z.object({
+  roomId: z.string().min(1, "Room is required"),
+  type: z.enum(["ELECTRICITY", "WATER", "INTERNET", "OTHER"]),
+  previousReading: z.coerce.number().min(0, "Previous reading must be positive"),
+  currentReading: z.coerce.number().min(0, "Current reading must be positive"),
+  ratePerUnit: z.coerce.number().positive("Rate must be positive"),
+  readingDate: z.date(),
+  billingPeriodStart: z.date(),
+  billingPeriodEnd: z.date(),
+});
+
+export const updateUtilityReadingSchema = createUtilityReadingSchema
+  .partial()
+  .extend({
+    id: z.string(),
+  });
+
+export type CreateUtilityReadingInput = z.infer<typeof createUtilityReadingSchema>;
+export type UpdateUtilityReadingInput = z.infer<typeof updateUtilityReadingSchema>;

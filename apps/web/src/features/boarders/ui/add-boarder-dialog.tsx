@@ -30,7 +30,10 @@ import {
 import { Plus } from "lucide-react";
 import { api } from "@/trpc/react";
 import { toast } from "@/shared/hooks/use-toast";
-import { createBoarderSchema, type CreateBoarderInput } from "@/entities/boarder";
+import {
+  createBoarderSchema,
+  type CreateBoarderInput,
+} from "@/entities/boarder";
 
 export function AddBoarderDialog() {
   const [open, setOpen] = useState(false);
@@ -95,7 +98,7 @@ export function AddBoarderDialog() {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="John" {...field} />
+                      <Input placeholder="Enter first name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -108,7 +111,7 @@ export function AddBoarderDialog() {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Doe" {...field} />
+                      <Input placeholder="Enter last name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -122,7 +125,11 @@ export function AddBoarderDialog() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="john@example.com" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="Enter email address"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,7 +142,7 @@ export function AddBoarderDialog() {
                 <FormItem>
                   <FormLabel>Phone (Optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="09171234567" {...field} />
+                    <Input placeholder="Enter phone number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -173,7 +180,7 @@ export function AddBoarderDialog() {
                   <FormItem>
                     <FormLabel>Emergency Contact</FormLabel>
                     <FormControl>
-                      <Input placeholder="Name" {...field} />
+                      <Input placeholder="Contact name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -186,14 +193,18 @@ export function AddBoarderDialog() {
                   <FormItem>
                     <FormLabel>Emergency Phone</FormLabel>
                     <FormControl>
-                      <Input placeholder="Phone" {...field} />
+                      <Input placeholder="Contact phone" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <Button type="submit" className="w-full" disabled={createBoarder.isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={createBoarder.isPending}
+            >
               {createBoarder.isPending ? "Adding..." : "Add Boarder"}
             </Button>
           </form>

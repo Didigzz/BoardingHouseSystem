@@ -13,15 +13,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-        working-directory: apps/web
       - run: pnpm lint
-        working-directory: apps/web
 
   typecheck:
     runs-on: ubuntu-latest
@@ -29,17 +27,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-        working-directory: apps/web
-      - run: pnpm prisma generate
-        working-directory: apps/web
+      - run: pnpm --filter bhms-web prisma generate
       - run: pnpm typecheck
-        working-directory: apps/web
 
   build:
     runs-on: ubuntu-latest
@@ -48,17 +43,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-        working-directory: apps/web
-      - run: pnpm prisma generate
-        working-directory: apps/web
+      - run: pnpm --filter bhms-web prisma generate
       - run: pnpm build
-        working-directory: apps/web
         env:
           DATABASE_URL: "postgresql://test:test@localhost:5432/test"
-          AUTH_SECRET: "test-secret-key-for-ci"
+          NEXTAUTH_SECRET: "test-secret-key-for-ci"

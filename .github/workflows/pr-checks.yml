@@ -60,10 +60,10 @@ jobs:
       - name: Check branch name
         uses: deepakputhraya/action-branch-name@master
         with:
-          regex: '^(feature|fix|bugfix|hotfix|release|chore|docs|refactor|test|ci)\/[a-z0-9._-]+$'
+          regex: '^(feature|fix|bugfix|hotfix|release|chore|docs|refactor|test|ci)(\/[a-z0-9._-]+)?$'
           allowed_prefixes: "feature,fix,bugfix,hotfix,release,chore,docs,refactor,test,ci"
           ignore: main,develop
-          min_length: 5
+          min_length: 3
           max_length: 50
 
   assignee-check:

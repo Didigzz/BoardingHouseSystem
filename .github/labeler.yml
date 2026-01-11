@@ -1,0 +1,120 @@
+# PR Labeler Configuration
+# https://github.com/actions/labeler
+
+# Documentation changes
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**/*"
+          - "**/*.md"
+          - "README.md"
+
+# Frontend/Web app changes
+frontend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/**/*"
+
+# Component changes
+components:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/src/shared/ui/**/*"
+          - "packages/ui/**/*"
+
+# Feature changes
+feature:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/src/features/**/*"
+
+# Entity changes
+entities:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/src/entities/**/*"
+
+# Widget changes
+widgets:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/src/widgets/**/*"
+
+# API/Backend changes
+api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/src/server/**/*"
+          - "apps/web/src/app/api/**/*"
+
+# Database/Prisma changes
+database:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/prisma/**/*"
+          - "packages/database/**/*"
+
+# Authentication changes
+auth:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/web/src/server/auth/**/*"
+          - "apps/web/src/features/auth/**/*"
+
+# Infrastructure changes
+infrastructure:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "infrastructure/**/*"
+          - "Dockerfile*"
+          - "docker-compose*.yml"
+
+# CI/CD changes
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**/*"
+
+# Configuration changes
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "*.config.*"
+          - "*.json"
+          - "*.yaml"
+          - "*.yml"
+          - ".eslintrc*"
+          - ".prettierrc*"
+          - "tsconfig*.json"
+
+# Dependencies
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "pnpm-lock.yaml"
+          - "**/package.json"
+
+# Test changes
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.test.*"
+          - "**/*.spec.*"
+          - "**/__tests__/**/*"
+          - "**/tests/**/*"
+
+# TypeScript config changes
+typescript:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "packages/typescript-config/**/*"
+          - "**/tsconfig*.json"
+
+# Styling changes
+styling:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.css"
+          - "**/tailwind.config.*"
+          - "**/postcss.config.*"

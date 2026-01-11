@@ -11,10 +11,16 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "db:push": "turbo run db:push",
     "db:studio": "turbo run db:studio",
-    "db:seed": "turbo run db:seed"
+    "db:seed": "turbo run db:seed",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
   },

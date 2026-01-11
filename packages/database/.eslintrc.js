@@ -2,6 +2,8 @@
 module.exports = {
   root: true,
   extends: ["eslint:recommended"],
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
@@ -10,13 +12,8 @@ module.exports = {
     node: true,
     es2022: true,
   },
-  ignorePatterns: [
-    "node_modules/",
-    ".next/",
-    "dist/",
-    ".turbo/",
-    "apps/",
-    "*.config.js",
-    "*.config.mjs",
-  ],
+  rules: {
+    "no-unused-vars": "off",
+  },
+  ignorePatterns: ["node_modules/", "dist/"],
 };

@@ -9,7 +9,7 @@
     "./*": "./src/*.tsx"
   },
   "scripts": {
-    "lint": "eslint src/",
+    "lint": "eslint src/ --no-error-on-unmatched-pattern",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -21,6 +21,9 @@
   "devDependencies": {
     "@bhms/typescript-config": "workspace:*",
     "@types/react": "^18.3.12",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "eslint": "^8.57.1",
     "react": "^18.3.1",
     "typescript": "^5.6.3"
   },

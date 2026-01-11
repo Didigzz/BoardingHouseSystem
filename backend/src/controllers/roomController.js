@@ -1,12 +1,38 @@
-const pool = require('../config/database');
+const prisma = require('../config/prisma');
 
-// Get all rooms
+// Get all rooms with boarder count
 const getAllRooms = async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM rooms ORDER BY room_number');
+    const rooms = await prisma.room.findMany({
+      orderBy: { roomNumber: 'asc' },
+      include: {
+        boarders: {
+          where: { status: 'ACTIVE' },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            bedSpaces: true,
+          },
+        },
+      },
+    });
+
+    // Transform data to include occupied beds count
+    const roomsWithOccupancy = rooms.map((room) => ({
+      ...room,
+      room_number: room.roomNumber,
+      monthly_rent: room.monthlyRent,
+      rental_mode: room.rentalMode,
+      created_at: room.createdAt,
+      updated_at: room.updatedAt,
+      occupiedBeds: room.boarders.reduce((sum, b) => sum + b.bedSpaces, 0),
+      availableBeds: room.capacity - room.boarders.reduce((sum, b) => sum + b.bedSpaces, 0),
+    }));
+
     res.status(200).json({
       success: true,
-      data: result.rows,
+      data: roomsWithOccupancy,
     });
   } catch (err) {
     console.error('Error fetching rooms:', err);
@@ -18,13 +44,27 @@ const getAllRooms = async (req, res) => {
 const getRoomById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query('SELECT * FROM rooms WHERE id = $1', [id]);
-    if (result.rows.length === 0) {
+    const room = await prisma.room.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        boarders: {
+          where: { status: 'ACTIVE' },
+        },
+      },
+    });
+
+    if (!room) {
       return res.status(404).json({ success: false, error: 'Room not found' });
     }
+
     res.status(200).json({
       success: true,
-      data: result.rows[0],
+      data: {
+        ...room,
+        room_number: room.roomNumber,
+        monthly_rent: room.monthlyRent,
+        rental_mode: room.rentalMode,
+      },
     });
   } catch (err) {
     console.error('Error fetching room:', err);
@@ -37,15 +77,26 @@ const createRoom = async (req, res) => {
   try {
     const { room_number, capacity, type, rental_mode, monthly_rent } = req.body;
 
-    const result = await pool.query(
-      'INSERT INTO rooms (room_number, capacity, type, rental_mode, monthly_rent, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [room_number, capacity, type, rental_mode, monthly_rent, 'AVAILABLE']
-    );
+    const room = await prisma.room.create({
+      data: {
+        roomNumber: room_number,
+        capacity: capacity || 4,
+        type: type || 'SHARED',
+        rentalMode: rental_mode || 'PER_BED',
+        monthlyRent: monthly_rent || 600,
+        status: 'AVAILABLE',
+      },
+    });
 
     res.status(201).json({
       success: true,
       message: 'Room created successfully',
-      data: result.rows[0],
+      data: {
+        ...room,
+        room_number: room.roomNumber,
+        monthly_rent: room.monthlyRent,
+        rental_mode: room.rentalMode,
+      },
     });
   } catch (err) {
     console.error('Error creating room:', err);
@@ -59,22 +110,33 @@ const updateRoom = async (req, res) => {
     const { id } = req.params;
     const { room_number, capacity, type, rental_mode, monthly_rent, status } = req.body;
 
-    const result = await pool.query(
-      'UPDATE rooms SET room_number = $1, capacity = $2, type = $3, rental_mode = $4, monthly_rent = $5, status = $6 WHERE id = $7 RETURNING *',
-      [room_number, capacity, type, rental_mode, monthly_rent, status, id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Room not found' });
-    }
+    const room = await prisma.room.update({
+      where: { id: parseInt(id) },
+      data: {
+        roomNumber: room_number,
+        capacity,
+        type,
+        rentalMode: rental_mode,
+        monthlyRent: monthly_rent,
+        status,
+      },
+    });
 
     res.status(200).json({
       success: true,
       message: 'Room updated successfully',
-      data: result.rows[0],
+      data: {
+        ...room,
+        room_number: room.roomNumber,
+        monthly_rent: room.monthlyRent,
+        rental_mode: room.rentalMode,
+      },
     });
   } catch (err) {
     console.error('Error updating room:', err);
+    if (err.code === 'P2025') {
+      return res.status(404).json({ success: false, error: 'Room not found' });
+    }
     res.status(500).json({ success: false, error: err.message });
   }
 };
@@ -83,19 +145,20 @@ const updateRoom = async (req, res) => {
 const deleteRoom = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query('DELETE FROM rooms WHERE id = $1 RETURNING *', [id]);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Room not found' });
-    }
+    const room = await prisma.room.delete({
+      where: { id: parseInt(id) },
+    });
 
     res.status(200).json({
       success: true,
       message: 'Room deleted successfully',
-      data: result.rows[0],
+      data: room,
     });
   } catch (err) {
     console.error('Error deleting room:', err);
+    if (err.code === 'P2025') {
+      return res.status(404).json({ success: false, error: 'Room not found' });
+    }
     res.status(500).json({ success: false, error: err.message });
   }
 };
@@ -104,18 +167,29 @@ const deleteRoom = async (req, res) => {
 const getRoomOccupancy = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query(
-      'SELECT r.*, COUNT(b.id) as occupied_beds FROM rooms r LEFT JOIN beds b ON r.id = b.room_id AND b.status = $1 WHERE r.id = $2 GROUP BY r.id',
-      ['OCCUPIED', id]
-    );
+    const room = await prisma.room.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        boarders: {
+          where: { status: 'ACTIVE' },
+        },
+      },
+    });
 
-    if (result.rows.length === 0) {
+    if (!room) {
       return res.status(404).json({ success: false, error: 'Room not found' });
     }
 
+    const occupiedBeds = room.boarders.reduce((sum, b) => sum + b.bedSpaces, 0);
+
     res.status(200).json({
       success: true,
-      data: result.rows[0],
+      data: {
+        ...room,
+        room_number: room.roomNumber,
+        occupiedBeds,
+        availableBeds: room.capacity - occupiedBeds,
+      },
     });
   } catch (err) {
     console.error('Error fetching room occupancy:', err);

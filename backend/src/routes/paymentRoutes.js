@@ -23,4 +23,7 @@ router.get('/boarder/:boarderId', paymentController.getPaymentsByBoarder);
 // Get overdue payments
 router.get('/status/overdue', paymentController.getOverduePayments);
 
+// Get payment statistics
+router.get('/stats/summary', paymentController.getPaymentStats);
+
 module.exports = router;

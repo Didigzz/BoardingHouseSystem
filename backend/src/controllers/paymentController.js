@@ -1,14 +1,38 @@
-const pool = require('../config/database');
+const prisma = require('../config/prisma');
 
 // Get all payments
 const getAllPayments = async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT p.*, b.first_name, b.last_name FROM payments p LEFT JOIN boarders b ON p.boarder_id = b.id ORDER BY p.created_at DESC'
-    );
+    const payments = await prisma.payment.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        boarder: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    // Transform data for frontend compatibility
+    const transformedPayments = payments.map((p) => ({
+      ...p,
+      boarder_id: p.boarderId,
+      paid_amount: p.paidAmount,
+      due_date: p.dueDate,
+      payment_date: p.paymentDate,
+      payment_type: p.paymentType,
+      created_at: p.createdAt,
+      updated_at: p.updatedAt,
+      first_name: p.boarder?.firstName,
+      last_name: p.boarder?.lastName,
+    }));
+
     res.status(200).json({
       success: true,
-      data: result.rows,
+      data: transformedPayments,
     });
   } catch (err) {
     console.error('Error fetching payments:', err);
@@ -20,16 +44,35 @@ const getAllPayments = async (req, res) => {
 const getPaymentById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query(
-      'SELECT p.*, b.first_name, b.last_name FROM payments p LEFT JOIN boarders b ON p.boarder_id = b.id WHERE p.id = $1',
-      [id]
-    );
-    if (result.rows.length === 0) {
+    const payment = await prisma.payment.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        boarder: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    if (!payment) {
       return res.status(404).json({ success: false, error: 'Payment not found' });
     }
+
     res.status(200).json({
       success: true,
-      data: result.rows[0],
+      data: {
+        ...payment,
+        boarder_id: payment.boarderId,
+        paid_amount: payment.paidAmount,
+        due_date: payment.dueDate,
+        payment_date: payment.paymentDate,
+        payment_type: payment.paymentType,
+        first_name: payment.boarder?.firstName,
+        last_name: payment.boarder?.lastName,
+      },
     });
   } catch (err) {
     console.error('Error fetching payment:', err);
@@ -40,17 +83,39 @@ const getPaymentById = async (req, res) => {
 // Create new payment
 const createPayment = async (req, res) => {
   try {
-    const { boarder_id, amount, due_date, payment_type, status } = req.body;
+    const { boarder_id, amount, due_date, payment_type, status, notes } = req.body;
 
-    const result = await pool.query(
-      'INSERT INTO payments (boarder_id, amount, due_date, payment_type, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [boarder_id, amount, due_date, payment_type, status || 'PENDING']
-    );
+    const payment = await prisma.payment.create({
+      data: {
+        boarderId: parseInt(boarder_id),
+        amount: parseFloat(amount),
+        dueDate: new Date(due_date),
+        paymentType: payment_type || 'RENT',
+        status: status || 'PENDING',
+        notes: notes || null,
+      },
+      include: {
+        boarder: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
 
     res.status(201).json({
       success: true,
       message: 'Payment recorded successfully',
-      data: result.rows[0],
+      data: {
+        ...payment,
+        boarder_id: payment.boarderId,
+        due_date: payment.dueDate,
+        payment_type: payment.paymentType,
+        first_name: payment.boarder?.firstName,
+        last_name: payment.boarder?.lastName,
+      },
     });
   } catch (err) {
     console.error('Error creating payment:', err);
@@ -64,22 +129,45 @@ const updatePayment = async (req, res) => {
     const { id } = req.params;
     const { amount, status, paid_amount, payment_date } = req.body;
 
-    const result = await pool.query(
-      'UPDATE payments SET amount = $1, status = $2, paid_amount = $3, payment_date = $4, updated_at = NOW() WHERE id = $5 RETURNING *',
-      [amount, status, paid_amount, payment_date, id]
-    );
+    const updateData = {};
+    if (amount !== undefined) updateData.amount = parseFloat(amount);
+    if (status !== undefined) updateData.status = status;
+    if (paid_amount !== undefined) updateData.paidAmount = parseFloat(paid_amount);
+    if (payment_date !== undefined) updateData.paymentDate = new Date(payment_date);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Payment not found' });
-    }
+    const payment = await prisma.payment.update({
+      where: { id: parseInt(id) },
+      data: updateData,
+      include: {
+        boarder: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
 
     res.status(200).json({
       success: true,
       message: 'Payment updated successfully',
-      data: result.rows[0],
+      data: {
+        ...payment,
+        boarder_id: payment.boarderId,
+        paid_amount: payment.paidAmount,
+        due_date: payment.dueDate,
+        payment_date: payment.paymentDate,
+        payment_type: payment.paymentType,
+        first_name: payment.boarder?.firstName,
+        last_name: payment.boarder?.lastName,
+      },
     });
   } catch (err) {
     console.error('Error updating payment:', err);
+    if (err.code === 'P2025') {
+      return res.status(404).json({ success: false, error: 'Payment not found' });
+    }
     res.status(500).json({ success: false, error: err.message });
   }
 };
@@ -88,19 +176,20 @@ const updatePayment = async (req, res) => {
 const deletePayment = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query('DELETE FROM payments WHERE id = $1 RETURNING *', [id]);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Payment not found' });
-    }
+    const payment = await prisma.payment.delete({
+      where: { id: parseInt(id) },
+    });
 
     res.status(200).json({
       success: true,
       message: 'Payment deleted successfully',
-      data: result.rows[0],
+      data: payment,
     });
   } catch (err) {
     console.error('Error deleting payment:', err);
+    if (err.code === 'P2025') {
+      return res.status(404).json({ success: false, error: 'Payment not found' });
+    }
     res.status(500).json({ success: false, error: err.message });
   }
 };
@@ -109,12 +198,23 @@ const deletePayment = async (req, res) => {
 const getPaymentsByBoarder = async (req, res) => {
   try {
     const { boarderId } = req.params;
-    const result = await pool.query('SELECT * FROM payments WHERE boarder_id = $1 ORDER BY due_date DESC', [
-      boarderId,
-    ]);
+    const payments = await prisma.payment.findMany({
+      where: { boarderId: parseInt(boarderId) },
+      orderBy: { dueDate: 'desc' },
+    });
+
+    const transformedPayments = payments.map((p) => ({
+      ...p,
+      boarder_id: p.boarderId,
+      due_date: p.dueDate,
+      payment_date: p.paymentDate,
+      payment_type: p.paymentType,
+      paid_amount: p.paidAmount,
+    }));
+
     res.status(200).json({
       success: true,
-      data: result.rows,
+      data: transformedPayments,
     });
   } catch (err) {
     console.error('Error fetching payments by boarder:', err);
@@ -125,19 +225,72 @@ const getPaymentsByBoarder = async (req, res) => {
 // Get overdue payments
 const getOverduePayments = async (req, res) => {
   try {
-    const result = await pool.query(
-      `SELECT p.*, b.first_name, b.last_name FROM payments p 
-       LEFT JOIN boarders b ON p.boarder_id = b.id 
-       WHERE p.status = $1 AND p.due_date < NOW()
-       ORDER BY p.due_date ASC`,
-      ['PENDING']
-    );
+    const payments = await prisma.payment.findMany({
+      where: {
+        status: 'PENDING',
+        dueDate: {
+          lt: new Date(),
+        },
+      },
+      orderBy: { dueDate: 'asc' },
+      include: {
+        boarder: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    const transformedPayments = payments.map((p) => ({
+      ...p,
+      boarder_id: p.boarderId,
+      due_date: p.dueDate,
+      payment_type: p.paymentType,
+      first_name: p.boarder?.firstName,
+      last_name: p.boarder?.lastName,
+    }));
+
     res.status(200).json({
       success: true,
-      data: result.rows,
+      data: transformedPayments,
     });
   } catch (err) {
     console.error('Error fetching overdue payments:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+// Get payment statistics
+const getPaymentStats = async (req, res) => {
+  try {
+    const [totalPaid, totalPending, totalOverdue] = await Promise.all([
+      prisma.payment.aggregate({
+        where: { status: 'PAID' },
+        _sum: { amount: true },
+      }),
+      prisma.payment.aggregate({
+        where: { status: 'PENDING', dueDate: { gte: new Date() } },
+        _sum: { amount: true },
+      }),
+      prisma.payment.aggregate({
+        where: { status: 'PENDING', dueDate: { lt: new Date() } },
+        _sum: { amount: true },
+      }),
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalPaid: totalPaid._sum.amount || 0,
+        totalPending: totalPending._sum.amount || 0,
+        totalOverdue: totalOverdue._sum.amount || 0,
+      },
+    });
+  } catch (err) {
+    console.error('Error fetching payment stats:', err);
     res.status(500).json({ success: false, error: err.message });
   }
 };
@@ -150,4 +303,5 @@ module.exports = {
   deletePayment,
   getPaymentsByBoarder,
   getOverduePayments,
+  getPaymentStats,
 };

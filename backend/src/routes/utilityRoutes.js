@@ -5,6 +5,9 @@ const utilityController = require('../controllers/utilityController');
 // Get all utilities
 router.get('/', utilityController.getAllUtilities);
 
+// Get utility split calculation
+router.get('/split/calculate', utilityController.getUtilitySplit);
+
 // Get utility by ID
 router.get('/:id', utilityController.getUtilityById);
 

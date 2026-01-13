@@ -8,8 +8,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
+} from "@bhms/ui/dialog";
+import { Button } from "@bhms/ui/button";
 import {
   Form,
   FormControl,
@@ -17,18 +17,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/ui/form";
-import { Input } from "@/shared/ui/input";
+} from "@bhms/ui/form";
+import { Input } from "@bhms/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
-import { api } from "@/trpc/react";
+} from "@bhms/ui/select";
+import { api } from "./lib/trpc-react";
 import { toast } from "@/shared/hooks/use-toast";
-import { updateRoomSchema, type UpdateRoomInput, type Room } from "@/entities/room";
+import { updateRoomSchema, type UpdateRoomInput, type Room } from "@bhms/shared/entities/room";
 
 interface EditRoomDialogProps {
   room: Room | null;
@@ -196,3 +196,4 @@ export function EditRoomDialog({ room, open, onOpenChange }: EditRoomDialogProps
     </Dialog>
   );
 }
+

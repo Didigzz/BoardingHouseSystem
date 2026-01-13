@@ -1,6 +1,6 @@
 "use client";
 
-import { BoarderList, AddBoarderDialog } from "@/features/boarders";
+import { BoarderList, AddBoarderDialog } from "./features/boarders";
 
 export default function BoardersPage() {
   return (
@@ -17,3 +17,4 @@ export default function BoardersPage() {
     </div>
   );
 }
+

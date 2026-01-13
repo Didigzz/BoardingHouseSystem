@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 
 export default function SettingsPage() {
   return (
@@ -21,3 +21,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+

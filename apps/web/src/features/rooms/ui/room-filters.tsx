@@ -1,13 +1,13 @@
 "use client";
 
-import { Input } from "@/shared/ui/input";
+import { Input } from "@bhms/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@bhms/ui/select";
 import { Search } from "lucide-react";
 
 interface RoomFiltersProps {
@@ -48,3 +48,4 @@ export function RoomFilters({
     </div>
   );
 }
+

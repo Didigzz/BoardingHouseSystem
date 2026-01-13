@@ -1,4 +1,4 @@
-import { StatsCards, RecentActivity, UpcomingPayments } from "@/features/dashboard";
+import { StatsCards, RecentActivity, UpcomingPayments } from "./features/dashboard";
 
 export default function LandlordDashboardPage() {
   return (
@@ -19,3 +19,4 @@ export default function LandlordDashboardPage() {
     </div>
   );
 }
+

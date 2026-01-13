@@ -1,10 +1,10 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { DoorOpen, Users, CreditCard, TrendingUp } from "lucide-react";
-import { api } from "@/trpc/react";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { formatCurrency } from "@/shared/lib/utils";
+import { api } from "./lib/trpc-react";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { formatCurrency } from "@bhms/shared";
 
 export function StatsCards() {
   const { data: stats, isLoading } = api.dashboard.getStats.useQuery();
@@ -65,3 +65,4 @@ export function StatsCards() {
     </div>
   );
 }
+

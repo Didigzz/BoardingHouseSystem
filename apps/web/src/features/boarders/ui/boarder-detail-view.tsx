@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { Button } from "@bhms/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bhms/ui/tabs";
 import { ArrowLeft, Mail, Phone, Calendar, DoorOpen, CreditCard, User } from "lucide-react";
-import { BoarderStatusBadge } from "@/entities/boarder";
-import { PaymentStatusBadge } from "@/entities/payment";
-import { formatCurrency, formatDate } from "@/shared/lib/utils";
+import { BoarderStatusBadge } from "@bhms/shared/entities/boarder";
+import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
+import { formatCurrency, formatDate } from "@bhms/shared";
 import { EditBoarderDialog } from "./edit-boarder-dialog";
 import type { Boarder, Room, Payment } from "@prisma/client";
 
@@ -177,3 +177,4 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
     </div>
   );
 }
+

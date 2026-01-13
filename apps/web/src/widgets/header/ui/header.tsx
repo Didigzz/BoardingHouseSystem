@@ -1,8 +1,8 @@
 "use client";
 
-import { UserMenu } from "@/entities/user";
+import { UserMenu } from "@bhms/shared/entities/user";
 import { MobileNav } from "./mobile-nav";
-import { ThemeToggle } from "@/widgets/theme-toggle";
+import { ThemeToggle } from "./widgets/theme-toggle";
 import { useSession } from "next-auth/react";
 
 export function Header() {
@@ -30,3 +30,4 @@ export function Header() {
     </header>
   );
 }
+

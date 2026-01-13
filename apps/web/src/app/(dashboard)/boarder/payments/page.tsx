@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 
 export default function BoarderPaymentsPage() {
   return (
@@ -25,3 +25,4 @@ export default function BoarderPaymentsPage() {
     </div>
   );
 }
+

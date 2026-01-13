@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@bhms/ui/button";
 import { FileQuestion } from "lucide-react";
 
 export default function NotFound() {
@@ -16,3 +16,4 @@ export default function NotFound() {
     </div>
   );
 }
+

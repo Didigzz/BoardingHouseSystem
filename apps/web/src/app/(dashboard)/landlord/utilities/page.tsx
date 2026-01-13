@@ -1,6 +1,6 @@
 "use client";
 
-import { UtilityList, AddUtilityReadingDialog } from "@/features/utilities";
+import { UtilityList, AddUtilityReadingDialog } from "./features/utilities";
 
 export default function UtilitiesPage() {
   return (
@@ -19,3 +19,4 @@ export default function UtilitiesPage() {
     </div>
   );
 }
+

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@bhms/ui/button";
 import { ShieldX } from "lucide-react";
 
 export default function UnauthorizedPage() {
@@ -21,3 +21,4 @@ export default function UnauthorizedPage() {
     </div>
   );
 }
+

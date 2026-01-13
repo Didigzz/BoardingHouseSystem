@@ -9,11 +9,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/shared/ui/alert-dialog";
-import { api } from "@/trpc/react";
+} from "@bhms/ui/alert-dialog";
+import { api } from "./lib/trpc-react";
 import { useToast } from "@/shared/hooks/use-toast";
-import { formatCurrency } from "@/shared/lib/utils";
-import type { Payment } from "@/entities/payment/model/types";
+import { formatCurrency } from "@bhms/shared";
+import type { Payment } from "@bhms/shared/entities/payment/model/types";
 
 interface MarkPaidDialogProps {
   payment: Payment | null;
@@ -68,3 +68,4 @@ export function MarkPaidDialog({ payment, open, onOpenChange }: MarkPaidDialogPr
     </AlertDialog>
   );
 }
+

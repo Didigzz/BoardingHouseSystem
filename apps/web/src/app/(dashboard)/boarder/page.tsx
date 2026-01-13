@@ -1,12 +1,12 @@
 "use client";
 
-import { auth } from "@/server/auth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { api } from "@/trpc/react";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { formatCurrency, formatDate } from "@/shared/lib/utils";
+import { auth } from "./lib/auth";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { api } from "./lib/trpc-react";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { formatCurrency, formatDate } from "@bhms/shared";
 import { DoorOpen, CreditCard, Calendar, AlertCircle } from "lucide-react";
-import { PaymentStatusBadge } from "@/entities/payment";
+import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
 
 export default function BoarderDashboardPage() {
   const { data: profile, isLoading: profileLoading } = api.user.getProfile.useQuery();
@@ -79,3 +79,4 @@ export default function BoarderDashboardPage() {
     </div>
   );
 }
+

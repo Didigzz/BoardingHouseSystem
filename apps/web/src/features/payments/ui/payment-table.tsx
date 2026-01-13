@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/trpc/react";
+import { api } from "./lib/trpc-react";
 import {
   Table,
   TableBody,
@@ -8,11 +8,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/ui/table";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { PaymentStatusBadge } from "@/entities/payment";
-import { Button } from "@/shared/ui/button";
-import { formatCurrency, formatDate } from "@/shared/lib/utils";
+} from "@bhms/ui/table";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
+import { Button } from "@bhms/ui/button";
+import { formatCurrency, formatDate } from "@bhms/shared";
 import { Check } from "lucide-react";
 import { toast } from "@/shared/hooks/use-toast";
 
@@ -97,3 +97,4 @@ export function PaymentTable() {
     </Table>
   );
 }
+

@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@bhms/ui/card";
+import { Button } from "@bhms/ui/button";
+import { Badge } from "@bhms/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bhms/ui/tabs";
 import { ArrowLeft, Edit, Trash2, Users, Zap } from "lucide-react";
-import { RoomStatusBadge } from "@/entities/room";
-import { BoarderCard } from "@/entities/boarder";
-import { formatCurrency } from "@/shared/lib/utils";
+import { RoomStatusBadge } from "@bhms/shared/entities/room";
+import { BoarderCard } from "@bhms/shared/entities/boarder";
+import { formatCurrency } from "@bhms/shared";
 import { EditRoomDialog } from "./edit-room-dialog";
 import { DeleteRoomDialog } from "./delete-room-dialog";
 import type { Room, Boarder, UtilityReading } from "@prisma/client";
@@ -158,3 +158,4 @@ export function RoomDetailView({ room }: RoomDetailViewProps) {
     </div>
   );
 }
+

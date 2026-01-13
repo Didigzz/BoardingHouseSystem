@@ -6,19 +6,19 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
+} from "@bhms/ui/dialog";
+import { Button } from "@bhms/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
-import { Label } from "@/shared/ui/label";
-import { api } from "@/trpc/react";
+} from "@bhms/ui/select";
+import { Label } from "@bhms/ui/label";
+import { api } from "./lib/trpc-react";
 import { toast } from "@/shared/hooks/use-toast";
-import type { Boarder } from "@/entities/boarder";
+import type { Boarder } from "@bhms/shared/entities/boarder";
 
 interface AssignRoomDialogProps {
   boarder: Boarder | null;
@@ -95,3 +95,4 @@ export function AssignRoomDialog({ boarder, open, onOpenChange }: AssignRoomDial
     </Dialog>
   );
 }
+

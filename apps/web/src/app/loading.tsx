@@ -1,4 +1,4 @@
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Skeleton } from "@bhms/ui/skeleton";
 
 export default function Loading() {
   return (
@@ -11,3 +11,4 @@ export default function Loading() {
     </div>
   );
 }
+

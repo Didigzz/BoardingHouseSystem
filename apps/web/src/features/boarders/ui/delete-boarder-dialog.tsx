@@ -9,11 +9,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/shared/ui/alert-dialog";
-import { api } from "@/trpc/react";
+} from "@bhms/ui/alert-dialog";
+import { api } from "./lib/trpc-react";
 import { toast } from "@/shared/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import type { Boarder } from "@/entities/boarder";
+import type { Boarder } from "@bhms/shared/entities/boarder";
 
 interface DeleteBoarderDialogProps {
   boarder: Boarder | null;
@@ -79,3 +79,4 @@ export function DeleteBoarderDialog({
     </AlertDialog>
   );
 }
+

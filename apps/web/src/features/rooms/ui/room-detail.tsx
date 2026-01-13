@@ -3,13 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Edit, Trash2, Users } from "lucide-react";
-import { api } from "@/trpc/react";
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { formatCurrency } from "@/shared/lib/utils";
-import { RoomStatusBadge } from "@/entities/room";
+import { api } from "./lib/trpc-react";
+import { Button } from "@bhms/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { Badge } from "@bhms/ui/badge";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { formatCurrency } from "@bhms/shared";
+import { RoomStatusBadge } from "@bhms/shared/entities/room";
 import { EditRoomDialog } from "./edit-room-dialog";
 import { DeleteRoomDialog } from "./delete-room-dialog";
 
@@ -151,3 +151,4 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
     </div>
   );
 }
+

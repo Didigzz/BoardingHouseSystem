@@ -1,4 +1,4 @@
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Skeleton } from "@bhms/ui/skeleton";
 
 export default function PaymentsLoading() {
   return (
@@ -15,3 +15,4 @@ export default function PaymentsLoading() {
     </div>
   );
 }
+

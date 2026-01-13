@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/trpc/react";
+import { api } from "./lib/trpc-react";
 import {
   Table,
   TableBody,
@@ -8,18 +8,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/ui/table";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { BoarderAvatar, BoarderStatusBadge } from "@/entities/boarder";
-import { Button } from "@/shared/ui/button";
+} from "@bhms/ui/table";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { BoarderAvatar, BoarderStatusBadge } from "@bhms/shared/entities/boarder";
+import { Button } from "@bhms/ui/button";
 import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
-import { formatDate } from "@/shared/lib/utils";
+} from "@bhms/ui/dropdown-menu";
+import { formatDate } from "@bhms/shared";
 
 interface BoarderTableProps {
   onEdit?: (boarder: any) => void;
@@ -107,3 +107,4 @@ export function BoarderTable({ onEdit, onDelete }: BoarderTableProps) {
     </Table>
   );
 }
+

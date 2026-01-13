@@ -1,8 +1,8 @@
 "use client";
 
-import { api } from "@/trpc/react";
-import { BoarderCard } from "@/entities/boarder";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { api } from "./lib/trpc-react";
+import { BoarderCard } from "@bhms/shared/entities/boarder";
+import { Skeleton } from "@bhms/ui/skeleton";
 import { useRouter } from "next/navigation";
 
 export function BoarderList() {
@@ -39,3 +39,4 @@ export function BoarderList() {
     </div>
   );
 }
+

@@ -1,9 +1,9 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { api } from "@/trpc/react";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { UserAvatar } from "@/entities/user";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { api } from "./lib/trpc-react";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { UserAvatar } from "@bhms/shared/entities/user";
 
 export default function BoarderProfilePage() {
   const { data: profile, isLoading } = api.user.getProfile.useQuery();
@@ -45,3 +45,4 @@ export default function BoarderProfilePage() {
     </div>
   );
 }
+

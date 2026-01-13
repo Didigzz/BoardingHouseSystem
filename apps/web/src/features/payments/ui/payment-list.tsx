@@ -1,8 +1,8 @@
 "use client";
 
-import { api } from "@/trpc/react";
-import { PaymentCard } from "@/entities/payment";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { api } from "./lib/trpc-react";
+import { PaymentCard } from "@bhms/shared/entities/payment";
+import { Skeleton } from "@bhms/ui/skeleton";
 
 export function PaymentList() {
   const { data: payments, isLoading } = api.payment.getAll.useQuery();
@@ -33,3 +33,4 @@ export function PaymentList() {
     </div>
   );
 }
+

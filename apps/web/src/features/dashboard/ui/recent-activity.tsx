@@ -1,9 +1,9 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { api } from "@/trpc/react";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { formatDateTime } from "@/shared/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { api } from "./lib/trpc-react";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { formatDateTime } from "@bhms/shared";
 import { CreditCard, UserPlus } from "lucide-react";
 
 export function RecentActivity() {
@@ -60,3 +60,4 @@ export function RecentActivity() {
     </Card>
   );
 }
+

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@bhms/ui";
 import { redirect } from "next/navigation";
-import { auth } from "@/server/auth";
+import { auth } from "../lib/auth";
 
 export default async function HomePage() {
   const session = await auth();
@@ -37,3 +37,4 @@ export default async function HomePage() {
 
   redirect("/landlord");
 }
+

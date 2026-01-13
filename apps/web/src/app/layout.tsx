@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { TRPCReactProvider } from "@/trpc/react";
-import { Providers } from "@/providers";
+import { TRPCReactProvider } from "./lib/trpc-react";
+import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,3 +26,4 @@ export default function RootLayout({
     </html>
   );
 }
+

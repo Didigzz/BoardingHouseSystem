@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/server/db";
+import { db } from "@bhms/database";
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,3 +45,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

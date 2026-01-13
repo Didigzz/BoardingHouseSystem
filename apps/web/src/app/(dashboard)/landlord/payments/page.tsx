@@ -1,6 +1,6 @@
 "use client";
 
-import { PaymentList, AddPaymentDialog } from "@/features/payments";
+import { PaymentList, AddPaymentDialog } from "./features/payments";
 
 export default function PaymentsPage() {
   return (
@@ -17,3 +17,4 @@ export default function PaymentsPage() {
     </div>
   );
 }
+

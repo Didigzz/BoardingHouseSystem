@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+import { Button } from "@bhms/ui/button";
+import { Input } from "@bhms/ui/input";
 import {
   Form,
   FormControl,
@@ -14,16 +14,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/ui/form";
+} from "@bhms/ui/form";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/shared/ui/card";
+} from "@bhms/ui/card";
 import { toast } from "@/shared/hooks/use-toast";
-import { api } from "@/trpc/react";
+import { api } from "./lib/trpc-react";
 import Link from "next/link";
 
 const registerSchema = z
@@ -169,3 +169,4 @@ export function RegisterForm() {
     </Card>
   );
 }
+

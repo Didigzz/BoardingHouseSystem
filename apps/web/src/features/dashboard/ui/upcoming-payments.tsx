@@ -1,10 +1,10 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { api } from "@/trpc/react";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { formatCurrency, formatDate } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { api } from "./lib/trpc-react";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { formatCurrency, formatDate } from "@bhms/shared";
+import { Button } from "@bhms/ui/button";
 import { toast } from "@/shared/hooks/use-toast";
 
 export function UpcomingPayments() {
@@ -78,3 +78,4 @@ export function UpcomingPayments() {
     </Card>
   );
 }
+

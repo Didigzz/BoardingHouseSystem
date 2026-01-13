@@ -9,10 +9,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/shared/ui/alert-dialog";
-import { api } from "@/trpc/react";
+} from "@bhms/ui/alert-dialog";
+import { api } from "./lib/trpc-react";
 import { toast } from "@/shared/hooks/use-toast";
-import type { Room } from "@/entities/room";
+import type { Room } from "@bhms/shared/entities/room";
 
 interface DeleteRoomDialogProps {
   room: Room | null;
@@ -66,3 +66,4 @@ export function DeleteRoomDialog({ room, open, onOpenChange }: DeleteRoomDialogP
     </AlertDialog>
   );
 }
+

@@ -1,4 +1,4 @@
-import { auth } from "@/server/auth";
+import { auth } from "./lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function BoarderLayout({
@@ -19,3 +19,4 @@ export default async function BoarderLayout({
 
   return <>{children}</>;
 }
+

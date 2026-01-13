@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/shared/ui/select";
+} from "@bhms/ui/select";
 
 interface PaymentFiltersProps {
   status: string;
@@ -50,3 +50,4 @@ export function PaymentFilters({
     </div>
   );
 }
+

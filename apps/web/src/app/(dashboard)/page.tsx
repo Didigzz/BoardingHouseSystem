@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getServerAuthSession } from "@/server/auth";
+import { getServerAuthSession } from "./lib/auth";
 
 export default async function DashboardPage() {
   const session = await getServerAuthSession();
@@ -16,3 +16,4 @@ export default async function DashboardPage() {
 
   redirect("/landlord");
 }
+

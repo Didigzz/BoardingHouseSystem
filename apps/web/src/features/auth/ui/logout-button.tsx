@@ -1,7 +1,7 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { Button } from "@/shared/ui/button";
+import { Button } from "@bhms/ui/button";
 import { LogOut } from "lucide-react";
 
 interface LogoutButtonProps {
@@ -17,3 +17,4 @@ export function LogoutButton({ variant = "ghost", showIcon = true }: LogoutButto
     </Button>
   );
 }
+

@@ -1,8 +1,8 @@
 "use client";
 
-import { api } from "@/trpc/react";
-import { RoomCard } from "@/entities/room";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { api } from "./lib/trpc-react";
+import { RoomCard } from "@bhms/shared/entities/room";
+import { Skeleton } from "@bhms/ui/skeleton";
 import { useRouter } from "next/navigation";
 import type { RoomStatus } from "@prisma/client";
 
@@ -48,3 +48,4 @@ export function RoomGrid({ status, search }: RoomGridProps) {
     </div>
   );
 }
+

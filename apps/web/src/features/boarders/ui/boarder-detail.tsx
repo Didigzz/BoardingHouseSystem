@@ -3,13 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Edit, CreditCard, Home } from "lucide-react";
-import { api } from "@/trpc/react";
-import { Button } from "@/shared/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Badge } from "@/shared/ui/badge";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { formatCurrency, formatDate } from "@/shared/lib/utils";
-import { PaymentStatusBadge } from "@/entities/payment";
+import { api } from "./lib/trpc-react";
+import { Button } from "@bhms/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { Badge } from "@bhms/ui/badge";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { formatCurrency, formatDate } from "@bhms/shared";
+import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
 import { EditBoarderDialog } from "./edit-boarder-dialog";
 
 interface BoarderDetailProps {
@@ -170,3 +170,4 @@ export function BoarderDetail({ boarderId }: BoarderDetailProps) {
     </div>
   );
 }
+

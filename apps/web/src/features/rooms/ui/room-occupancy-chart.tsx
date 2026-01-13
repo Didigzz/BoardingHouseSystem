@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { api } from "@/trpc/react";
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { api } from "./lib/trpc-react";
+import { Skeleton } from "@bhms/ui/skeleton";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
 const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
@@ -60,3 +60,4 @@ export function RoomOccupancyChart() {
     </Card>
   );
 }
+

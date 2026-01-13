@@ -28,6 +28,9 @@
     },
     "db:seed": {
       "cache": false
+    },
+    "db:generate": {
+      "cache": false
     }
   }
 }

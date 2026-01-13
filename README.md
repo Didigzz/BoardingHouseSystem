@@ -97,71 +97,292 @@ A modern, full-stack web application for managing boarding houses, built with th
 
 ## Project Structure
 
-This project follows **Feature-Sliced Design (FSD)** architecture within a **Turborepo** monorepo:
+This project follows a monorepo architecture with the following structure:
 
 ```
-bhms/
+BoardingHouseSystem/
 ├── apps/
-│   └── web/                          # Next.js application
-│       ├── prisma/                   # Database schema & migrations
-│       │   ├── schema.prisma
-│       │   └── seed.ts
-│       └── src/
-│           ├── app/                  # Next.js App Router
-│           │   ├── (auth)/           # Auth pages (login, register)
-│           │   ├── (dashboard)/      # Dashboard pages
-│           │   │   ├── landlord/     # Landlord views
-│           │   │   └── boarder/      # Boarder views
-│           │   └── api/              # API routes
-│           │
-│           ├── entities/             # Domain entities (UI & models)
-│           │   ├── boarder/
-│           │   ├── payment/
-│           │   ├── room/
-│           │   ├── user/
-│           │   └── utility/
-│           │
-│           ├── features/             # Feature modules
-│           │   ├── auth/
-│           │   ├── boarders/
-│           │   ├── dashboard/
-│           │   ├── payments/
-│           │   ├── rooms/
-│           │   └── utilities/
-│           │
-│           ├── widgets/              # Composite UI blocks
-│           │   ├── header/
-│           │   ├── sidebar/
-│           │   └── footer/
-│           │
-│           ├── shared/               # Shared utilities
-│           │   ├── ui/               # UI components
-│           │   ├── lib/              # Utilities
-│           │   ├── hooks/            # Custom hooks
-│           │   └── config/           # Configuration
-│           │
-│           ├── server/               # Server-side code
-│           │   ├── api/              # tRPC routers
-│           │   ├── auth/             # Auth configuration
-│           │   └── db/               # Database client
-│           │
-│           └── trpc/                 # tRPC client setup
+│   ├── web/                              # Main web application (Next.js)
+│   │   ├── src/
+│   │   │   ├── app/                      # Next.js App Router
+│   │   │   │   ├── (auth)/
+│   │   │   │   │   ├── login/
+│   │   │   │   │   ├── register/
+│   │   │   │   │   └── layout.tsx
+│   │   │   │   ├── (dashboard)/
+│   │   │   │   │   ├── landlord/
+│   │   │   │   │   │   ├── boarders/
+│   │   │   │   │   │   ├── rooms/
+│   │   │   │   │   │   ├── payments/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── boarder/
+│   │   │   │   │   │   ├── profile/
+│   │   │   │   │   │   ├── payments/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── layout.tsx
+│   │   │   │   ├── api/
+│   │   │   │   │   ├── trpc/[trpc]/route.ts      # Thin tRPC adapter
+│   │   │   │   │   └── auth/[...nextauth]/route.ts
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── globals.css
+│   │   │   ├── components/                # Web-specific components only
+│   │   │   │   ├── layouts/
+│   │   │   │   ├── navigation/
+│   │   │   │   └── providers.tsx
+│   │   │   └── lib/
+│   │   │       ├── trpc-client.ts
+│   │   │       └── utils.ts
+│   │   ├── public/
+│   │   ├── next.config.js
+│   │   ├── tailwind.config.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── mobile/                            # React Native app (future)
+│   │   ├── src/
+│   │   │   ├── screens/
+│   │   │   │   ├── auth/
+│   │   │   │   ├── landlord/
+│   │   │   │   └── boarder/
+│   │   │   ├── navigation/
+│   │   │   │   ├── AuthNavigator.tsx
+│   │   │   │   ├── LandlordNavigator.tsx
+│   │   │   │   └── RootNavigator.tsx
+│   │   │   ├── components/               # Mobile-specific components
+│   │   │   └── lib/
+│   │   │       └── trpc-client.ts
+│   │   ├── android/
+│   │   ├── ios/
+│   │   ├── app.json
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── admin/                             # Admin dashboard (optional)
+│   │   ├── src/
+│   │   │   └── app/
+│   │   │       ├── users/
+│   │   │       ├── analytics/
+│   │   │       └── settings/
+│   │   └── package.json
+│   │
+│   └── landing/                           # Marketing/public website
+│       ├── src/
+│       │   └── app/
+│       │       ├── about/
+│       │       ├── pricing/
+│       │       └── contact/
+│       └── package.json
 │
 ├── packages/
-│   ├── database/                     # Shared Prisma client
-│   ├── eslint-config/                # Shared ESLint config
-│   ├── typescript-config/            # Shared TypeScript config
-│   └── ui/                           # Shared UI components
+│   ├── api/                              # Backend API layer (tRPC)
+│   │   ├── src/
+│   │   │   ├── routers/
+│   │   │   │   ├── boarder.router.ts
+│   │   │   │   ├── payment.router.ts
+│   │   │   │   ├── room.router.ts
+│   │   │   │   ├── user.router.ts
+│   │   │   │   ├── utility.router.ts
+│   │   │   │   ├── dashboard.router.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── services/                 # Business logic services
+│   │   │   │   ├── boarder.service.ts
+│   │   │   │   ├── payment.service.ts
+│   │   │   │   ├── room.service.ts
+│   │   │   │   └── utility.service.ts
+│   │   │   ├── middleware/
+│   │   │   │   ├── auth.middleware.ts
+│   │   │   │   ├── error.middleware.ts
+│   │   │   │   └── logger.middleware.ts
+│   │   │   ├── context.ts
+│   │   │   ├── root.ts
+│   │   │   └── trpc.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── database/                         # Prisma + database client
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma
+│   │   │   ├── migrations/
+│   │   │   └── seed.ts
+│   │   ├── src/
+│   │   │   ├── client.ts
+│   │   │   ├── types.ts
+│   │   │   └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── auth/                             # Authentication & authorization
+│   │   ├── src/
+│   │   │   ├── providers/
+│   │   │   │   ├── credentials.provider.ts
+│   │   │   │   ├── google.provider.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── strategies/
+│   │   │   │   ├── jwt.strategy.ts
+│   │   │   │   └── session.strategy.ts
+│   │   │   ├── guards/
+│   │   │   │   ├── landlord.guard.ts
+│   │   │   │   ├── boarder.guard.ts
+│   │   │   │   └── admin.guard.ts
+│   │   │   ├── config.ts
+│   │   │   └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── shared/                           # Shared business logic & domain models
+│   │   ├── src/
+│   │   │   ├── entities/                 # Domain entities (FSD)
+│   │   │   │   ├── boarder/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── schemas.ts
+│   │   │   │   │   │   └── utils.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── payment/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── schemas.ts
+│   │   │   │   │   │   ├── constants.ts
+│   │   │   │   │   │   └── utils.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── room/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── user/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── utility/
+│   │   │   │       ├── model/
+│   │   │   │       └── index.ts
+│   │   │   ├── features/                 # Business features (FSD)
+│   │   │   │   ├── boarder-management/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── store.ts
+│   │   │   │   │   │   ├── hooks.ts
+│   │   │   │   │   │   └── types.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── payment-processing/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── room-management/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── utility-tracking/
+│   │   │   │       ├── model/
+│   │   │   │       └── index.ts
+│   │   │   ├── lib/                      # Shared utilities
+│   │   │   │   ├── formatters.ts
+│   │   │   │   ├── validators.ts
+│   │   │   │   ├── constants.ts
+│   │   │   │   └── utils.ts
+│   │   │   └── types/
+│   │   │       ├── index.ts
+│   │   │       └── common.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── ui/                               # Shared UI components (cross-platform)
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   │   ├── primitives/           # Basic components
+│   │   │   │   │   ├── Button/
+│   │   │   │   │   │   ├── Button.tsx
+│   │   │   │   │   │   ├── Button.stories.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── Input/
+│   │   │   │   │   ├── Card/
+│   │   │   │   │   ├── Badge/
+│   │   │   │   │   ├── Avatar/
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── composite/            # Composite components
+│   │   │   │   │   ├── BoarderCard/
+│   │   │   │   │   ├── RoomCard/
+│   │   │   │   │   ├── PaymentCard/
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── hooks/
+│   │   │   │   ├── useDebounce.ts
+│   │   │   │   ├── useMediaQuery.ts
+│   │   │   │   ├── useLocalStorage.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── theme/
+│   │   │   │   ├── colors.ts
+│   │   │   │   ├── typography.ts
+│   │   │   │   └── index.ts
+│   │   │   └── utils/
+│   │   │       ├── cn.ts
+│   │   │       └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── validation/                       # Zod schemas (shared across platforms)
+│   │   ├── src/
+│   │   │   ├── boarder.schemas.ts
+│   │   │   ├── payment.schemas.ts
+│   │   │   ├── room.schemas.ts
+│   │   │   ├── user.schemas.ts
+│   │   │   ├── utility.schemas.ts
+│   │   │   └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   └── config/                           # Shared configuration packages
+│       ├── eslint-config/
+│       │   ├── base.js
+│       │   ├── react.js
+│       │   ├── next.js
+│       │   └── package.json
+│       ├── typescript-config/
+│       │   ├── base.json
+│       │   ├── nextjs.json
+│       │   ├── react-native.json
+│       │   └── package.json
+│       └── tailwind-config/
+│           ├── base.js
+│           ├── web.js
+│           └── package.json
 │
-├── infra/
-│   ├── docker/                       # Docker configuration
-│   └── scripts/                      # Setup & deployment scripts
+├── services/                             # Standalone backend services (optional)
+│   ├── api-server/                       # Standalone API server (Express/Fastify)
+│   │   ├── src/
+│   │   │   ├── server.ts
+│   │   │   └── index.ts
+│   │   ├── Dockerfile
+│   │   └── package.json
+│   │
+│   └── workers/                          # Background jobs (Bull/BullMQ)
+│       ├── src/
+│       │   ├── queues/
+│       │   │   ├── payment-reminder.worker.ts
+│       │   │   └── utility-calculation.worker.ts
+│       │   └── index.ts
+│       └── package.json
 │
-└── docs/                             # Documentation
-    ├── api.md
-    ├── architecture.md
-    ├── database.md
-    └── deployment.md
+├── docs/
+│   ├── api.md
+│   ├── architecture.md
+│   ├── database.md
+│   └── deployment.md
+│
+├── scripts/
+│   ├── setup.sh
+│   ├── seed.sh
+│   └── migrate.sh
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── deploy-web.yml
+│       └── deploy-mobile.yml
+│
+├── docker-compose.yml
+├── docker-compose.dev.yml
+├── turbo.json
+├── pnpm-workspace.yaml
+├── package.json
+├── .gitignore
+└── README.md
 ```
 
 ## Getting Started

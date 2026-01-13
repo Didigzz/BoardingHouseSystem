@@ -1,11 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
+  reactStrictMode: true,
+  swcMinify: true,
+  transpilePackages: [
+    "@bhms/api",
+    "@bhms/auth",
+    "@bhms/database",
+    "@bhms/shared",
+    "@bhms/ui",
+    "@bhms/validation",
+  ],
+  experimental: {
+    serverComponentsExternalPackages: ["@prisma/client"],
   },
 };
 

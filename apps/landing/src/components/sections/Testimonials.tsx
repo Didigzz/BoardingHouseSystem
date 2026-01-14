@@ -56,11 +56,11 @@ export function Testimonials() {
   return (
     <section id="testimonials" className="py-24">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <p className="text-sm font-semibold text-primary mb-2">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <p className="mb-2 text-sm font-semibold text-primary">
             TESTIMONIALS
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
             Loved by Property Owners
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -68,13 +68,13 @@ export function Testimonials() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="relative">
               <CardContent className="p-6">
-                <Quote className="h-8 w-8 text-primary/20 mb-4" />
+                <Quote className="mb-4 h-8 w-8 text-primary/20" />
 
-                <div className="flex gap-1 mb-4">
+                <div className="mb-4 flex gap-1">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
                     <Star
                       key={i}
@@ -83,16 +83,16 @@ export function Testimonials() {
                   ))}
                 </div>
 
-                <p className="text-muted-foreground mb-6">
-                  "{testimonial.content}"
+                <p className="mb-6 text-muted-foreground">
+                  &quot;{testimonial.content}&quot;
                 </p>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
                     {testimonial.avatar}
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">{testimonial.name}</p>
+                    <p className="text-sm font-semibold">{testimonial.name}</p>
                     <p className="text-xs text-muted-foreground">
                       {testimonial.role}
                     </p>

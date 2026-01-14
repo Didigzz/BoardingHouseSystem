@@ -64,18 +64,18 @@ export function FAQ() {
   return (
     <section id="faq" className="py-24">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <p className="text-sm font-semibold text-primary mb-2">FAQ</p>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <p className="mb-2 text-sm font-semibold text-primary">FAQ</p>
+          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
             Frequently Asked Questions
           </h2>
           <p className="text-lg text-muted-foreground">
-            Got questions? We've got answers. If you can't find what you're
-            looking for, feel free to contact us.
+            Got questions? We&apos;ve got answers. If you can&apos;t find what
+            you&apos;re looking for, feel free to contact us.
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto max-w-3xl">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>

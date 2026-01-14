@@ -6,14 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  MessageSquare,
-  Clock,
-  Send,
-} from "lucide-react";
+import Link from "next/link";
+import { Mail, Phone, MapPin, MessageSquare, Clock, Send } from "lucide-react";
 
 const contactMethods = [
   {
@@ -52,14 +46,16 @@ export default function ContactPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-muted/30">
+      <section className="bg-muted/30 pb-16 pt-32">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-sm font-semibold text-primary mb-2">CONTACT</p>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6">Get in Touch</h1>
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="mb-2 text-sm font-semibold text-primary">CONTACT</p>
+            <h1 className="mb-6 text-4xl font-bold sm:text-5xl">
+              Get in Touch
+            </h1>
             <p className="text-lg text-muted-foreground">
-              Have questions? We'd love to hear from you. Send us a message and
-              we'll respond as soon as possible.
+              Have questions? We&apos;d love to hear from you. Send us a message
+              and we&apos;ll respond as soon as possible.
             </p>
           </div>
         </div>
@@ -68,15 +64,15 @@ export default function ContactPage() {
       {/* Contact Methods */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {contactMethods.map((method) => (
               <Card key={method.title} className="text-center">
                 <CardContent className="p-6">
-                  <div className="inline-flex p-3 rounded-xl bg-primary/10 mb-4">
+                  <div className="mb-4 inline-flex rounded-xl bg-primary/10 p-3">
                     <method.icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="font-semibold mb-1">{method.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">
+                  <h3 className="mb-1 font-semibold">{method.title}</h3>
+                  <p className="mb-2 text-sm text-muted-foreground">
                     {method.description}
                   </p>
                   <a
@@ -95,7 +91,7 @@ export default function ContactPage() {
       {/* Contact Form */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2">
             {/* Form */}
             <Card>
               <CardHeader>
@@ -103,7 +99,7 @@ export default function ContactPage() {
               </CardHeader>
               <CardContent>
                 <form className="space-y-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                       <label className="text-sm font-medium">First Name</label>
                       <Input placeholder="John" />
@@ -118,7 +114,9 @@ export default function ContactPage() {
                     <Input type="email" placeholder="john@example.com" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Phone (Optional)</label>
+                    <label className="text-sm font-medium">
+                      Phone (Optional)
+                    </label>
                     <Input type="tel" placeholder="+63 9XX XXX XXXX" />
                   </div>
                   <div className="space-y-2">
@@ -143,23 +141,25 @@ export default function ContactPage() {
             {/* Info */}
             <div className="space-y-8">
               <div>
-                <h3 className="text-xl font-semibold mb-4">
+                <h3 className="mb-4 text-xl font-semibold">
                   Frequently Asked Questions
                 </h3>
-                <p className="text-muted-foreground mb-4">
+                <p className="mb-4 text-muted-foreground">
                   Before reaching out, you might find your answer in our FAQ
                   section.
                 </p>
                 <Button variant="outline" asChild>
-                  <a href="/#faq">View FAQ</a>
+                  <Link href="/#faq">View FAQ</Link>
                 </Button>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">Business Hours</h3>
+                <h3 className="mb-4 text-xl font-semibold">Business Hours</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Monday - Friday</span>
+                    <span className="text-muted-foreground">
+                      Monday - Friday
+                    </span>
                     <span>8:00 AM - 6:00 PM</span>
                   </div>
                   <div className="flex justify-between">
@@ -171,7 +171,7 @@ export default function ContactPage() {
                     <span>Closed</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 mt-4">
+                <div className="mt-4 flex items-center gap-2">
                   <Clock className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">
                     Philippine Standard Time (PST)
@@ -180,8 +180,8 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">For Enterprise</h3>
-                <p className="text-muted-foreground mb-4">
+                <h3 className="mb-4 text-xl font-semibold">For Enterprise</h3>
+                <p className="mb-4 text-muted-foreground">
                   Looking for a custom solution for your large-scale operation?
                   Our enterprise team is ready to help.
                 </p>

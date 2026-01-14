@@ -21,9 +21,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/shared/ui/table";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
+} from "./table";
+import { Button } from "./button";
+import { Input } from "./input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

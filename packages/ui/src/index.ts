@@ -28,6 +28,7 @@ export * from './components/primitives/tabs';
 export * from './components/primitives/textarea';
 export * from './components/primitives/toast';
 export * from './components/primitives/toaster';
+export * from './components/primitives/use-toast';
 
 // Export composite components
 export * from './components/composite';

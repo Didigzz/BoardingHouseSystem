@@ -9,6 +9,7 @@ export * from "./select";
 export * from "./table";
 export * from "./toast";
 export * from "./toaster";
+export * from "./use-toast";
 export * from "./avatar";
 export * from "./skeleton";
 export * from "./separator";

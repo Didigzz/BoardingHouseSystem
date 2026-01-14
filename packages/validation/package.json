@@ -6,7 +6,7 @@
     "types": "./src/index.ts",
     "scripts": {
         "build": "tsc",
-        "lint": "eslint src/"
+        "lint": "eslint src/ --no-error-on-unmatched-pattern"
     },
     "dependencies": {
         "zod": "^3.23.8"

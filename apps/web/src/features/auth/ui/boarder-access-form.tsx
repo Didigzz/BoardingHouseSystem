@@ -22,7 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@bhms/ui/card";
-import { toast } from "@/shared/hooks/use-toast";
+import { toast } from "@bhms/ui";
 
 const accessCodeSchema = z.object({
   accessCode: z.string().min(1, "Access code is required"),

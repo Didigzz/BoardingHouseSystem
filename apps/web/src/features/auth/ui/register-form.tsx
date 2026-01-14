@@ -22,8 +22,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@bhms/ui/card";
-import { toast } from "@/shared/hooks/use-toast";
-import { api } from "./lib/trpc-react";
+import { toast } from "@bhms/ui";
+import { api } from "@/lib/trpc-react";
 import Link from "next/link";
 
 const registerSchema = z

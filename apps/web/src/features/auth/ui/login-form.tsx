@@ -23,7 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@bhms/ui/card";
-import { toast } from "@/shared/hooks/use-toast";
+import { toast } from "@bhms/ui";
 import Link from "next/link";
 
 const loginSchema = z.object({

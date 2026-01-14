@@ -41,198 +41,524 @@ This document provides a comprehensive plan to restructure the Boarding House Sy
 
 ```
 BoardingHouseSystem/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── deploy-landing.yml
+│       ├── deploy-web.yml
+│       └── test.yml
+│
 ├── apps/
-│   ├── web/                              # Main web application (Next.js)
+│   ├── admin/
 │   │   ├── src/
-│   │   │   ├── app/                      # Next.js App Router
-│   │   │   │   ├── (auth)/
-│   │   │   │   │   ├── login/
-│   │   │   │   │   ├── register/
-│   │   │   │   │   └── layout.tsx
-│   │   │   │   ├── (dashboard)/
-│   │   │   │   │   ├── landlord/
-│   │   │   │   │   │   ├── boarders/
-│   │   │   │   │   │   ├── rooms/
-│   │   │   │   │   │   ├── payments/
+│   │   │   ├── app/
+│   │   │   │   ├── analytics/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── settings/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── users/
+│   │   │   │   │   ├── [id]/
 │   │   │   │   │   │   └── page.tsx
-│   │   │   │   │   ├── boarder/
-│   │   │   │   │   │   ├── profile/
-│   │   │   │   │   │   ├── payments/
-│   │   │   │   │   │   └── page.tsx
-│   │   │   │   │   └── layout.tsx
-│   │   │   │   ├── api/
-│   │   │   │   │   ├── trpc/[trpc]/route.ts      # Thin tRPC adapter
-│   │   │   │   │   └── auth/[...nextauth]/route.ts
+│   │   │   │   │   └── page.tsx
 │   │   │   │   ├── layout.tsx
 │   │   │   │   ├── page.tsx
 │   │   │   │   └── globals.css
-│   │   │   ├── components/                # Web-specific components only
-│   │   │   │   ├── layouts/
-│   │   │   │   ├── navigation/
-│   │   │   │   └── providers.tsx
-│   │   │   └── lib/
-│   │   │       ├── trpc-client.ts
-│   │   │       └── utils.ts
+│   │   │   ├── components/
+│   │   │   │   ├── charts/
+│   │   │   │   ├── tables/
+│   │   │   │   └── index.ts
+│   │   │   ├── lib/
+│   │   │   │   ├── utils.ts
+│   │   │   │   └── config.ts
+│   │   │   └── providers.tsx
 │   │   ├── public/
-│   │   ├── next.config.js
-│   │   ├── tailwind.config.ts
 │   │   ├── package.json
-│   │   └── tsconfig.json
+│   │   ├── next.config.js
+│   │   ├── tsconfig.json
+│   │   ├── tailwind.config.ts
+│   │   └── postcss.config.js
 │   │
-│   ├── mobile/                            # React Native app (future)
+│   ├── landing/
 │   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── about/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── contact/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── pricing/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── features/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── blog/
+│   │   │   │   │   ├── [slug]/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── globals.css
+│   │   │   ├── components/
+│   │   │   │   ├── sections/
+│   │   │   │   │   ├── CTA.tsx
+│   │   │   │   │   ├── FAQ.tsx
+│   │   │   │   │   ├── Features.tsx
+│   │   │   │   │   ├── Footer.tsx
+│   │   │   │   │   ├── Header.tsx
+│   │   │   │   │   ├── Hero.tsx
+│   │   │   │   │   ├── HowItWorks.tsx
+│   │   │   │   │   ├── Pricing.tsx
+│   │   │   │   │   ├── Testimonials.tsx
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── ui/
+│   │   │   │       ├── accordion.tsx
+│   │   │   │       ├── badge.tsx
+│   │   │   │       ├── button.tsx
+│   │   │   │       ├── card.tsx
+│   │   │   │       ├── input.tsx
+│   │   │   │       └── index.ts
+│   │   │   ├── lib/
+│   │   │   │   └── utils.ts
+│   │   │   └── assets/
+│   │   │       ├── images/
+│   │   │       └── icons/
+│   │   ├── public/
+│   │   │   ├── favicon.ico
+│   │   │   ├── robots.txt
+│   │   │   └── sitemap.xml
+│   │   ├── package.json
+│   │   ├── next.config.js
+│   │   ├── next-env.d.ts
+│   │   ├── tsconfig.json
+│   │   ├── tailwind.config.ts
+│   │   ├── postcss.config.js
+│   │   └── .eslintrc.js
+│   │
+│   ├── mobile/
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   │   ├── common/
+│   │   │   │   ├── forms/
+│   │   │   │   └── cards/
+│   │   │   ├── lib/
+│   │   │   │   ├── api.ts
+│   │   │   │   └── utils.ts
+│   │   │   ├── navigation/
+│   │   │   │   ├── AppNavigator.tsx
+│   │   │   │   ├── AuthNavigator.tsx
+│   │   │   │   └── types.ts
 │   │   │   ├── screens/
 │   │   │   │   ├── auth/
-│   │   │   │   ├── landlord/
-│   │   │   │   └── boarder/
-│   │   │   ├── navigation/
-│   │   │   │   ├── AuthNavigator.tsx
-│   │   │   │   ├── LandlordNavigator.tsx
-│   │   │   │   └── RootNavigator.tsx
-│   │   │   ├── components/               # Mobile-specific components
-│   │   │   └── lib/
-│   │   │       └── trpc-client.ts
+│   │   │   │   │   ├── LoginScreen.tsx
+│   │   │   │   │   ├── RegisterScreen.tsx
+│   │   │   │   │   └── ForgotPasswordScreen.tsx
+│   │   │   │   ├── boarder/
+│   │   │   │   │   ├── DashboardScreen.tsx
+│   │   │   │   │   ├── PaymentsScreen.tsx
+│   │   │   │   │   ├── ProfileScreen.tsx
+│   │   │   │   │   └── NotificationsScreen.tsx
+│   │   │   │   └── landlord/
+│   │   │   │       ├── DashboardScreen.tsx
+│   │   │   │       ├── BoardersScreen.tsx
+│   │   │   │       ├── RoomsScreen.tsx
+│   │   │   │       ├── PaymentsScreen.tsx
+│   │   │   │       └── UtilitiesScreen.tsx
+│   │   │   ├── hooks/
+│   │   │   │   ├── useAuth.ts
+│   │   │   │   └── useTheme.ts
+│   │   │   ├── store/
+│   │   │   │   └── index.ts
+│   │   │   ├── App.tsx
+│   │   │   └── index.tsx
 │   │   ├── android/
 │   │   ├── ios/
-│   │   ├── app.json
 │   │   ├── package.json
-│   │   └── tsconfig.json
+│   │   ├── tsconfig.json
+│   │   ├── babel.config.js
+│   │   └── metro.config.js
 │   │
-│   ├── admin/                             # Admin dashboard (optional)
-│   │   ├── src/
-│   │   │   └── app/
-│   │   │       ├── users/
-│   │   │       ├── analytics/
-│   │   │       └── settings/
-│   │   └── package.json
-│   │
-│   └── landing/                           # Marketing/public website
+│   └── web/
 │       ├── src/
-│       │   └── app/
-│       │       ├── about/
-│       │       ├── pricing/
-│       │       └── contact/
-│       └── package.json
+│       │   ├── app/
+│       │   │   ├── api/
+│       │   │   │   ├── auth/
+│       │   │   │   │   ├── [...nextauth]/
+│       │   │   │   │   │   └── route.ts
+│       │   │   │   │   ├── boarder-access/
+│       │   │   │   │   │   └── route.ts
+│       │   │   │   │   ├── verify-email/
+│       │   │   │   │   │   └── route.ts
+│       │   │   │   │   └── reset-password/
+│       │   │   │   │       └── route.ts
+│       │   │   │   └── trpc/
+│       │   │   │       └── [trpc]/
+│       │   │   │           └── route.ts
+│       │   │   ├── (auth)/
+│       │   │   │   ├── boarder-access/
+│       │   │   │   │   └── page.tsx
+│       │   │   │   ├── login/
+│       │   │   │   │   └── page.tsx
+│       │   │   │   ├── register/
+│       │   │   │   │   └── page.tsx
+│       │   │   │   ├── forgot-password/
+│       │   │   │   │   └── page.tsx
+│       │   │   │   ├── reset-password/
+│       │   │   │   │   └── page.tsx
+│       │   │   │   └── layout.tsx
+│       │   │   │   ├── landlord/
+│       │   │   │   │   ├── boarders/
+│       │   │   │   │   │   ├── [id]/
+│       │   │   │   │   │   │   ├── edit/
+│       │   │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   ├── loading.tsx
+│       │   │   │   │   │   └── page.tsx
+│       │   │   │   │   ├── payments/
+│       │   │   │   │   │   ├── [id]/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   ├── loading.tsx
+│       │   │   │   │   │   └── page.tsx
+│       │   │   │   │   ├── rooms/
+│       │   │   │   │   │   ├── [id]/
+│       │   │   │   │   │   │   ├── edit/
+│       │   │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   ├── loading.tsx
+│       │   │   │   │   │   └── page.tsx
+│       │   │   │   │   ├── utilities/
+│       │   │   │   │   │   ├── electricity/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   ├── water/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   └── page.tsx
+│       │   │   │   │   ├── reports/
+│       │   │   │   │   │   ├── revenue/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   ├── occupancy/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   └── page.tsx
+│       │   │   │   │   ├── settings/
+│       │   │   │   │   │   ├── profile/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   ├── billing/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   ├── notifications/
+│       │   │   │   │   │   │   └── page.tsx
+│       │   │   │   │   │   └── page.tsx
+│       │   │   │   │   ├── loading.tsx
+│       │   │   │   │   ├── layout.tsx
+│       │   │   │   │   └── page.tsx
+│       │   │   │   ├── layout.tsx
+│       │   │   │   └── page.tsx
+│       │   │   ├── unauthorized/
+│       │   │   │   └── page.tsx
+│       │   │   ├── error.tsx
+│       │   │   ├── layout.tsx
+│       │   │   ├── loading.tsx
+│       │   │   ├── not-found.tsx
+│       │   │   ├── page.tsx
+│       │   │   └── globals.css
+│       │   ├── components/
+│       │   │   ├── layouts/
+│       │   │   │   ├── DashboardLayout.tsx
+│       │   │   │   ├── AuthLayout.tsx
+│       │   │   │   └── index.ts
+│       │   │   └── navigation/
+│       │   │       ├── Breadcrumbs.tsx
+│       │   │       ├── Navigation.tsx
+│       │   │       └── index.ts
+│       │   ├── lib/
+│       │   │   ├── auth.ts
+│       │   │   ├── config.ts
+│       │   │   ├── trpc-client.ts
+│       │   │   ├── trpc-react.tsx
+│       │   │   ├── trpc-server-api.ts
+│       │   │   ├── trpc-server.ts
+│       │   │   └── utils.ts
+│       │   ├── features/
+│       │   │   ├── auth/
+│       │   │   │   ├── ui/
+│       │   │   │   │   ├── boarder-access-form.tsx
+│       │   │   │   │   ├── login-form.tsx
+│       │   │   │   │   ├── logout-button.tsx
+│       │   │   │   │   ├── register-form.tsx
+│       │   │   │   │   ├── forgot-password-form.tsx
+│       │   │   │   │   ├── reset-password-form.tsx
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── index.ts
+│       │   │   ├── boarders/
+│       │   │   │   ├── ui/
+│       │   │   │   │   ├── add-boarder-dialog.tsx
+│       │   │   │   │   ├── assign-room-dialog.tsx
+│       │   │   │   │   ├── boarder-detail-view.tsx
+│       │   │   │   │   ├── boarder-detail.tsx
+│       │   │   │   │   ├── boarder-filters.tsx
+│       │   │   │   │   ├── boarder-list.tsx
+│       │   │   │   │   ├── boarder-table.tsx
+│       │   │   │   │   ├── delete-boarder-dialog.tsx
+│       │   │   │   │   ├── edit-boarder-dialog.tsx
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── index.ts
+│       │   │   ├── dashboard/
+│       │   │   │   ├── ui/
+│       │   │   │   │   ├── occupancy-chart.tsx
+│       │   │   │   │   ├── occupancy-overview.tsx
+│       │   │   │   │   ├── recent-activity.tsx
+│       │   │   │   │   ├── revenue-chart.tsx
+│       │   │   │   │   ├── stats-cards.tsx
+│       │   │   │   │   ├── upcoming-payments.tsx
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── index.ts
+│       │   │   ├── payments/
+│       │   │   │   ├── ui/
+│       │   │   │   │   ├── add-payment-dialog.tsx
+│       │   │   │   │   ├── mark-paid-dialog.tsx
+│       │   │   │   │   ├── payment-filters.tsx
+│       │   │   │   │   ├── payment-history-chart.tsx
+│       │   │   │   │   ├── payment-list.tsx
+│       │   │   │   │   ├── payment-summary-card.tsx
+│       │   │   │   │   ├── payment-table.tsx
+│       │   │   │   │   ├── payment-details.tsx
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── index.ts
+│       │   │   ├── rooms/
+│       │   │   │   ├── ui/
+│       │   │   │   │   ├── add-room-dialog.tsx
+│       │   │   │   │   ├── delete-room-dialog.tsx
+│       │   │   │   │   ├── edit-room-dialog.tsx
+│       │   │   │   │   ├── room-detail-view.tsx
+│       │   │   │   │   ├── room-detail.tsx
+│       │   │   │   │   ├── room-filters.tsx
+│       │   │   │   │   ├── room-grid.tsx
+│       │   │   │   │   ├── room-list.tsx
+│       │   │   │   │   ├── room-occupancy-chart.tsx
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── index.ts
+│       │   │   └── utilities/
+│       │   │       ├── ui/
+│       │   │       │   ├── utility-meter-form.tsx
+│       │   │       │   ├── utility-history.tsx
+│       │   │       │   ├── utility-calculator.tsx
+│       │   │       │   └── index.ts
+│       │   │       └── index.ts
+│       │   ├── widgets/
+│       │   │   ├── footer/
+│       │   │   │   ├── ui/
+│       │   │   │   │   ├── footer.tsx
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── index.ts
+│       │   │   ├── header/
+│       │   │   │   ├── ui/
+│       │   │   │   │   ├── header.tsx
+│       │   │   │   │   ├── mobile-nav.tsx
+│       │   │   │   │   ├── user-menu.tsx
+│       │   │   │   │   └── index.ts
+│       │   │   │   └── index.ts
+│       │   │   └── sidebar/
+│       │   │       ├── ui/
+│       │   │       │   ├── sidebar-item.tsx
+│       │   │       │   ├── sidebar-nav.tsx
+│       │   │       │   ├── sidebar.tsx
+│       │   │       │   └── index.ts
+│       │   │       └── index.ts
+│       │   ├── hooks/
+│       │   │   ├── useAuth.ts
+│       │   │   ├── useUser.ts
+│       │   │   └── index.ts
+│       │   ├── middleware.ts
+│       │   └── providers.tsx
+│       ├── public/
+│       │   ├── favicon.ico
+│       │   └── assets/
+│       ├── package.json
+│       ├── next.config.js
+│       ├── next-env.d.ts
+│       ├── tsconfig.json
+│       ├── tailwind.config.ts
+│       ├── postcss.config.js
+│       ├── components.json
+│       ├── .env
+│       ├── .env.example
+│       └── .eslintrc.js
 │
 ├── packages/
-│   ├── api/                              # Backend API layer (tRPC)
+│   ├── api/
 │   │   ├── src/
+│   │   │   ├── services/
+│   │   │   │   ├── boarder.service.ts
+│   │   │   │   ├── payment.service.ts
+│   │   │   │   ├── room.service.ts
+│   │   │   │   ├── user.service.ts
+│   │   │   │   ├── utility.service.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── middleware/
+│   │   │   │   ├── auth.middleware.ts
+│   │   │   │   ├── error.middleware.ts
+│   │   │   │   ├── logger.middleware.ts
+│   │   │   │   └── index.ts
 │   │   │   ├── routers/
 │   │   │   │   ├── boarder.router.ts
+│   │   │   │   ├── dashboard.router.ts
 │   │   │   │   ├── payment.router.ts
 │   │   │   │   ├── room.router.ts
 │   │   │   │   ├── user.router.ts
 │   │   │   │   ├── utility.router.ts
-│   │   │   │   ├── dashboard.router.ts
 │   │   │   │   └── index.ts
-│   │   │   ├── services/                 # Business logic services
-│   │   │   │   ├── boarder.service.ts
-│   │   │   │   ├── payment.service.ts
-│   │   │   │   ├── room.service.ts
-│   │   │   │   └── utility.service.ts
-│   │   │   ├── middleware/
-│   │   │   │   ├── auth.middleware.ts
-│   │   │   │   ├── error.middleware.ts
-│   │   │   │   └── logger.middleware.ts
-│   │   │   ├── context.ts
-│   │   │   ├── root.ts
+│   │   │   ├── utils/
+│   │   │   │   ├── errors.ts
+│   │   │   │   └── helpers.ts
+│   │   │   ├── index.ts
+│   │   │   ├── routers.ts
 │   │   │   └── trpc.ts
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   ├── database/                         # Prisma + database client
-│   │   ├── prisma/
-│   │   │   ├── schema.prisma
-│   │   │   ├── migrations/
-│   │   │   └── seed.ts
+│   ├── auth/
 │   │   ├── src/
-│   │   │   ├── client.ts
-│   │   │   ├── types.ts
-│   │   │   └── index.ts
-│   │   ├── package.json
-│   │   └── tsconfig.json
-│   │
-│   ├── auth/                             # Authentication & authorization
-│   │   ├── src/
+│   │   │   ├── guards/
+│   │   │   │   ├── role.guard.ts
+│   │   │   │   ├── auth.guard.ts
+│   │   │   │   └── index.ts
 │   │   │   ├── providers/
 │   │   │   │   ├── credentials.provider.ts
 │   │   │   │   ├── google.provider.ts
 │   │   │   │   └── index.ts
 │   │   │   ├── strategies/
 │   │   │   │   ├── jwt.strategy.ts
-│   │   │   │   └── session.strategy.ts
-│   │   │   ├── guards/
-│   │   │   │   ├── landlord.guard.ts
-│   │   │   │   ├── boarder.guard.ts
-│   │   │   │   └── admin.guard.ts
+│   │   │   │   ├── session.strategy.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── utils/
+│   │   │   │   ├── hash.ts
+│   │   │   │   ├── token.ts
+│   │   │   │   └── index.ts
 │   │   │   ├── config.ts
+│   │   │   ├── guards.ts
+│   │   │   ├── middleware.ts
 │   │   │   └── index.ts
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   ├── shared/                           # Shared business logic & domain models
+│   ├── database/
 │   │   ├── src/
-│   │   │   ├── entities/                 # Domain entities (FSD)
+│   │   │   ├── client.ts
+│   │   │   └── index.ts
+│   │   ├── prisma/
+│   │   │   ├── migrations/
+│   │   │   ├── seed.ts
+│   │   │   └── schema.prisma
+│   │   ├── package.json
+│   │   ├── tsconfig.json
+│   │   ├── .env
+│   │   └── .eslintrc.js
+│   │
+│   ├── shared/
+│   │   ├── src/
+│   │   │   ├── lib/
+│   │   │   │   ├── constants.ts
+│   │   │   │   ├── formatters.ts
+│   │   │   │   ├── hooks.ts
+│   │   │   │   ├── utils.ts
+│   │   │   │   ├── validators.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── types/
+│   │   │   │   ├── common.ts
+│   │   │   │   ├── api.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── entities/
 │   │   │   │   ├── boarder/
 │   │   │   │   │   ├── model/
 │   │   │   │   │   │   ├── types.ts
-│   │   │   │   │   │   ├── schemas.ts
-│   │   │   │   │   │   └── utils.ts
+│   │   │   │   │   │   ├── utils.ts
+│   │   │   │   │   │   └── index.ts
 │   │   │   │   │   └── index.ts
 │   │   │   │   ├── payment/
 │   │   │   │   │   ├── model/
 │   │   │   │   │   │   ├── types.ts
-│   │   │   │   │   │   ├── schemas.ts
+│   │   │   │   │   │   ├── utils.ts
 │   │   │   │   │   │   ├── constants.ts
-│   │   │   │   │   │   └── utils.ts
+│   │   │   │   │   │   └── index.ts
 │   │   │   │   │   └── index.ts
 │   │   │   │   ├── room/
 │   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── utils.ts
+│   │   │   │   │   │   └── index.ts
 │   │   │   │   │   └── index.ts
 │   │   │   │   ├── user/
 │   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   └── index.ts
 │   │   │   │   │   └── index.ts
-│   │   │   │   └── utility/
-│   │   │   │       ├── model/
-│   │   │   │       └── index.ts
-│   │   │   ├── features/                 # Business features (FSD)
+│   │   │   │   ├── utility/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── features/
 │   │   │   │   ├── boarder-management/
 │   │   │   │   │   ├── model/
-│   │   │   │   │   │   ├── store.ts
+│   │   │   │   │   │   ├── types.ts
 │   │   │   │   │   │   ├── hooks.ts
-│   │   │   │   │   │   └── types.ts
+│   │   │   │   │   │   ├── store.ts
+│   │   │   │   │   │   ├── boarder-store.ts
+│   │   │   │   │   │   ├── use-boarders.ts
+│   │   │   │   │   │   └── index.ts
 │   │   │   │   │   └── index.ts
 │   │   │   │   ├── payment-processing/
 │   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── hooks.ts
+│   │   │   │   │   │   ├── store.ts
+│   │   │   │   │   │   ├── calculator.ts
+│   │   │   │   │   │   ├── payment-store.ts
+│   │   │   │   │   │   ├── use-payments.ts
+│   │   │   │   │   │   └── index.ts
 │   │   │   │   │   └── index.ts
 │   │   │   │   ├── room-management/
 │   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── hooks.ts
+│   │   │   │   │   │   ├── store.ts
+│   │   │   │   │   │   └── index.ts
 │   │   │   │   │   └── index.ts
-│   │   │   │   └── utility-tracking/
-│   │   │   │       ├── model/
-│   │   │   │       └── index.ts
-│   │   │   ├── lib/                      # Shared utilities
-│   │   │   │   ├── formatters.ts
-│   │   │   │   ├── validators.ts
-│   │   │   │   ├── constants.ts
-│   │   │   │   └── utils.ts
-│   │   │   └── types/
-│   │   │       ├── index.ts
-│   │   │       └── common.ts
+│   │   │   │   ├── utility-tracking/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── hooks.ts
+│   │   │   │   │   │   ├── store.ts
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── index.ts
+│   │   │   └── index.ts
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   ├── ui/                               # Shared UI components (cross-platform)
+│   ├── ui/
 │   │   ├── src/
 │   │   │   ├── components/
-│   │   │   │   ├── primitives/           # Basic components
-│   │   │   │   │   ├── Button/
-│   │   │   │   │   │   ├── Button.tsx
-│   │   │   │   │   │   ├── Button.stories.tsx
+│   │   │   │   ├── composite/
+│   │   │   │   │   ├── BoarderCard/
+│   │   │   │   │   │   ├── BoarderCard.tsx
 │   │   │   │   │   │   └── index.ts
-│   │   │   │   │   ├── Input/
-│   │   │   │   │   ├── Card/
-│   │   │   │   │   ├── Badge/
+│   │   │   │   │   ├── PaymentCard/
+│   │   │   │   │   │   ├── PaymentCard.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── RoomCard/
+│   │   │   │   │   │   ├── RoomCard.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── StatsCard/
+│   │   │   │   │   │   ├── StatsCard.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── primitives/
+│   │   │   │   │   ├── accordion.tsx
+│   │   │   │   │   ├── alert-dialog.tsx
+│   │   │   │   │   ├── avatar.tsx
+│   │   │   │   │   ├── badge.tsx
+│   │   │   │   │   ├── button.tsx
+│   │   │   │   │   ├── calendar.tsx
+│   │   │   │   │   ├── card.tsx
+│   │   │   │   │   ├── checkbox.tsx
+│   │   │   │   │   ├── command.tsx
 │   │   │   │   │   ├── Avatar/
 │   │   │   │   │   └── index.ts
 │   │   │   │   ├── composite/            # Composite components

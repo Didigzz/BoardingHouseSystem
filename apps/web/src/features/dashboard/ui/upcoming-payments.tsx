@@ -1,11 +1,11 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { Button } from "@bhms/ui/button";
-import { toast } from "@/shared/hooks/use-toast";
+import { toast } from "@bhms/ui";
 
 export function UpcomingPayments() {
   const utils = api.useUtils();

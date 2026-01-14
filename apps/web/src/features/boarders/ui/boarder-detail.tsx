@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Edit, CreditCard, Home } from "lucide-react";
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import { Button } from "@bhms/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Badge } from "@bhms/ui/badge";

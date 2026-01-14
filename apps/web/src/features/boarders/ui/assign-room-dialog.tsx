@@ -16,8 +16,8 @@ import {
   SelectValue,
 } from "@bhms/ui/select";
 import { Label } from "@bhms/ui/label";
-import { api } from "./lib/trpc-react";
-import { toast } from "@/shared/hooks/use-toast";
+import { api } from "@/lib/trpc-react";
+import { toast } from "@bhms/ui";
 import type { Boarder } from "@bhms/shared/entities/boarder";
 
 interface AssignRoomDialogProps {

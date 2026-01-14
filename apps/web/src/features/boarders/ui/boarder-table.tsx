@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import {
   Table,
   TableBody,

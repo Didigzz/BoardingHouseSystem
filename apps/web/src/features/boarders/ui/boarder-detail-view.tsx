@@ -9,7 +9,7 @@ import { BoarderStatusBadge } from "@bhms/shared/entities/boarder";
 import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { EditBoarderDialog } from "./edit-boarder-dialog";
-import type { Boarder, Room, Payment } from "@prisma/client";
+import type { Boarder, Room, Payment } from "@bhms/database";
 
 interface BoarderWithRelations extends Boarder {
   room: Room | null;
@@ -82,7 +82,7 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {boarder.room ? formatCurrency(boarder.room.monthlyRate) : "N/A"}
+              {boarder.room ? formatCurrency(Number(boarder.room.monthlyRate)) : "N/A"}
             </div>
           </CardContent>
         </Card>
@@ -152,7 +152,7 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <p className="font-medium">{formatCurrency(payment.amount)}</p>
+                        <p className="font-medium">{formatCurrency(Number(payment.amount))}</p>
                         {payment.paidDate && (
                           <p className="text-sm text-muted-foreground">
                             Paid: {formatDate(payment.paidDate)}

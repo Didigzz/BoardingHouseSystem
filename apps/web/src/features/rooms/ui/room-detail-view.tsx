@@ -11,7 +11,7 @@ import { BoarderCard } from "@bhms/shared/entities/boarder";
 import { formatCurrency } from "@bhms/shared";
 import { EditRoomDialog } from "./edit-room-dialog";
 import { DeleteRoomDialog } from "./delete-room-dialog";
-import type { Room, Boarder, UtilityReading } from "@prisma/client";
+import type { Room, Boarder, UtilityReading } from "@bhms/database";
 
 interface RoomWithRelations extends Room {
   boarders: Boarder[];
@@ -50,7 +50,7 @@ export function RoomDetailView({ room }: RoomDetailViewProps) {
             <CardTitle className="text-sm font-medium">Monthly Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(room.monthlyRate)}</div>
+            <div className="text-2xl font-bold">{formatCurrency(Number(room.monthlyRate))}</div>
           </CardContent>
         </Card>
         <Card>

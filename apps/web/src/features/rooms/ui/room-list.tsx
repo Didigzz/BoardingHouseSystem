@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import { RoomCard } from "@bhms/shared/entities/room";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { useRouter } from "next/navigation";

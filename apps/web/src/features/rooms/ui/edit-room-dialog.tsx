@@ -26,8 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@bhms/ui/select";
-import { api } from "./lib/trpc-react";
-import { toast } from "@/shared/hooks/use-toast";
+import { api } from "@/lib/trpc-react";
+import { toast } from "@bhms/ui";
 import { updateRoomSchema, type UpdateRoomInput, type Room } from "@bhms/shared/entities/room";
 
 interface EditRoomDialogProps {

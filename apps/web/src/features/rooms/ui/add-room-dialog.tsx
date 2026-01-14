@@ -21,8 +21,8 @@ import {
 } from "@bhms/ui/form";
 import { Input } from "@bhms/ui/input";
 import { Plus } from "lucide-react";
-import { api } from "./lib/trpc-react";
-import { toast } from "@/shared/hooks/use-toast";
+import { api } from "@/lib/trpc-react";
+import { toast } from "@bhms/ui";
 import { createRoomSchema, type CreateRoomInput } from "@bhms/shared/entities/room";
 
 export function AddRoomDialog() {

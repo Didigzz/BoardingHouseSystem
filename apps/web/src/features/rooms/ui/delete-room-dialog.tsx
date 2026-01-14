@@ -10,8 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@bhms/ui/alert-dialog";
-import { api } from "./lib/trpc-react";
-import { toast } from "@/shared/hooks/use-toast";
+import { api } from "@/lib/trpc-react";
+import { toast } from "@bhms/ui";
 import type { Room } from "@bhms/shared/entities/room";
 
 interface DeleteRoomDialogProps {

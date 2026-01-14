@@ -28,8 +28,8 @@ import {
   SelectValue,
 } from "@bhms/ui/select";
 import { Plus } from "lucide-react";
-import { api } from "./lib/trpc-react";
-import { toast } from "@/shared/hooks/use-toast";
+import { api } from "@/lib/trpc-react";
+import { toast } from "@bhms/ui";
 import { createPaymentSchema, type CreatePaymentInput } from "@bhms/shared/entities/payment";
 
 export function AddPaymentDialog() {

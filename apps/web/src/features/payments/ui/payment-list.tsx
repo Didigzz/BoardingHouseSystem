@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import { PaymentCard } from "@bhms/shared/entities/payment";
 import { Skeleton } from "@bhms/ui/skeleton";
 

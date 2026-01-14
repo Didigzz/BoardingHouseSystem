@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
 import { Button } from "@bhms/ui/button";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { Check } from "lucide-react";
-import { toast } from "@/shared/hooks/use-toast";
+import { toast } from "@bhms/ui";
 
 export function PaymentTable() {
   const utils = api.useUtils();

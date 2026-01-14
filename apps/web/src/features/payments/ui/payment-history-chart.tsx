@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import { Skeleton } from "@bhms/ui/skeleton";
 import {
   LineChart,

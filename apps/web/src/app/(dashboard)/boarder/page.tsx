@@ -2,7 +2,7 @@
 
 import { auth } from "./lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "./lib/trpc-react";
+import { api } from "@/lib/trpc-react";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { DoorOpen, CreditCard, Calendar, AlertCircle } from "lucide-react";

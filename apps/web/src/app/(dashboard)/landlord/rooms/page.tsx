@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RoomList, AddRoomDialog } from "./features/rooms";
-import { api } from "./lib/trpc-react";
-import type { RoomStatus } from "@prisma/client";
+import { api } from "@/lib/trpc-react";
+import type { RoomStatus } from "@bhms/database";
 import type { Room } from "@bhms/shared/entities/room";
 
 export default function RoomsPage() {

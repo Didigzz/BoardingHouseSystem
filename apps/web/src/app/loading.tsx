@@ -1,4 +1,4 @@
-import { Skeleton } from "@bhms/ui/skeleton";
+import { Skeleton } from "@bhms/ui";
 
 export default function Loading() {
   return (

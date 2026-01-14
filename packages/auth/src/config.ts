@@ -1,12 +1,17 @@
-import type { AuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import type { NextAuthConfig } from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { db } from '@bhms/database';
+import { authConfigEdge } from './config.edge';
 
-export const authConfig: AuthOptions = {
+/**
+ * Full auth config with providers (requires Node.js runtime)
+ * Used for actual authentication
+ */
+export const authConfig: NextAuthConfig = {
+    ...authConfigEdge,
     providers: [
-        CredentialsProvider({
-            name: 'credentials',
+        Credentials({
             credentials: {
                 email: { label: 'Email', type: 'email' },
                 password: { label: 'Password', type: 'password' },
@@ -17,7 +22,7 @@ export const authConfig: AuthOptions = {
                 }
 
                 const user = await db.user.findUnique({
-                    where: { email: credentials.email },
+                    where: { email: credentials.email as string },
                 });
 
                 if (!user || !user.password) {
@@ -25,7 +30,7 @@ export const authConfig: AuthOptions = {
                 }
 
                 const isPasswordValid = await bcrypt.compare(
-                    credentials.password,
+                    credentials.password as string,
                     user.password
                 );
 
@@ -42,26 +47,4 @@ export const authConfig: AuthOptions = {
             },
         }),
     ],
-    session: {
-        strategy: 'jwt',
-    },
-    callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-                token.role = (user as any).role;
-            }
-            return token;
-        },
-        async session({ session, token }) {
-            if (session.user) {
-                (session.user as any).id = token.id;
-                (session.user as any).role = token.role;
-            }
-            return session;
-        },
-    },
-    pages: {
-        signIn: '/login',
-    },
 };

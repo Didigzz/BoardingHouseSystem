@@ -6,13 +6,14 @@
     "types": "./src/index.ts",
     "scripts": {
         "build": "tsc",
-        "lint": "eslint src/"
+        "lint": "eslint src/ --no-error-on-unmatched-pattern"
     },
     "dependencies": {
-        "next-auth": "5.0.0-beta.4",
-        "bcryptjs": "^2.4.3",
+        "@auth/core": "^0.34.0",
         "@bhms/database": "workspace:*",
         "@trpc/server": "^11.0.0-rc.297",
+        "bcryptjs": "^2.4.3",
+        "next-auth": "5.0.0-beta.4",
         "zod": "^3.22.4"
     },
     "devDependencies": {

@@ -1,14 +1,14 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { Progress } from "@bhms/ui/progress";
 import { DoorOpen, Users } from "lucide-react";
 
 export function OccupancyOverview() {
-  const { data: roomStats, isLoading: roomsLoading } = api.room.getStats.useQuery();
-  const { data: boarderStats, isLoading: boardersLoading } = api.boarder.getStats.useQuery();
+  const { data: roomStats, isLoading: roomsLoading } = orpc.room.getStats.useQuery();
+  const { data: boarderStats, isLoading: boardersLoading } = orpc.boarder.getStats.useQuery();
 
   if (roomsLoading || boardersLoading) {
     return <Skeleton className="h-48" />;

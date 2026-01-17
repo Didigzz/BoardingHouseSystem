@@ -1,13 +1,13 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency } from "@bhms/shared";
 import { CreditCard, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 export function PaymentSummaryCard() {
-  const { data: stats, isLoading } = api.payment.getStats.useQuery();
+  const { data: stats, isLoading } = orpc.payment.getStats.useQuery();
 
   if (isLoading) {
     return <Skeleton className="h-32" />;

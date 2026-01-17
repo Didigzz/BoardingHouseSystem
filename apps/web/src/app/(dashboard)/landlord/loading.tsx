@@ -1,6 +1,6 @@
 import { Skeleton } from "@bhms/ui/skeleton";
 
-export default function LandlordLoading() {
+export default function LandlordLoading(): JSX.Element {
   return (
     <div className="space-y-6">
       <Skeleton className="h-10 w-48" />

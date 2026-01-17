@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { TRPCReactProvider } from "@/lib/trpc-react";
+import { ORPCReactProvider } from "@/lib/orpc-react";
 import { Providers } from "@/providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -11,19 +11,21 @@ export const metadata: Metadata = {
   description: "Manage your boarding house efficiently",
 };
 
-export default function RootLayout({
+const RootLayout = function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}): React.ReactElement {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <TRPCReactProvider>
+        <ORPCReactProvider>
           <Providers>{children}</Providers>
-        </TRPCReactProvider>
+        </ORPCReactProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
 

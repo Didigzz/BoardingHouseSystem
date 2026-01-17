@@ -10,7 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@bhms/ui/alert-dialog";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { useToast } from "@bhms/ui";
 import { formatCurrency } from "@bhms/shared";
 import type { Payment } from "@bhms/shared/entities/payment/model/types";
@@ -23,14 +23,14 @@ interface MarkPaidDialogProps {
 
 export function MarkPaidDialog({ payment, open, onOpenChange }: MarkPaidDialogProps) {
   const { toast } = useToast();
-  const utils = api.useUtils();
+  const utils = orpc.useUtils();
 
-  const markAsPaid = api.payment.markAsPaid.useMutation({
+  const markAsPaid = orpc.payment.markAsPaid.useMutation({
     onSuccess: () => {
       toast({ title: "Payment marked as paid" });
-      utils.payment.getAll.invalidate();
-      utils.payment.getSummary.invalidate();
-      utils.dashboard.getStats.invalidate();
+      queryClient.payment.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.payment.getSummary.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.dashboard.getStats.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
       onOpenChange(false);
     },
     onError: (error) => {

@@ -4,9 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
-import { Button } from "@bhms/ui/button";
+import { Button } from "@bhms/ui";
 import { Sheet, SheetContent, SheetTrigger } from "@bhms/ui/sheet";
-import { cn } from "@bhms/shared";
+import { cn } from "@/lib/utils";
 import { landlordNavItems } from "@/shared/config/nav";
 
 export function MobileNav() {

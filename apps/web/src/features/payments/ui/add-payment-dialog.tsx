@@ -28,15 +28,15 @@ import {
   SelectValue,
 } from "@bhms/ui/select";
 import { Plus } from "lucide-react";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import { createPaymentSchema, type CreatePaymentInput } from "@bhms/shared/entities/payment";
 
 export function AddPaymentDialog() {
   const [open, setOpen] = useState(false);
-  const utils = api.useUtils();
+  const utils = orpc.useUtils();
 
-  const { data: boarders } = api.boarder.getAll.useQuery({ isActive: true });
+  const { data: boarders } = orpc.boarder.getAll.useQuery({ isActive: true });
 
   const form = useForm<CreatePaymentInput>({
     resolver: zodResolver(createPaymentSchema),
@@ -49,10 +49,10 @@ export function AddPaymentDialog() {
     },
   });
 
-  const createPayment = api.payment.create.useMutation({
+  const createPayment = orpc.payment.create.useMutation({
     onSuccess: () => {
       toast({ title: "Payment created successfully" });
-      utils.payment.getAll.invalidate();
+      queryClient.payment.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
       setOpen(false);
       form.reset();
     },

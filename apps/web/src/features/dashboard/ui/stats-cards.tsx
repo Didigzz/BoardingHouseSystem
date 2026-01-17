@@ -2,12 +2,12 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { DoorOpen, Users, CreditCard, TrendingUp } from "lucide-react";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency } from "@bhms/shared";
 
 export function StatsCards() {
-  const { data: stats, isLoading } = api.dashboard.getStats.useQuery();
+  const { data: stats, isLoading } = orpc.dashboard.getStats.useQuery();
 
   if (isLoading) {
     return (

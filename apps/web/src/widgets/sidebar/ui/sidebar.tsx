@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@bhms/shared";
-import { Button } from "@bhms/ui/button";
+import { cn } from "@/lib/utils";
+import { Button } from "@bhms/ui";
 import { signOut } from "next-auth/react";
 import { LogOut } from "lucide-react";
 import { landlordNavItems } from "@/shared/config/nav";

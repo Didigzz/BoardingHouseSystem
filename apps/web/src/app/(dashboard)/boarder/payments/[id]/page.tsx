@@ -6,7 +6,7 @@ interface PaymentDetailPageProps {
   };
 }
 
-export default function PaymentDetailPage({ params }: PaymentDetailPageProps) {
+export default function PaymentDetailPage({ params }: PaymentDetailPageProps): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

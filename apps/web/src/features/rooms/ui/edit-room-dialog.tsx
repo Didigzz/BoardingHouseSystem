@@ -26,9 +26,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@bhms/ui/select";
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import { updateRoomSchema, type UpdateRoomInput, type Room } from "@bhms/shared/entities/room";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface EditRoomDialogProps {
   room: Room | null;
@@ -37,7 +38,7 @@ interface EditRoomDialogProps {
 }
 
 export function EditRoomDialog({ room, open, onOpenChange }: EditRoomDialogProps) {
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
   const form = useForm<UpdateRoomInput>({
     resolver: zodResolver(updateRoomSchema),
@@ -66,10 +67,10 @@ export function EditRoomDialog({ room, open, onOpenChange }: EditRoomDialogProps
     }
   }, [room, form]);
 
-  const updateRoom = api.room.update.useMutation({
+  const updateRoom = orpc.room.update.useMutation({
     onSuccess: () => {
       toast({ title: "Room updated successfully" });
-      utils.room.getAll.invalidate();
+      queryClient.invalidateQueries({ queryKey: ["room.getAll"] });
       onOpenChange(false);
     },
     onError: (error) => {

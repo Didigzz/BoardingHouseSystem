@@ -3,8 +3,14 @@ import { Button } from "@bhms/ui";
 import { redirect } from "next/navigation";
 import { auth } from "../lib/auth";
 
-export default async function HomePage() {
-  const session = await auth();
+const HomePage = async function HomePage(): Promise<React.ReactElement> {
+  let session;
+  try {
+    session = await auth();
+  } catch (error) {
+    console.error("Auth error:", error);
+    session = null;
+  }
 
   if (!session) {
     return (
@@ -13,8 +19,9 @@ export default async function HomePage() {
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
             <span className="text-primary">BHMS</span>
           </h1>
-          <p className="text-xl text-muted-foreground text-center max-w-md">
-            Boarding House Management System - Efficiently manage rooms, boarders, and payments
+          <p className="max-w-md text-center text-xl text-muted-foreground">
+            Boarding House Management System - Efficiently manage rooms,
+            boarders, and payments
           </p>
           <div className="flex gap-4">
             <Button asChild size="lg">
@@ -36,5 +43,6 @@ export default async function HomePage() {
   }
 
   redirect("/landlord");
-}
+};
 
+export default HomePage;

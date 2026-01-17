@@ -6,6 +6,7 @@ import type { NextAuthConfig } from 'next-auth';
  */
 export const authConfigEdge: NextAuthConfig = {
     providers: [], // No providers - just for session validation
+    trustHost: true, // Required for development without HTTPS
     session: {
         strategy: 'jwt',
     },

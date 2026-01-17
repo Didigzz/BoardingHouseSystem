@@ -1,6 +1,6 @@
 import { Skeleton } from "@bhms/ui/skeleton";
 
-export default function RoomsLoading() {
+export default function RoomsLoading(): JSX.Element {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

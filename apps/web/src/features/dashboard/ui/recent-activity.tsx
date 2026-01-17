@@ -1,13 +1,13 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatDateTime } from "@bhms/shared";
 import { CreditCard, UserPlus } from "lucide-react";
 
 export function RecentActivity() {
-  const { data: activities, isLoading } = api.dashboard.getRecentActivity.useQuery();
+  const { data: activities, isLoading } = orpc.dashboard.getRecentActivity.useQuery();
 
   if (isLoading) {
     return (

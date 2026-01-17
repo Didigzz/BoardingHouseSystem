@@ -4,7 +4,7 @@ interface EditRoomPageProps {
   };
 }
 
-export default function EditRoomPage({ params }: EditRoomPageProps) {
+export default function EditRoomPage({ params }: EditRoomPageProps): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

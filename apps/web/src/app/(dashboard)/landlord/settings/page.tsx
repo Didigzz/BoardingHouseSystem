@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 
-export default function SettingsPage() {
+export default function SettingsPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

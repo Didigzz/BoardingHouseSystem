@@ -1,14 +1,14 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
 const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
 
 export function RoomOccupancyChart() {
-  const { data: stats, isLoading } = api.room.getStats.useQuery();
+  const { data: stats, isLoading } = orpc.room.getStats.useQuery();
 
   if (isLoading) {
     return (

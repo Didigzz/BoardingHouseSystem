@@ -21,13 +21,14 @@ import {
 } from "@bhms/ui/form";
 import { Input } from "@bhms/ui/input";
 import { Plus } from "lucide-react";
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import { createRoomSchema, type CreateRoomInput } from "@bhms/shared/entities/room";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function AddRoomDialog() {
   const [open, setOpen] = useState(false);
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
   const form = useForm<CreateRoomInput>({
     resolver: zodResolver(createRoomSchema),
@@ -41,10 +42,10 @@ export function AddRoomDialog() {
     },
   });
 
-  const createRoom = api.room.create.useMutation({
+  const createRoom = orpc.room.create.useMutation({
     onSuccess: () => {
       toast({ title: "Room created successfully" });
-      utils.room.getAll.invalidate();
+      queryClient.invalidateQueries({ queryKey: ["room.getAll"] });
       setOpen(false);
       form.reset();
     },

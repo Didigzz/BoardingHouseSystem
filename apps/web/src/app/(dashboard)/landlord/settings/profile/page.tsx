@@ -1,4 +1,4 @@
-export default function ProfileSettingsPage() {
+export default function ProfileSettingsPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

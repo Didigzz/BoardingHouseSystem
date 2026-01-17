@@ -10,7 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@bhms/ui/alert-dialog";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import { useRouter } from "next/navigation";
 import type { Boarder } from "@bhms/shared/entities/boarder";
@@ -29,13 +29,13 @@ export function DeleteBoarderDialog({
   redirectOnDelete = false,
 }: DeleteBoarderDialogProps) {
   const router = useRouter();
-  const utils = api.useUtils();
+  const utils = orpc.useUtils();
 
-  const deleteBoarder = api.boarder.delete.useMutation({
+  const deleteBoarder = orpc.boarder.delete.useMutation({
     onSuccess: () => {
       toast({ title: "Boarder deleted successfully" });
-      utils.boarder.getAll.invalidate();
-      utils.room.getAll.invalidate();
+      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.room.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
       onOpenChange(false);
       if (redirectOnDelete) {
         router.push("/landlord/boarders");

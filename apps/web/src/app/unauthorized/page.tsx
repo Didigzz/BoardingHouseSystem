@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@bhms/ui/button";
 import { ShieldX } from "lucide-react";
 
-export default function UnauthorizedPage() {
+export default function UnauthorizedPage(): JSX.Element {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
       <ShieldX className="h-12 w-12 text-destructive" />

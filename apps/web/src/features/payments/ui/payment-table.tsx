@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import {
   Table,
   TableBody,
@@ -17,13 +17,13 @@ import { Check } from "lucide-react";
 import { toast } from "@bhms/ui";
 
 export function PaymentTable() {
-  const utils = api.useUtils();
-  const { data: payments, isLoading } = api.payment.getAll.useQuery();
+  const utils = orpc.useUtils();
+  const { data: payments, isLoading } = orpc.payment.getAll.useQuery();
 
-  const markAsPaid = api.payment.markAsPaid.useMutation({
+  const markAsPaid = orpc.payment.markAsPaid.useMutation({
     onSuccess: () => {
       toast({ title: "Payment marked as paid" });
-      utils.payment.getAll.invalidate();
+      queryClient.payment.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
     },
   });
 

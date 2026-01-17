@@ -1,13 +1,13 @@
 "use client";
 
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import { BoarderCard } from "@bhms/shared/entities/boarder";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { useRouter } from "next/navigation";
 
 export function BoarderList() {
   const router = useRouter();
-  const { data: boarders, isLoading } = api.boarder.getAll.useQuery();
+  const { data: boarders, isLoading } = orpc.boarder.getAll.useQuery();
 
   if (isLoading) {
     return (

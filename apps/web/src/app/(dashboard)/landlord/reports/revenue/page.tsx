@@ -1,4 +1,4 @@
-export default function RevenueReportPage() {
+export default function RevenueReportPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

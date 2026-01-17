@@ -30,7 +30,7 @@ const accessCodeSchema = z.object({
 
 type AccessCodeFormValues = z.infer<typeof accessCodeSchema>;
 
-export function BoarderAccessForm() {
+export function BoarderAccessForm(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 

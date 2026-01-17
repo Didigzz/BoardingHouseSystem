@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import {
   LineChart,
@@ -14,7 +14,7 @@ import {
 } from "recharts";
 
 export function PaymentHistoryChart() {
-  const { data: monthlyRevenue, isLoading } = api.payment.getMonthlyRevenue.useQuery({});
+  const { data: monthlyRevenue, isLoading } = orpc.payment.getMonthlyRevenue.useQuery({});
 
   if (isLoading) {
     return (

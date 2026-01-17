@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ interface BoarderTableProps {
 }
 
 export function BoarderTable({ onEdit, onDelete }: BoarderTableProps) {
-  const { data: boarders, isLoading } = api.boarder.getAll.useQuery();
+  const { data: boarders, isLoading } = orpc.boarder.getAll.useQuery();
 
   if (isLoading) {
     return (

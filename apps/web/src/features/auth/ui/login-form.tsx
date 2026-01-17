@@ -33,7 +33,7 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export function LoginForm() {
+export function LoginForm(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 

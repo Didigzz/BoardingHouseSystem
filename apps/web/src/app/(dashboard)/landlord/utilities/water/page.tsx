@@ -1,4 +1,4 @@
-export default function WaterPage() {
+export default function WaterPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

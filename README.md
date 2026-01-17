@@ -1,4 +1,6 @@
-# Boarding House Management System (BHMS)
+# 🏠 Boarding House Management System (BHMS)
+
+A modern, multi-tenant boarding house management platform built with Next.js, React Native, tRPC, and Prisma.
 
 A modern, full-stack web application for managing boarding houses, built with the **T3 Stack** and **Feature-Sliced Design** architecture.
 
@@ -385,6 +387,26 @@ BoardingHouseSystem/
 └── README.md
 ```
 
+## 🚀 Quick Start
+
+```bash
+# 1. Install dependencies
+pnpm install
+
+# 2. Setup environment (creates .env files)
+bash scripts/setup.sh
+
+# 3. Update .env with your database credentials
+
+# 4. Start all services (web + api + mobile)
+pnpm dev
+```
+
+Visit:
+- **Web App:** http://localhost:3000
+- **API Server:** http://localhost:3001
+- **Mobile App:** http://localhost:8081
+
 ## Getting Started
 
 ### Prerequisites
@@ -411,7 +433,10 @@ BoardingHouseSystem/
 3. **Set up environment variables**
 
    ```bash
+   # Copy example files
+   cp .env.example .env
    cp apps/web/.env.example apps/web/.env
+   cp apps/api/.env.example apps/api/.env
    ```
 
    See [Environment Variables](#-environment-variables) for configuration details.
@@ -419,7 +444,7 @@ BoardingHouseSystem/
 4. **Start the database** (using Docker)
 
    ```bash
-   docker compose -f infra/docker/docker-compose.dev.yml up -d
+   docker compose up -d
    ```
 
 5. **Push database schema**
@@ -434,14 +459,22 @@ BoardingHouseSystem/
    pnpm db:seed
    ```
 
-7. **Start the development server**
+7. **Start the development servers**
 
    ```bash
+   # Start all services (web + api + mobile)
    pnpm dev
+
+   # Or start individually
+   pnpm web:dev    # Web app only
+   pnpm api:dev    # API server only
+   pnpm mobile:dev # Mobile app only
    ```
 
 8. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+   - Web: [http://localhost:3000](http://localhost:3000)
+   - API: [http://localhost:3001](http://localhost:3001)
+   - Mobile: [http://localhost:8081](http://localhost:8081)
 
 ### Demo Credentials
 
@@ -599,18 +632,41 @@ See [docs/deployment.md](docs/deployment.md) for detailed deployment instruction
 
 ## Available Scripts
 
+### Development
+
+| Command          | Description                         |
+| ---------------- | ----------------------------------- |
+| `pnpm dev`       | Start all services (web + api)      |
+| `pnpm web:dev`   | Start web app only                  |
+| `pnpm api:dev`   | Start API server only               |
+| `pnpm mobile:dev`| Start mobile app only               |
+
+### Build & Production
+
 | Command          | Description                    |
 | ---------------- | ------------------------------ |
-| `pnpm dev`       | Start development server       |
-| `pnpm build`     | Build for production           |
+| `pnpm build`     | Build all apps                 |
+| `pnpm web:build` | Build web app only             |
+| `pnpm api:build` | Build API server only          |
 | `pnpm start`     | Start production server        |
+
+### Code Quality
+
+| Command          | Description                    |
+| ---------------- | ------------------------------ |
 | `pnpm lint`      | Run ESLint                     |
 | `pnpm typecheck` | Run TypeScript type checking   |
 | `pnpm format`    | Format code with Prettier      |
 | `pnpm clean`     | Clean build artifacts          |
-| `pnpm db:push`   | Push Prisma schema to database |
-| `pnpm db:studio` | Open Prisma Studio             |
-| `pnpm db:seed`   | Seed database with sample data |
+
+### Database
+
+| Command           | Description                    |
+| ----------------- | ------------------------------ |
+| `pnpm db:push`    | Push Prisma schema to database |
+| `pnpm db:migrate` | Run database migrations        |
+| `pnpm db:studio`  | Open Prisma Studio             |
+| `pnpm db:seed`    | Seed database with sample data |
 
 ## Contributing
 

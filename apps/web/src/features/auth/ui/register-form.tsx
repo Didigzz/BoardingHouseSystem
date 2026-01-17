@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from "@bhms/ui/card";
 import { toast } from "@bhms/ui";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import Link from "next/link";
 
 const registerSchema = z
@@ -40,7 +40,7 @@ const registerSchema = z
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-export function RegisterForm() {
+export function RegisterForm(): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -54,7 +54,7 @@ export function RegisterForm() {
     },
   });
 
-  const register = api.user.register.useMutation({
+  const register = orpc.user.register.useMutation({
     onSuccess: () => {
       toast({ title: "Account created successfully" });
       router.push("/login");

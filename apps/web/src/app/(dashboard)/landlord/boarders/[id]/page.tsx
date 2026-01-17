@@ -1,18 +1,31 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { api } from "@/trpc/react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { BoarderAvatar, BoarderStatusBadge } from "@/entities/boarder";
-import { PaymentCard } from "@/entities/payment";
+import { orpc } from "@/lib/orpc-client";
+import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
+import { Button } from "@bhms/ui/button";
+import { Skeleton } from "@bhms/ui/skeleton";
+import { Avatar, AvatarFallback } from "@bhms/ui/avatar";
+import { Badge } from "@bhms/ui/badge";
 import { ArrowLeft, Edit, Trash2, Mail, Phone, DoorOpen, Calendar, AlertCircle } from "lucide-react";
-import { formatDate, formatCurrency } from "@/shared/lib/utils";
 import { useState } from "react";
-import { EditBoarderDialog, DeleteBoarderDialog } from "@/features/boarders";
 
-export default function BoarderDetailPage() {
+const formatDate = (date: Date | string) => {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
+
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "PHP",
+  }).format(amount);
+};
+
+export default function BoarderDetailPage(): JSX.Element {
   const params = useParams();
   const router = useRouter();
   const boarderId = params.id as string;
@@ -20,7 +33,7 @@ export default function BoarderDetailPage() {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const { data: boarder, isLoading } = api.boarder.getById.useQuery({ id: boarderId });
+  const { data: boarder, isLoading } = orpc.boarder.getById.useQuery({ id: boarderId });
 
   if (isLoading) {
     return (
@@ -42,6 +55,10 @@ export default function BoarderDetailPage() {
     );
   }
 
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName[0]}${lastName[0]}`.toUpperCase();
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -49,16 +66,16 @@ export default function BoarderDetailPage() {
           <Button variant="ghost" size="icon" onClick={() => router.push("/landlord/boarders")}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <BoarderAvatar
-            firstName={boarder.firstName}
-            lastName={boarder.lastName}
-            className="h-12 w-12"
-          />
+          <Avatar className="h-12 w-12">
+            <AvatarFallback>{getInitials(boarder.firstName, boarder.lastName)}</AvatarFallback>
+          </Avatar>
           <div>
             <h1 className="text-3xl font-bold">
               {boarder.firstName} {boarder.lastName}
             </h1>
-            <BoarderStatusBadge isActive={boarder.isActive} />
+            <Badge variant={boarder.isActive ? "default" : "secondary"}>
+              {boarder.isActive ? "Active" : "Inactive"}
+            </Badge>
           </div>
         </div>
         <div className="flex gap-2">
@@ -158,8 +175,25 @@ export default function BoarderDetailPage() {
         <CardContent>
           {boarder.payments && boarder.payments.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2">
-              {boarder.payments.map((payment) => (
-                <PaymentCard key={payment.id} payment={payment} />
+              {boarder.payments.map((payment: any) => (
+                <Card key={payment.id}>
+                  <CardContent className="pt-6">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold">{payment.type}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Due: {formatDate(payment.dueDate)}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold">{formatCurrency(Number(payment.amount))}</p>
+                        <Badge variant={payment.status === "PAID" ? "default" : "secondary"}>
+                          {payment.status}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           ) : (
@@ -167,9 +201,6 @@ export default function BoarderDetailPage() {
           )}
         </CardContent>
       </Card>
-
-      <EditBoarderDialog boarder={boarder} open={editOpen} onOpenChange={setEditOpen} />
-      <DeleteBoarderDialog boarder={boarder} open={deleteOpen} onOpenChange={setDeleteOpen} />
     </div>
   );
 }

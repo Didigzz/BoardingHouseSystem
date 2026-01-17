@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@bhms/ui/select";
 import { Label } from "@bhms/ui/label";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import type { Boarder } from "@bhms/shared/entities/boarder";
 
@@ -28,15 +28,15 @@ interface AssignRoomDialogProps {
 
 export function AssignRoomDialog({ boarder, open, onOpenChange }: AssignRoomDialogProps) {
   const [selectedRoomId, setSelectedRoomId] = useState<string>("");
-  const utils = api.useUtils();
+  const utils = orpc.useUtils();
 
-  const { data: rooms } = api.room.getAll.useQuery({ status: "AVAILABLE" });
+  const { data: rooms } = orpc.room.getAll.useQuery({ status: "AVAILABLE" });
 
-  const assignRoom = api.boarder.assignRoom.useMutation({
+  const assignRoom = orpc.boarder.assignRoom.useMutation({
     onSuccess: () => {
       toast({ title: "Room assigned successfully" });
-      utils.boarder.getAll.invalidate();
-      utils.room.getAll.invalidate();
+      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.room.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
       onOpenChange(false);
     },
     onError: (error) => {

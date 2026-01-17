@@ -1,4 +1,4 @@
-export default function NotificationSettingsPage() {
+export default function NotificationSettingsPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

@@ -1,4 +1,4 @@
-export default function BillingSettingsPage() {
+export default function BillingSettingsPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

@@ -1,0 +1,1 @@
+export { UtilityReadingRecordedDomainEvent } from './utility-reading-recorded.domain-event';

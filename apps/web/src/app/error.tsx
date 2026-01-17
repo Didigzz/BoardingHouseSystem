@@ -10,7 +10,7 @@ export default function Error({
 }: {
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}): JSX.Element {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -19,7 +19,7 @@ export default function Error({
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
       <AlertCircle className="h-12 w-12 text-destructive" />
       <h2 className="text-2xl font-bold">Something went wrong!</h2>
-      <p className="text-muted-foreground text-center max-w-md">
+      <p className="max-w-md text-center text-muted-foreground">
         An unexpected error occurred. Please try again or contact support if the
         problem persists.
       </p>
@@ -27,4 +27,3 @@ export default function Error({
     </div>
   );
 }
-

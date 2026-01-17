@@ -1,11 +1,11 @@
 "use client";
 
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { PaymentCard } from "@bhms/shared/entities/payment";
 import { Skeleton } from "@bhms/ui/skeleton";
 
 export function PaymentList() {
-  const { data: payments, isLoading } = api.payment.getAll.useQuery();
+  const { data: payments, isLoading } = orpc.payment.getAll.useQuery();
 
   if (isLoading) {
     return (

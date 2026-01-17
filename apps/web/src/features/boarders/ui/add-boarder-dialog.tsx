@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@bhms/ui/select";
 import { Plus } from "lucide-react";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import {
   createBoarderSchema,
@@ -37,9 +37,9 @@ import {
 
 export function AddBoarderDialog() {
   const [open, setOpen] = useState(false);
-  const utils = api.useUtils();
+  const utils = orpc.useUtils();
 
-  const { data: rooms } = api.room.getAll.useQuery({ status: "AVAILABLE" });
+  const { data: rooms } = orpc.room.getAll.useQuery({ status: "AVAILABLE" });
 
   const form = useForm<CreateBoarderInput>({
     resolver: zodResolver(createBoarderSchema),
@@ -55,11 +55,11 @@ export function AddBoarderDialog() {
     },
   });
 
-  const createBoarder = api.boarder.create.useMutation({
+  const createBoarder = orpc.boarder.create.useMutation({
     onSuccess: () => {
       toast({ title: "Boarder added successfully" });
-      utils.boarder.getAll.invalidate();
-      utils.room.getAll.invalidate();
+      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.room.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
       setOpen(false);
       form.reset();
     },

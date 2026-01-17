@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Edit, Trash2, Users } from "lucide-react";
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import { Button } from "@bhms/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Badge } from "@bhms/ui/badge";
@@ -21,7 +21,7 @@ export function RoomDetail({ roomId }: RoomDetailProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const { data: room, isLoading } = api.room.getById.useQuery({ id: roomId });
+  const { data: room, isLoading } = orpc.room.getById.useQuery({ id: roomId });
 
   if (isLoading) {
     return (

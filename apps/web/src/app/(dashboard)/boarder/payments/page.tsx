@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 
-export default function BoarderPaymentsPage() {
+export default function BoarderPaymentsPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

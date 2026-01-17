@@ -4,7 +4,7 @@ interface EditBoarderPageProps {
   };
 }
 
-export default function EditBoarderPage({ params }: EditBoarderPageProps) {
+export default function EditBoarderPage({ params }: EditBoarderPageProps): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

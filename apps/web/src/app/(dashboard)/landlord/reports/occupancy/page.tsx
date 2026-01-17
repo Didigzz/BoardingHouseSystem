@@ -1,4 +1,4 @@
-export default function OccupancyReportPage() {
+export default function OccupancyReportPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Edit, CreditCard, Home } from "lucide-react";
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import { Button } from "@bhms/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Badge } from "@bhms/ui/badge";
@@ -19,7 +19,7 @@ interface BoarderDetailProps {
 export function BoarderDetail({ boarderId }: BoarderDetailProps) {
   const [editOpen, setEditOpen] = useState(false);
 
-  const { data: boarder, isLoading } = api.boarder.getById.useQuery({ id: boarderId });
+  const { data: boarder, isLoading } = orpc.boarder.getById.useQuery({ id: boarderId });
 
   if (isLoading) {
     return (

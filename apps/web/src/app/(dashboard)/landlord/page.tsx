@@ -1,6 +1,6 @@
 import { StatsCards, RecentActivity, UpcomingPayments } from "./features/dashboard";
 
-export default function LandlordDashboardPage() {
+export default function LandlordDashboardPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

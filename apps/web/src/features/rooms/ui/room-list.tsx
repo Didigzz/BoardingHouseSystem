@@ -1,13 +1,13 @@
 "use client";
 
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import { RoomCard } from "@bhms/shared/entities/room";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { useRouter } from "next/navigation";
 
 export function RoomList() {
   const router = useRouter();
-  const { data: rooms, isLoading } = api.room.getAll.useQuery();
+  const { data: rooms, isLoading } = orpc.room.getAll.useQuery();
 
   if (isLoading) {
     return (

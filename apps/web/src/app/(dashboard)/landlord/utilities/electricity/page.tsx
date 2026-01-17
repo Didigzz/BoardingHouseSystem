@@ -1,4 +1,4 @@
-export default function ElectricityPage() {
+export default function ElectricityPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

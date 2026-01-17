@@ -1,6 +1,6 @@
 import { Skeleton } from "@bhms/ui";
 
-export default function Loading() {
+export default function Loading(): JSX.Element {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="space-y-4 w-full max-w-md">

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@bhms/ui/components/primitives/card";
 
-export default function ReportsPage() {
+export default function ReportsPage(): JSX.Element {
   return (
     <div className="space-y-6">
       <div>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@bhms/ui/button";
 import { FileQuestion } from "lucide-react";
 
-export default function NotFound() {
+export default function NotFound(): JSX.Element {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4">
       <FileQuestion className="h-12 w-12 text-muted-foreground" />

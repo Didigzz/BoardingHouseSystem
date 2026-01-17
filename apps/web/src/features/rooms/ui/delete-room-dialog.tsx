@@ -10,9 +10,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@bhms/ui/alert-dialog";
-import { api } from "@/lib/trpc-react";
+import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import type { Room } from "@bhms/shared/entities/room";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DeleteRoomDialogProps {
   room: Room | null;
@@ -21,12 +22,12 @@ interface DeleteRoomDialogProps {
 }
 
 export function DeleteRoomDialog({ room, open, onOpenChange }: DeleteRoomDialogProps) {
-  const utils = api.useUtils();
+  const queryClient = useQueryClient();
 
-  const deleteRoom = api.room.delete.useMutation({
+  const deleteRoom = orpc.room.delete.useMutation({
     onSuccess: () => {
       toast({ title: "Room deleted successfully" });
-      utils.room.getAll.invalidate();
+      queryClient.invalidateQueries({ queryKey: ["room.getAll"] });
       onOpenChange(false);
     },
     onError: (error) => {

@@ -1,21 +1,21 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { Button } from "@bhms/ui/button";
 import { toast } from "@bhms/ui";
 
 export function UpcomingPayments() {
-  const utils = api.useUtils();
-  const { data: payments, isLoading } = api.dashboard.getUpcomingPayments.useQuery();
+  const utils = orpc.useUtils();
+  const { data: payments, isLoading } = orpc.dashboard.getUpcomingPayments.useQuery();
 
-  const markAsPaid = api.payment.markAsPaid.useMutation({
+  const markAsPaid = orpc.payment.markAsPaid.useMutation({
     onSuccess: () => {
       toast({ title: "Payment marked as paid" });
-      utils.dashboard.getUpcomingPayments.invalidate();
-      utils.dashboard.getStats.invalidate();
+      queryClient.dashboard.getUpcomingPayments.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.dashboard.getStats.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
     },
   });
 

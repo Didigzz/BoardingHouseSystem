@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@bhms/ui/select";
-import { api } from "@/lib/trpc-react";
+import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import {
   updateBoarderSchema,
@@ -45,8 +45,8 @@ export function EditBoarderDialog({
   open,
   onOpenChange,
 }: EditBoarderDialogProps) {
-  const utils = api.useUtils();
-  const { data: rooms } = api.room.getAll.useQuery();
+  const utils = orpc.useUtils();
+  const { data: rooms } = orpc.room.getAll.useQuery();
 
   const form = useForm<UpdateBoarderInput>({
     resolver: zodResolver(updateBoarderSchema),
@@ -78,10 +78,10 @@ export function EditBoarderDialog({
     }
   }, [boarder, form]);
 
-  const updateBoarder = api.boarder.update.useMutation({
+  const updateBoarder = orpc.boarder.update.useMutation({
     onSuccess: () => {
       toast({ title: "Boarder updated successfully" });
-      utils.boarder.getAll.invalidate();
+      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
       onOpenChange(false);
     },
     onError: (error) => {

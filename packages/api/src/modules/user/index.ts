@@ -1,0 +1,11 @@
+export { createUserRouter } from './presentation/user.router';
+export { User } from './domain/entities/user.entity';
+export { UserRole } from './domain/value-objects/user-role.vo';
+export { IUserRepository } from './domain/repositories/user.repository.interface';
+export { UserService } from './domain/services/user.service';
+export { PrismaUserRepository } from './infrastructure/persistence/prisma-user.repository';
+export { UserModule } from './user.module';
+export* from './domain/events';
+export* from './integration-events';
+export* from './config';
+export* from './config';

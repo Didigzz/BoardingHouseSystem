@@ -1,0 +1,11 @@
+export { createUtilityRouter } from './presentation/utility.router';
+export { UtilityReading } from './domain/entities/utility-reading.entity';
+export { UtilityType } from './domain/value-objects/utility-type.vo';
+export { IUtilityRepository } from './domain/repositories/utility.repository.interface';
+export { UtilityService } from './domain/services/utility.service';
+export { PrismaUtilityRepository } from './infrastructure/persistence/prisma-utility.repository';
+export { UtilityModule } from './utility.module';
+export * from './domain/events';
+export* from './integration-events';
+export* from './config';
+export* from './config';

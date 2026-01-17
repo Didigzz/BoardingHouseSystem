@@ -1,76 +1,43 @@
 # Dependencies
-node_modules/
-/.pnp
-.pnp.js
+node_modules
+.pnpm-store
 
 # Build outputs
-/build
-/dist
-/out
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-backend/data/
+dist
+.next
+out
+build
 
 # Environment files
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env*.local
+.env.*.local
+!.env.example
 
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Editor directories and files
-.idea/
-.vscode/
+# IDE
+.idea
+.vscode
 *.swp
 *.swo
-*~
-*.sublime-workspace
-*.sublime-project
 
-# OS files
+# OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
 # Testing
-/coverage
-.nyc_output
+coverage
 
-# Misc
-*.pem
-.cache/
-.temp/
-.tmp/
+# Turbo
+.turbo
 
-# Package manager locks (keep one, ignore others if needed)
-# package-lock.json
-# yarn.lock
+# Prisma
+*.db
+*.db-journal
 
-# Debug
-.npm
-.eslintcache
-
-# Optional: Ignore frontend/backend specific
-frontend/build/
-backend/data/
+# TypeScript
+*.tsbuildinfo

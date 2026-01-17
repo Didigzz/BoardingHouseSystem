@@ -1,0 +1,1 @@
+export { DashboardStatsCalculatedDomainEvent } from './dashboard-stats-calculated.domain-event';

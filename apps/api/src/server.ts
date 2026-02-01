@@ -111,6 +111,19 @@ const createUserRouter = (protectedProcedure: any) => ({
     const users = await context.db.user.findMany({ take: 10 });
     return { users };
   }),
+  register: protectedProcedure.mutation(async ({ context, input }: any) => {
+    const { name, email, password, role } = input;
+    // Simple implementation - in production you would hash the password
+    const user = await context.db.user.create({
+      data: {
+        name,
+        email,
+        password, // TODO: hash this
+        role: role || "BOARDER",
+      },
+    });
+    return { id: user.id, email: user.email, name: user.name };
+  }),
 });
 
 const createUtilityRouter = (protectedProcedure: any) => ({

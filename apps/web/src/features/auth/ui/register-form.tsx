@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from "@bhms/ui/card";
 import { toast } from "@bhms/ui";
-import { api } from "@/lib/orpc-client";
+import { useORPC } from "@/lib/orpc-react";
 import Link from "next/link";
 
 const registerSchema = z
@@ -54,7 +54,8 @@ export function RegisterForm(): JSX.Element {
     },
   });
 
-  const register = api.user.register.useMutation({
+  const orpc = useORPC();
+  const register = orpc.user.register.useMutation({
     onSuccess: () => {
       toast({ title: "Account created successfully" });
       router.push("/login");

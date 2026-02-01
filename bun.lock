@@ -176,21 +176,6 @@
         "typescript": "^5.3.3",
       },
     },
-    "packages/api-client": {
-      "name": "@bhms/api-client",
-      "version": "0.0.1",
-      "dependencies": {
-        "@bhms/api": "workspace:*",
-        "@tanstack/react-query": "^5.24.0",
-        "@trpc/client": "^11.0.0-rc.297",
-        "@trpc/react-query": "^11.0.0-rc.297",
-        "superjson": "^2.2.6",
-      },
-      "devDependencies": {
-        "@bhms/typescript-config": "workspace:*",
-        "typescript": "^5.3.3",
-      },
-    },
     "packages/auth": {
       "name": "@bhms/auth",
       "version": "0.0.0",
@@ -274,17 +259,6 @@
         "typescript": "^5.3.3",
       },
     },
-    "packages/types": {
-      "name": "@bhms/types",
-      "version": "0.0.1",
-      "dependencies": {
-        "zod": "^3.22.4",
-      },
-      "devDependencies": {
-        "@bhms/typescript-config": "workspace:*",
-        "typescript": "^5.3.3",
-      },
-    },
     "packages/typescript-config": {
       "name": "@bhms/typescript-config",
       "version": "0.0.0",
@@ -328,14 +302,6 @@
       },
       "peerDependencies": {
         "react": "^18.0.0",
-      },
-    },
-    "packages/utils": {
-      "name": "@bhms/utils",
-      "version": "0.0.1",
-      "devDependencies": {
-        "@bhms/typescript-config": "workspace:*",
-        "typescript": "^5.3.3",
       },
     },
     "packages/validation": {
@@ -550,8 +516,6 @@
 
     "@bhms/api": ["@bhms/api@workspace:packages/api"],
 
-    "@bhms/api-client": ["@bhms/api-client@workspace:packages/api-client"],
-
     "@bhms/api-server": ["@bhms/api-server@workspace:apps/api"],
 
     "@bhms/auth": ["@bhms/auth@workspace:packages/auth"],
@@ -566,13 +530,9 @@
 
     "@bhms/shared": ["@bhms/shared@workspace:packages/shared"],
 
-    "@bhms/types": ["@bhms/types@workspace:packages/types"],
-
     "@bhms/typescript-config": ["@bhms/typescript-config@workspace:packages/typescript-config"],
 
     "@bhms/ui": ["@bhms/ui@workspace:packages/ui"],
-
-    "@bhms/utils": ["@bhms/utils@workspace:packages/utils"],
 
     "@bhms/validation": ["@bhms/validation@workspace:packages/validation"],
 
@@ -1107,10 +1067,6 @@
     "@tanstack/react-table": ["@tanstack/react-table@8.21.3", "", { "dependencies": { "@tanstack/table-core": "8.21.3" }, "peerDependencies": { "react": ">=16.8", "react-dom": ">=16.8" } }, "sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww=="],
 
     "@tanstack/table-core": ["@tanstack/table-core@8.21.3", "", {}, "sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg=="],
-
-    "@trpc/client": ["@trpc/client@11.9.0", "", { "peerDependencies": { "@trpc/server": "11.9.0", "typescript": ">=5.7.2" } }, "sha512-3r4RT/GbR263QO+2gCPyrs5fEYaXua3/AzCs+GbWC09X0F+mVkyBpO3GRSDObiNU/N1YB597U7WGW3WA1d1TVw=="],
-
-    "@trpc/react-query": ["@trpc/react-query@11.9.0", "", { "peerDependencies": { "@tanstack/react-query": "^5.80.3", "@trpc/client": "11.9.0", "@trpc/server": "11.9.0", "react": ">=18.2.0", "react-dom": ">=18.2.0", "typescript": ">=5.7.2" } }, "sha512-9Gpj06ZcfsA77PB5A8VC2MFS/E7pPvoNqaSlSrAgLyRsKqy0gldFOW2RMKura69M6fwtgjg9+4i2+rOHKT7qLw=="],
 
     "@trpc/server": ["@trpc/server@11.9.0", "", { "peerDependencies": { "typescript": ">=5.7.2" } }, "sha512-T8gC4NOCzx8tCsQEQ5sSjf24bN+9AEqXZRfpThG+YCEmcEwXfS7RP8VVrl5Vodt1S+zGEDyQSof4YVAj1zq/mg=="],
 

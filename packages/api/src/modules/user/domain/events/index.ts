@@ -1,0 +1,1 @@
+export { UserRegisteredDomainEvent } from './user-registered.domain-event';

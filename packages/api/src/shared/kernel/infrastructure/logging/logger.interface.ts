@@ -1,0 +1,13 @@
+export enum LogLevel {
+  DEBUG = 'debug',
+  INFO = 'info',
+  WARN = 'warn',
+  ERROR = 'error',
+}
+
+export interface ILogger {
+  debug(message: string, context?: any): void;
+  info(message: string, context?: any): void;
+  warn(message: string, context?: any): void;
+  error(message: string, context?: any): void;
+}

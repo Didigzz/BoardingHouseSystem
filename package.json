@@ -1,0 +1,49 @@
+{
+  "name": "bhms",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint -- --fix",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:push": "turbo run db:push",
+    "db:studio": "turbo run db:studio",
+    "db:seed": "turbo run db:seed",
+    "db:migrate": "bun --filter @bhms/database db:migrate",
+    "prepare": "husky",
+    "web:dev": "bun --filter @bhms/web dev",
+    "web:build": "bun --filter @bhms/web build",
+    "api:dev": "bun --filter @bhms/api-server dev",
+    "api:build": "bun --filter @bhms/api-server build",
+    "mobile:dev": "bun --filter @bhms/mobile dev",
+    "check:all": "bun lint && bun typecheck && bun format:check",
+    "docker:up": "docker-compose up -d",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:build:api": "docker build -f apps/api/Dockerfile -t bhms-api .",
+    "docker:build:web": "docker build -f infra/docker/Dockerfile -t bhms-web .",
+    "docker:clean": "docker system prune -f"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.2.5",
+    "prettier-plugin-prisma": "^5.0.0",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "packageManager": "bun@1.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

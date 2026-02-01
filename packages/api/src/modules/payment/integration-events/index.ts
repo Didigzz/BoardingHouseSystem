@@ -1,0 +1,1 @@
+export { PaymentReceivedIntegrationEvent } from './payment-received.integration-event';

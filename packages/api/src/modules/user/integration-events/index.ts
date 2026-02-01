@@ -1,0 +1,1 @@
+export { UserAuthenticatedIntegrationEvent } from './user-authenticated.integration-event';

@@ -1,399 +1,706 @@
-# Boarding House Management System (BHMS)
-## Complete Setup & Running Guide
+# 🏠 Boarding House Management System (BHMS)
 
-### 📦 Project Structure
+A modern, multi-tenant boarding house management platform built with Next.js, React Native, tRPC, and Prisma.
+
+A modern, full-stack web application for managing boarding houses, built with the **T3 Stack** and **Feature-Sliced Design** architecture.
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue?style=flat-square&logo=typescript)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql)
+![Prisma](https://img.shields.io/badge/Prisma-5.10-2D3748?style=flat-square&logo=prisma)
+![tRPC](https://img.shields.io/badge/tRPC-11-398CCB?style=flat-square&logo=trpc)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat-square&logo=tailwind-css)
+
+## Table of Contents
+
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [Database](#-database)
+- [API Documentation](#-api-documentation)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+## Features
+
+### For Landlords
+
+- **Room Management** - Create, update, and track room availability
+- **Boarder Management** - Register boarders, assign rooms, and manage profiles
+- **Payment Tracking** - Record rent payments, generate receipts, track overdue payments
+- **Utility Management** - Track electricity, water, and internet readings per room
+- **Dashboard Analytics** - Visualize occupancy rates, revenue, and payment statistics
+- **Reports** - Generate financial and occupancy reports
+
+### For Boarders
+
+- **Access Code Login** - Simple authentication via access code
+- **View Room Details** - See assigned room and amenities
+- **Payment History** - Track payment status and history
+- **Profile Management** - Update personal information
+
+### General
+
+- **Secure Authentication** - NextAuth.js v5 with role-based access
+- **Responsive Design** - Works on desktop and mobile devices
+- **Dark Mode** - Light/dark theme support
+- **Real-time Updates** - Optimistic UI updates with TanStack Query
+
+## Tech Stack
+
+### Core (T3 Stack)
+
+| Technology         | Purpose                                 |
+| ------------------ | --------------------------------------- |
+| **Next.js 15**     | Full-stack React framework (App Router) |
+| **TypeScript**     | Type safety across the entire stack     |
+| **tRPC**           | End-to-end typesafe APIs                |
+| **Prisma**         | Type-safe database ORM                  |
+| **PostgreSQL**     | Relational database                     |
+| **NextAuth.js v5** | Authentication & authorization          |
+| **Tailwind CSS**   | Utility-first CSS framework             |
+
+### UI & Components
+
+| Technology       | Purpose                             |
+| ---------------- | ----------------------------------- |
+| **shadcn/ui**    | Accessible, customizable components |
+| **Radix UI**     | Headless UI primitives              |
+| **Lucide React** | Beautiful icons                     |
+| **Recharts**     | Data visualization & charts         |
+
+### Forms & Validation
+
+| Technology          | Purpose                    |
+| ------------------- | -------------------------- |
+| **React Hook Form** | Performant form management |
+| **Zod**             | Schema validation          |
+
+### State Management
+
+| Technology         | Purpose                            |
+| ------------------ | ---------------------------------- |
+| **TanStack Query** | Server state management (via tRPC) |
+| **Zustand**        | Client state management            |
+
+### Development Tools
+
+| Technology     | Purpose                              |
+| -------------- | ------------------------------------ |
+| **Turborepo**  | Monorepo build system                |
+| **pnpm**       | Fast, disk-efficient package manager |
+| **ESLint**     | Code linting                         |
+| **Prettier**   | Code formatting                      |
+| **Husky**      | Git hooks                            |
+| **Commitlint** | Commit message linting               |
+
+## Project Structure
+
+This project follows a monorepo architecture with the following structure:
 
 ```
-Boarding House System/
-├── backend/                    # Node.js + Express API
-│   ├── src/
-│   │   ├── server.js          # Main server entry
-│   │   ├── config/
-│   │   │   └── database.js    # PostgreSQL connection
-│   │   ├── routes/            # API routes
-│   │   ├── controllers/       # Business logic
-│   │   └── middleware/        # Express middleware
-│   ├── package.json
-│   └── .env.example           # Environment variables template
-├── frontend/                   # React web application
-│   ├── src/
-│   │   ├── index.js           # React entry point
-│   │   ├── App.js             # Main App component
-│   │   ├── components/        # Reusable components
-│   │   ├── pages/             # Page components
-│   │   └── services/          # API service calls
-│   ├── public/
-│   │   └── index.html         # HTML template
-│   └── package.json
-├── database/
-│   └── schema.sql             # PostgreSQL database schema
+BoardingHouseSystem/
+├── apps/
+│   ├── web/                              # Main web application (Next.js)
+│   │   ├── src/
+│   │   │   ├── app/                      # Next.js App Router
+│   │   │   │   ├── (auth)/
+│   │   │   │   │   ├── login/
+│   │   │   │   │   ├── register/
+│   │   │   │   │   └── layout.tsx
+│   │   │   │   ├── (dashboard)/
+│   │   │   │   │   ├── landlord/
+│   │   │   │   │   │   ├── boarders/
+│   │   │   │   │   │   ├── rooms/
+│   │   │   │   │   │   ├── payments/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── boarder/
+│   │   │   │   │   │   ├── profile/
+│   │   │   │   │   │   ├── payments/
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   └── layout.tsx
+│   │   │   │   ├── api/
+│   │   │   │   │   ├── trpc/[trpc]/route.ts      # Thin tRPC adapter
+│   │   │   │   │   └── auth/[...nextauth]/route.ts
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── globals.css
+│   │   │   ├── components/                # Web-specific components only
+│   │   │   │   ├── layouts/
+│   │   │   │   ├── navigation/
+│   │   │   │   └── providers.tsx
+│   │   │   └── lib/
+│   │   │       ├── trpc-client.ts
+│   │   │       └── utils.ts
+│   │   ├── public/
+│   │   ├── next.config.js
+│   │   ├── tailwind.config.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── mobile/                            # React Native app (future)
+│   │   ├── src/
+│   │   │   ├── screens/
+│   │   │   │   ├── auth/
+│   │   │   │   ├── landlord/
+│   │   │   │   └── boarder/
+│   │   │   ├── navigation/
+│   │   │   │   ├── AuthNavigator.tsx
+│   │   │   │   ├── LandlordNavigator.tsx
+│   │   │   │   └── RootNavigator.tsx
+│   │   │   ├── components/               # Mobile-specific components
+│   │   │   └── lib/
+│   │   │       └── trpc-client.ts
+│   │   ├── android/
+│   │   ├── ios/
+│   │   ├── app.json
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── admin/                             # Admin dashboard (optional)
+│   │   ├── src/
+│   │   │   └── app/
+│   │   │       ├── users/
+│   │   │       ├── analytics/
+│   │   │       └── settings/
+│   │   └── package.json
+│   │
+│   └── landing/                           # Marketing/public website
+│       ├── src/
+│       │   └── app/
+│       │       ├── about/
+│       │       ├── pricing/
+│       │       └── contact/
+│       └── package.json
+│
+├── packages/
+│   ├── api/                              # Backend API layer (tRPC)
+│   │   ├── src/
+│   │   │   ├── routers/
+│   │   │   │   ├── boarder.router.ts
+│   │   │   │   ├── payment.router.ts
+│   │   │   │   ├── room.router.ts
+│   │   │   │   ├── user.router.ts
+│   │   │   │   ├── utility.router.ts
+│   │   │   │   ├── dashboard.router.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── services/                 # Business logic services
+│   │   │   │   ├── boarder.service.ts
+│   │   │   │   ├── payment.service.ts
+│   │   │   │   ├── room.service.ts
+│   │   │   │   └── utility.service.ts
+│   │   │   ├── middleware/
+│   │   │   │   ├── auth.middleware.ts
+│   │   │   │   ├── error.middleware.ts
+│   │   │   │   └── logger.middleware.ts
+│   │   │   ├── context.ts
+│   │   │   ├── root.ts
+│   │   │   └── trpc.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── database/                         # Prisma + database client
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma
+│   │   │   ├── migrations/
+│   │   │   └── seed.ts
+│   │   ├── src/
+│   │   │   ├── client.ts
+│   │   │   ├── types.ts
+│   │   │   └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── auth/                             # Authentication & authorization
+│   │   ├── src/
+│   │   │   ├── providers/
+│   │   │   │   ├── credentials.provider.ts
+│   │   │   │   ├── google.provider.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── strategies/
+│   │   │   │   ├── jwt.strategy.ts
+│   │   │   │   └── session.strategy.ts
+│   │   │   ├── guards/
+│   │   │   │   ├── landlord.guard.ts
+│   │   │   │   ├── boarder.guard.ts
+│   │   │   │   └── admin.guard.ts
+│   │   │   ├── config.ts
+│   │   │   └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── shared/                           # Shared business logic & domain models
+│   │   ├── src/
+│   │   │   ├── entities/                 # Domain entities (FSD)
+│   │   │   │   ├── boarder/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── schemas.ts
+│   │   │   │   │   │   └── utils.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── payment/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── types.ts
+│   │   │   │   │   │   ├── schemas.ts
+│   │   │   │   │   │   ├── constants.ts
+│   │   │   │   │   │   └── utils.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── room/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── user/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── utility/
+│   │   │   │       ├── model/
+│   │   │   │       └── index.ts
+│   │   │   ├── features/                 # Business features (FSD)
+│   │   │   │   ├── boarder-management/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   │   ├── store.ts
+│   │   │   │   │   │   ├── hooks.ts
+│   │   │   │   │   │   └── types.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── payment-processing/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── room-management/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── utility-tracking/
+│   │   │   │       ├── model/
+│   │   │   │       └── index.ts
+│   │   │   ├── lib/                      # Shared utilities
+│   │   │   │   ├── formatters.ts
+│   │   │   │   ├── validators.ts
+│   │   │   │   ├── constants.ts
+│   │   │   │   └── utils.ts
+│   │   │   └── types/
+│   │   │       ├── index.ts
+│   │   │       └── common.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── ui/                               # Shared UI components (cross-platform)
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   │   ├── primitives/           # Basic components
+│   │   │   │   │   ├── Button/
+│   │   │   │   │   │   ├── Button.tsx
+│   │   │   │   │   │   ├── Button.stories.tsx
+│   │   │   │   │   │   └── index.ts
+│   │   │   │   │   ├── Input/
+│   │   │   │   │   ├── Card/
+│   │   │   │   │   ├── Badge/
+│   │   │   │   │   ├── Avatar/
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── composite/            # Composite components
+│   │   │   │   │   ├── BoarderCard/
+│   │   │   │   │   ├── RoomCard/
+│   │   │   │   │   ├── PaymentCard/
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── hooks/
+│   │   │   │   ├── useDebounce.ts
+│   │   │   │   ├── useMediaQuery.ts
+│   │   │   │   ├── useLocalStorage.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── theme/
+│   │   │   │   ├── colors.ts
+│   │   │   │   ├── typography.ts
+│   │   │   │   └── index.ts
+│   │   │   └── utils/
+│   │   │       ├── cn.ts
+│   │   │       └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── validation/                       # Zod schemas (shared across platforms)
+│   │   ├── src/
+│   │   │   ├── boarder.schemas.ts
+│   │   │   ├── payment.schemas.ts
+│   │   │   ├── room.schemas.ts
+│   │   │   ├── user.schemas.ts
+│   │   │   ├── utility.schemas.ts
+│   │   │   └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   └── config/                           # Shared configuration packages
+│       ├── eslint-config/
+│       │   ├── base.js
+│       │   ├── react.js
+│       │   ├── next.js
+│       │   └── package.json
+│       ├── typescript-config/
+│       │   ├── base.json
+│       │   ├── nextjs.json
+│       │   ├── react-native.json
+│       │   └── package.json
+│       └── tailwind-config/
+│           ├── base.js
+│           ├── web.js
+│           └── package.json
+│
+├── services/                             # Standalone backend services (optional)
+│   ├── api-server/                       # Standalone API server (Express/Fastify)
+│   │   ├── src/
+│   │   │   ├── server.ts
+│   │   │   └── index.ts
+│   │   ├── Dockerfile
+│   │   └── package.json
+│   │
+│   └── workers/                          # Background jobs (Bull/BullMQ)
+│       ├── src/
+│       │   ├── queues/
+│       │   │   ├── payment-reminder.worker.ts
+│       │   │   └── utility-calculation.worker.ts
+│       │   └── index.ts
+│       └── package.json
+│
 ├── docs/
-│   └── README.md              # This file
-└── SYSTEM_DESIGN.md           # Complete system design document
+│   ├── api.md
+│   ├── architecture.md
+│   ├── database.md
+│   └── deployment.md
+│
+├── scripts/
+│   ├── setup.sh
+│   ├── seed.sh
+│   └── migrate.sh
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── deploy-web.yml
+│       └── deploy-mobile.yml
+│
+├── docker-compose.yml
+├── docker-compose.dev.yml
+├── turbo.json
+├── pnpm-workspace.yaml
+├── package.json
+├── .gitignore
+└── README.md
 ```
 
----
+## 🚀 Quick Start
 
-## 🚀 QUICK START (5 Steps)
-
-### Step 1: Install Prerequisites
-
-You need to have installed:
-- **Node.js** (v14 or higher) - Download from https://nodejs.org/
-- **PostgreSQL** (v12 or higher) - Download from https://www.postgresql.org/
-- **Git** (optional) - Download from https://git-scm.com/
-
-**Verify Installation:**
 ```bash
-node --version
-npm --version
-psql --version
+# 1. Install dependencies
+pnpm install
+
+# 2. Setup environment (creates .env files)
+bash scripts/setup.sh
+
+# 3. Update .env with your database credentials
+
+# 4. Start all services (web + api + mobile)
+pnpm dev
 ```
 
-### Step 2: Set Up Database
+Visit:
+- **Web App:** http://localhost:3000
+- **API Server:** http://localhost:3001
+- **Mobile App:** http://localhost:8081
 
-1. **Open PostgreSQL:**
-   - Windows: Use pgAdmin or psql command line
-   - Run: `psql -U postgres` (or your username)
+## Getting Started
 
-2. **Create Database:**
-   ```sql
-   CREATE DATABASE boarding_house_db;
-   \c boarding_house_db
-   ```
+### Prerequisites
 
-3. **Run Schema:**
+- **Node.js** 20.x or later
+- **pnpm** 9.x or later
+- **PostgreSQL** 16.x or later (or Docker)
+
+### Installation
+
+1. **Clone the repository**
+
    ```bash
-   # Copy and paste the contents of database/schema.sql into psql
-   # OR run from command line:
-   psql -U postgres -d boarding_house_db -f database/schema.sql
+   git clone https://github.com/yourusername/bhms.git
+   cd bhms
    ```
 
-4. **Verify Tables Created:**
-   ```sql
-   \dt
-   ```
-   You should see tables: boarding_houses, rooms, boarders, payments, utilities, etc.
+2. **Install dependencies**
 
-### Step 3: Set Up Backend
-
-1. **Navigate to backend folder:**
    ```bash
-   cd backend
+   pnpm install
    ```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+3. **Set up environment variables**
 
-3. **Create `.env` file** (copy from `.env.example`):
    ```bash
+   # Copy example files
    cp .env.example .env
+   cp apps/web/.env.example apps/web/.env
+   cp apps/api/.env.example apps/api/.env
    ```
 
-4. **Edit `.env` with your database credentials:**
-   ```
-   PORT=5000
-   NODE_ENV=development
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=boarding_house_db
-   DB_USER=postgres
-   DB_PASSWORD=your_password
-   JWT_SECRET=your_secret_key
-   API_BASE_URL=http://localhost:5000
-   ```
+   See [Environment Variables](#-environment-variables) for configuration details.
 
-5. **Start backend server:**
+4. **Start the database** (using Docker)
+
    ```bash
-   npm run dev
-   ```
-   
-   You should see:
-   ```
-   🚀 Server running on port 5000
-   📍 API Base URL: http://localhost:5000/api
+   docker compose up -d
    ```
 
-### Step 4: Set Up Frontend
+5. **Push database schema**
 
-1. **Open new terminal and navigate to frontend folder:**
    ```bash
-   cd frontend
+   pnpm db:push
    ```
 
-2. **Install dependencies:**
+6. **Seed the database** (optional)
+
    ```bash
-   npm install
+   pnpm db:seed
    ```
 
-3. **Start development server:**
+7. **Start the development servers**
+
    ```bash
-   npm start
-   ```
-   
-   Browser should automatically open at `http://localhost:3000`
+   # Start all services (web + api + mobile)
+   pnpm dev
 
-### Step 5: Test the System
-
-1. **Check Dashboard** (http://localhost:3000)
-   - Should show: Total Rooms (5), Total Boarders, etc.
-
-2. **Check Rooms Page** (http://localhost:3000/rooms)
-   - Should display 5 sample rooms (101-105)
-
-3. **Test API Directly:**
-   ```bash
-   # In a new terminal or Postman:
-   curl http://localhost:5000/api/rooms
-   ```
-   Should return JSON with list of rooms.
-
----
-
-## 📋 API ENDPOINTS
-
-### Rooms
-```
-GET    /api/rooms              - Get all rooms
-GET    /api/rooms/:id          - Get room by ID
-POST   /api/rooms              - Create new room
-PUT    /api/rooms/:id          - Update room
-DELETE /api/rooms/:id          - Delete room
-GET    /api/rooms/:id/occupancy - Get room occupancy
-```
-
-### Boarders
-```
-GET    /api/boarders           - Get all boarders
-GET    /api/boarders/:id       - Get boarder by ID
-POST   /api/boarders           - Create new boarder
-PUT    /api/boarders/:id       - Update boarder
-DELETE /api/boarders/:id       - Delete boarder
-GET    /api/boarders/room/:roomId - Get boarders by room
-```
-
-### Payments
-```
-GET    /api/payments           - Get all payments
-GET    /api/payments/:id       - Get payment by ID
-POST   /api/payments           - Create new payment
-PUT    /api/payments/:id       - Update payment
-DELETE /api/payments/:id       - Delete payment
-GET    /api/payments/boarder/:boarderId - Get boarder payments
-GET    /api/payments/status/overdue - Get overdue payments
-```
-
-### Utilities
-```
-GET    /api/utilities          - Get all utilities
-GET    /api/utilities/:id      - Get utility by ID
-POST   /api/utilities          - Create new utility
-PUT    /api/utilities/:id      - Update utility
-DELETE /api/utilities/:id      - Delete utility
-```
-
----
-
-## 🧪 TESTING WITH POSTMAN
-
-1. **Download Postman**: https://www.postman.com/downloads/
-
-2. **Import Collection** (optional):
-   - Create new request
-   - Set URL: `http://localhost:5000/api/rooms`
-   - Click Send
-
-3. **Example: Create a Room**
-   ```
-   Method: POST
-   URL: http://localhost:5000/api/rooms
-   Body (JSON):
-   {
-     "room_number": "106",
-     "capacity": 4,
-     "type": "SHARED",
-     "rental_mode": "BED_SPACER",
-     "monthly_rent": 2400
-   }
+   # Or start individually
+   pnpm web:dev    # Web app only
+   pnpm api:dev    # API server only
+   pnpm mobile:dev # Mobile app only
    ```
 
----
+8. **Open your browser**
+   - Web: [http://localhost:3000](http://localhost:3000)
+   - API: [http://localhost:3001](http://localhost:3001)
+   - Mobile: [http://localhost:8081](http://localhost:8081)
 
-## 🛠️ TROUBLESHOOTING
+### Demo Credentials
 
-### Backend Won't Start
-**Error:** `Error: connect ECONNREFUSED 127.0.0.1:5432`
-- **Solution:** PostgreSQL not running. Start PostgreSQL service.
-  - Windows: Services → PostgreSQL → Start
-  - Mac: `brew services start postgresql`
-  - Linux: `sudo systemctl start postgresql`
+After seeding the database:
 
-### Frontend Page Blank
-**Error:** Blank white page with no errors
-- **Solution:** Backend not running. Run `npm run dev` in backend folder.
+| Role     | Email                  | Password      |
+| -------- | ---------------------- | ------------- |
+| Landlord | `landlord@example.com` | `password123` |
+| Boarder  | Access Code: `MS2024`  | -             |
+| Boarder  | Access Code: `PC2024`  | -             |
 
-### Database Connection Error
-**Error:** `error: password authentication failed`
-- **Solution:** Check `.env` file has correct DB_PASSWORD
+## Environment Variables
 
-### Port Already in Use
-**Error:** `Error: listen EADDRINUSE :::5000`
-- **Solution:** Kill process on port 5000
-  - Windows: `netstat -ano | findstr :5000` then `taskkill /PID <PID> /F`
-  - Mac/Linux: `lsof -ti:5000 | xargs kill -9`
+Create a `.env` file in `apps/web/` with the following variables:
 
-### Dependencies Installation Error
-**Error:** `npm ERR! code E404`
-- **Solution:** 
-  1. Delete `node_modules` folder: `rm -rf node_modules`
-  2. Delete lock file: `rm package-lock.json`
-  3. Clear npm cache: `npm cache clean --force`
-  4. Reinstall: `npm install`
+```env
+# Database
+DATABASE_URL="postgresql://bhms:bhms@localhost:5432/bhms"
 
----
+# NextAuth.js
+NEXTAUTH_SECRET="your-super-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
 
-## 📚 LEARNING RESOURCES
+# App
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
 
-### For Beginners:
+### Variable Descriptions
 
-**Node.js & Express:**
-- YouTube: "Express.js Crash Course" by Traversy Media
-- Official: https://expressjs.com/
+| Variable              | Description                                                             |
+| --------------------- | ----------------------------------------------------------------------- |
+| `DATABASE_URL`        | PostgreSQL connection string                                            |
+| `NEXTAUTH_SECRET`     | Secret key for JWT encryption (generate with `openssl rand -base64 32`) |
+| `NEXTAUTH_URL`        | Base URL of your application                                            |
+| `NEXT_PUBLIC_APP_URL` | Public-facing URL of your application                                   |
 
-**React:**
-- YouTube: "React Crash Course" by Traversy Media
-- Official: https://react.dev/
+## Database
 
-**PostgreSQL:**
-- YouTube: "PostgreSQL Tutorial" by Edureka
-- Official: https://www.postgresql.org/docs/
+### Schema Overview
 
-**REST APIs:**
-- YouTube: "REST API Basics" by Programming with Mosh
+```
+┌─────────────┐     ┌─────────────┐     ┌──────────────────┐
+│    User     │     │    Room     │     │  UtilityReading  │
+├─────────────┤     ├─────────────┤     ├──────────────────┤
+│ id          │     │ id          │     │ id               │
+│ email       │     │ roomNumber  │◄────│ roomId           │
+│ password    │     │ floor       │     │ type             │
+│ role        │     │ capacity    │     │ currentReading   │
+│ ...         │     │ monthlyRate │     │ previousReading  │
+└──────┬──────┘     │ status      │     │ ratePerUnit      │
+       │            └──────┬──────┘     └──────────────────┘
+       │ 1:1               │ 1:N
+       ▼                   ▼
+┌─────────────┐     ┌─────────────┐
+│   Boarder   │─────│   Payment   │
+├─────────────┤     ├─────────────┤
+│ id          │     │ id          │
+│ firstName   │     │ boarderId   │
+│ lastName    │     │ amount      │
+│ roomId      │◄────│ type        │
+│ accessCode  │     │ status      │
+│ ...         │     │ dueDate     │
+└─────────────┘     └─────────────┘
+```
 
----
+### Database Commands
 
-## 📝 NEXT STEPS
-
-### Phase 1 (Currently Complete):
-- ✅ Database schema
-- ✅ Backend API setup
-- ✅ Basic React frontend
-- ✅ Room listing page
-- ✅ Dashboard with metrics
-
-### Phase 2 (To Do):
-- [ ] Create/Edit/Delete forms for all entities
-- [ ] Boarder management full UI
-- [ ] Payment recording & tracking
-- [ ] Utility management UI
-- [ ] Reports page
-- [ ] User authentication (Login)
-- [ ] Search & filter functionality
-
-### Phase 3 (Future):
-- [ ] Mobile app (React Native)
-- [ ] Payment gateway integration
-- [ ] Email/SMS notifications
-- [ ] Advanced analytics
-- [ ] Multi-landlord support
-- [ ] Document storage
-
----
-
-## 🤝 CONTRIBUTING
-
-When adding new features:
-
-1. **Backend:**
-   - Add route in `backend/src/routes/`
-   - Add controller logic in `backend/src/controllers/`
-   - Test with Postman or curl
-
-2. **Frontend:**
-   - Create new page in `frontend/src/pages/`
-   - Add route in `frontend/src/App.js`
-   - Use API service from `frontend/src/services/api.js`
-
-3. **Database:**
-   - Update schema in `database/schema.sql`
-   - Document changes in comments
-
----
-
-## 📞 SUPPORT
-
-- **System Design**: See [SYSTEM_DESIGN.md](../SYSTEM_DESIGN.md)
-- **API Documentation**: Postman collection (create manually for now)
-- **Issues**: Common issues section above
-
----
-
-## ✨ FEATURES SUMMARY
-
-### Dashboard
-- Real-time metrics (rooms, occupancy, revenue)
-- Overdue payments alert
-- Quick action buttons
-
-### Rooms Management
-- View all rooms with occupancy status
-- Add/Edit/Delete rooms
-- Track bed-spacer and whole-room rentals
-- Color-coded availability status
-
-### Boarders Management
-- Complete boarder profiles
-- Contract tracking
-- Automatic move-out date calculation
-- Boarder status tracking
-
-### Payments & Billing
-- Monthly rent calculation
-- Utility charge allocation
-- Payment status tracking (Paid/Pending/Overdue)
-- Payment history per boarder
-
-### Utilities Management
-- Bundled or metered billing modes
-- Electricity, Water, Wi-Fi tracking
-- Consumption records
-
----
-
-## 🎯 QUICK COMMANDS REFERENCE
-
-**Backend:**
 ```bash
-cd backend
-npm install              # Install dependencies
-npm run dev             # Start development server (with auto-reload)
-npm start               # Start production server
-npm test                # Run tests
+# Push schema to database (development)
+pnpm db:push
+
+# Run migrations (production)
+pnpm db:migrate
+
+# Open Prisma Studio (GUI)
+pnpm db:studio
+
+# Seed database with sample data
+pnpm db:seed
 ```
 
-**Frontend:**
-```bash
-cd frontend
-npm install              # Install dependencies
-npm start               # Start development server
-npm run build           # Create production build
-npm test                # Run tests
+## API Documentation
+
+The API is built with **tRPC**, providing end-to-end type safety.
+
+### Available Routers
+
+| Router      | Description                            |
+| ----------- | -------------------------------------- |
+| `room`      | Room CRUD operations and statistics    |
+| `boarder`   | Boarder management and room assignment |
+| `payment`   | Payment tracking and receipts          |
+| `utility`   | Utility readings and billing           |
+| `dashboard` | Analytics and statistics               |
+| `user`      | User management                        |
+
+### Example Usage
+
+```typescript
+import { api } from "@/trpc/react";
+
+// Query rooms
+const { data: rooms } = api.room.getAll.useQuery();
+
+// Create a room
+const createRoom = api.room.create.useMutation({
+  onSuccess: () => {
+    utils.room.getAll.invalidate();
+  },
+});
+
+// Call mutation
+createRoom.mutate({
+  roomNumber: "301",
+  floor: 3,
+  capacity: 2,
+  monthlyRate: 5000,
+});
 ```
 
-**Database:**
+See [docs/api.md](docs/api.md) for complete API documentation.
+
+## Deployment
+
+### Docker Deployment
+
 ```bash
-psql -U postgres                          # Connect to PostgreSQL
-createdb boarding_house_db                # Create database
-psql -d boarding_house_db -f schema.sql   # Run schema
-\dt                                       # List tables
-\q                                        # Quit
+# Build and run production containers
+docker compose -f infra/docker/docker-compose.yml up -d
 ```
+
+### Vercel Deployment
+
+1. Connect your repository to Vercel
+2. Configure environment variables in Vercel dashboard
+3. Deploy
+
+```bash
+# Using Vercel CLI
+npm i -g vercel
+vercel --prod
+```
+
+### Manual Deployment
+
+```bash
+# Build the application
+pnpm build
+
+# Start production server
+pnpm start
+```
+
+See [docs/deployment.md](docs/deployment.md) for detailed deployment instructions.
+
+## Available Scripts
+
+### Development
+
+| Command          | Description                         |
+| ---------------- | ----------------------------------- |
+| `pnpm dev`       | Start all services (web + api)      |
+| `pnpm web:dev`   | Start web app only                  |
+| `pnpm api:dev`   | Start API server only               |
+| `pnpm mobile:dev`| Start mobile app only               |
+
+### Build & Production
+
+| Command          | Description                    |
+| ---------------- | ------------------------------ |
+| `pnpm build`     | Build all apps                 |
+| `pnpm web:build` | Build web app only             |
+| `pnpm api:build` | Build API server only          |
+| `pnpm start`     | Start production server        |
+
+### Code Quality
+
+| Command          | Description                    |
+| ---------------- | ------------------------------ |
+| `pnpm lint`      | Run ESLint                     |
+| `pnpm typecheck` | Run TypeScript type checking   |
+| `pnpm format`    | Format code with Prettier      |
+| `pnpm clean`     | Clean build artifacts          |
+
+### Database
+
+| Command           | Description                    |
+| ----------------- | ------------------------------ |
+| `pnpm db:push`    | Push Prisma schema to database |
+| `pnpm db:migrate` | Run database migrations        |
+| `pnpm db:studio`  | Open Prisma Studio             |
+| `pnpm db:seed`    | Seed database with sample data |
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Commit Convention
+
+This project uses [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `docs:` - Documentation changes
+- `style:` - Code style changes
+- `refactor:` - Code refactoring
+- `test:` - Adding tests
+- `chore:` - Maintenance tasks
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: January 10, 2026  
-**Status**: Ready for Development
+<div align="center">
+  <p>Built with ❤️ T3 Stack</p>
+  <p>
+    <a href="https://create.t3.gg/">T3 Stack</a> •
+    <a href="https://nextjs.org/">Next.js</a> •
+    <a href="https://trpc.io/">tRPC</a> •
+    <a href="https://prisma.io/">Prisma</a> •
+    <a href="https://ui.shadcn.com/">shadcn/ui</a>
+  </p>
+</div>

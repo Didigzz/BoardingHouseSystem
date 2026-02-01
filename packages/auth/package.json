@@ -1,0 +1,25 @@
+{
+  "name": "@bhms/auth",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src/ --no-error-on-unmatched-pattern"
+  },
+  "dependencies": {
+    "@auth/core": "^0.34.0",
+    "@bhms/database": "workspace:*",
+    "@trpc/server": "^11.0.0-rc.297",
+    "bcryptjs": "^2.4.3",
+    "next-auth": "5.0.0-beta.4",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@bhms/typescript-config": "workspace:*",
+    "@types/bcryptjs": "^2.4.6",
+    "eslint": "^8.57.1",
+    "typescript": "^5.6.3"
+  }
+}

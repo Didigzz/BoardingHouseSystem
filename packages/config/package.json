@@ -1,0 +1,31 @@
+{
+  "name": "@bhms/config",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    "./eslint": "./eslint/base.js",
+    "./eslint/next": "./eslint/next.js",
+    "./eslint/react": "./eslint/react.js",
+    "./typescript": "./typescript/base.json",
+    "./typescript/nextjs": "./typescript/nextjs.json",
+    "./typescript/react-native": "./typescript/react-native.json",
+    "./tailwind": "./tailwind/base.js",
+    "./tailwind/web": "./tailwind/web.js"
+  },
+  "dependencies": {
+    "@vercel/style-guide": "^5.2.0",
+    "eslint-config-turbo": "^2.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-only-warn": "^1.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

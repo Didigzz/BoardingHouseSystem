@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ ENUMS ============
+
+enum UserRole {
+  LANDLORD
+  BOARDER
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentType {
+  RENT
+  UTILITY
+  DEPOSIT
+  OTHER
+}
+
+enum UtilityType {
+  ELECTRICITY
+  WATER
+  INTERNET
+  OTHER
+}
+
+// ============ MODELS ============
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          UserRole  @default(LANDLORD)
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  boarder  Boarder?
+  accounts Account[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Room {
+  id          String     @id @default(cuid())
+  roomNumber  String     @unique @map("room_number")
+  floor       Int        @default(1)
+  capacity    Int        @default(1)
+  monthlyRate Decimal    @map("monthly_rate") @db.Decimal(10, 2)
+  description String?
+  amenities   String[]   @default([])
+  status      RoomStatus @default(AVAILABLE)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  boarders        Boarder[]
+  utilityReadings UtilityReading[]
+
+  @@map("rooms")
+}
+
+model Boarder {
+  id               String    @id @default(cuid())
+  firstName        String    @map("first_name")
+  lastName         String    @map("last_name")
+  email            String    @unique
+  phone            String?
+  emergencyContact String?   @map("emergency_contact")
+  emergencyPhone   String?   @map("emergency_phone")
+  moveInDate       DateTime  @map("move_in_date")
+  moveOutDate      DateTime? @map("move_out_date")
+  isActive         Boolean   @default(true) @map("is_active")
+  accessCode       String?   @unique @map("access_code")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  roomId String? @map("room_id")
+  room   Room?   @relation(fields: [roomId], references: [id])
+
+  userId String? @unique @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id])
+
+  payments Payment[]
+
+  @@map("boarders")
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  amount        Decimal       @db.Decimal(10, 2)
+  type          PaymentType   @default(RENT)
+  status        PaymentStatus @default(PENDING)
+  dueDate       DateTime      @map("due_date")
+  paidDate      DateTime?     @map("paid_date")
+  description   String?
+  receiptNumber String?       @unique @map("receipt_number")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  boarderId String  @map("boarder_id")
+  boarder   Boarder @relation(fields: [boarderId], references: [id])
+
+  @@index([boarderId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("payments")
+}
+
+model UtilityReading {
+  id                 String      @id @default(cuid())
+  type               UtilityType
+  previousReading    Decimal     @map("previous_reading") @db.Decimal(10, 2)
+  currentReading     Decimal     @map("current_reading") @db.Decimal(10, 2)
+  ratePerUnit        Decimal     @map("rate_per_unit") @db.Decimal(10, 4)
+  readingDate        DateTime    @map("reading_date")
+  billingPeriodStart DateTime    @map("billing_period_start")
+  billingPeriodEnd   DateTime    @map("billing_period_end")
+  createdAt          DateTime    @default(now()) @map("created_at")
+  updatedAt          DateTime    @updatedAt @map("updated_at")
+
+  roomId String @map("room_id")
+  room   Room   @relation(fields: [roomId], references: [id])
+
+  @@index([roomId])
+  @@index([type])
+  @@map("utility_readings")
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}

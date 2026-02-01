@@ -1,8 +1,5 @@
 {
-  "extends": "../config/typescript/base.json",
-  "compilerOptions": {
-    "types": ["node"]
-  },
+  "extends": "@bhms/typescript-config/base.json",
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

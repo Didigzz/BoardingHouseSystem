@@ -1,50 +1,6 @@
 import { useMemo } from 'react';
-import type { Boarder } from '../../../entities/boarder';
-
-export interface BoarderWithRoom extends Boarder {
-  room?: { id: string; roomNumber: string; monthlyRate: number } | null;
-}
-
-export interface BoarderStats {
-  total: number;
-  active: number;
-  inactive: number;
-}
-
-export function getBoarderFullName(boarder: Boarder): string {
-  return boarder.name;
-}
-
-export function isBoarderActive(boarder: Boarder): boolean {
-  return boarder.status === 'ACTIVE';
-}
-
-export function filterBoarders(
-  boarders: BoarderWithRoom[],
-  filters: {
-    search?: string;
-    isActive?: boolean;
-    roomId?: string;
-  }
-): BoarderWithRoom[] {
-  return boarders.filter((boarder) => {
-    if (filters.isActive !== undefined && isBoarderActive(boarder) !== filters.isActive) {
-      return false;
-    }
-    if (filters.roomId && boarder.roomId !== filters.roomId) {
-      return false;
-    }
-    if (filters.search) {
-      const searchLower = filters.search.toLowerCase();
-      const name = boarder.name.toLowerCase();
-      const email = boarder.email.toLowerCase();
-      if (!name.includes(searchLower) && !email.includes(searchLower)) {
-        return false;
-      }
-    }
-    return true;
-  });
-}
+import type { BoarderWithRoom, BoarderStats } from '../../entities/boarder';
+import { getBoarderFullName, isBoarderActive, filterBoarders } from '../../entities/boarder';
 
 /**
  * Hook to calculate boarder statistics
@@ -104,10 +60,10 @@ export function useRecentBoarders(boarders: BoarderWithRoom[], daysBack: number 
 
     return boarders
       .filter(boarder => 
-        boarder.createdAt >= cutoffDate && 
+        boarder.moveInDate >= cutoffDate && 
         isBoarderActive(boarder)
       )
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      .sort((a, b) => b.moveInDate.getTime() - a.moveInDate.getTime());
   }, [boarders, daysBack]);
 }
 
@@ -117,11 +73,11 @@ export function useRecentBoarders(boarders: BoarderWithRoom[], daysBack: number 
 export function useBoardersByRoom(boarders: BoarderWithRoom[]) {
   return useMemo(() => {
     const grouped = boarders.reduce((groups, boarder) => {
-      const roomKey = boarder.room?.roomNumber ?? 'Unassigned';
+      const roomKey = boarder.room?.roomNumber || 'Unassigned';
       if (!groups[roomKey]) {
         groups[roomKey] = [];
       }
-      groups[roomKey]!.push(boarder);
+      groups[roomKey].push(boarder);
       return groups;
     }, {} as Record<string, BoarderWithRoom[]>);
 

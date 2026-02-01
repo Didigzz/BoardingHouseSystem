@@ -1,7 +1,5 @@
 import { create } from "zustand";
-
-type PaymentStatus = "PENDING" | "PAID" | "OVERDUE" | "CANCELLED";
-type PaymentType = "RENT" | "UTILITY" | "DEPOSIT" | "OTHER";
+import type { PaymentStatus, PaymentType } from "@prisma/client";
 
 interface PaymentFilters {
   status: PaymentStatus | "ALL";

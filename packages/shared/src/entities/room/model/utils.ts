@@ -77,7 +77,7 @@ export function filterRooms(
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       const roomNumber = room.roomNumber.toLowerCase();
-      const description = room.description?.toLowerCase() ?? '';
+      const description = room.description?.toLowerCase() || '';
       
       if (!roomNumber.includes(searchLower) && !description.includes(searchLower)) {
         return false;
@@ -113,7 +113,7 @@ export function groupRoomsByFloor(rooms: Room[]): Record<number, Room[]> {
     if (!groups[room.floor]) {
       groups[room.floor] = [];
     }
-    groups[room.floor]!.push(room);
+    groups[room.floor].push(room);
     return groups;
   }, {} as Record<number, Room[]>);
 }

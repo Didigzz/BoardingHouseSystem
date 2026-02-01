@@ -9,7 +9,7 @@ export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout>;
+  let timeout: NodeJS.Timeout;
   
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
@@ -146,9 +146,9 @@ export function roundTo(value: number, decimals: number): number {
 /**
  * Get a random item from an array
  */
-export function getRandomItem<T>(array: T[]): T {
-  if (array.length === 0) return undefined as T;
-  return array[Math.floor(Math.random() * array.length)]!;
+export function getRandomItem<T>(array: T[]): T | undefined {
+  if (array.length === 0) return undefined;
+  return array[Math.floor(Math.random() * array.length)];
 }
 
 /**
@@ -158,9 +158,7 @@ export function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    const temp = shuffled[i];
-    shuffled[i] = shuffled[j] as T;
-    shuffled[j] = temp as T;
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
 }

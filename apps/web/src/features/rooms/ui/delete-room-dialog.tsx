@@ -12,7 +12,7 @@ import {
 } from "@bhms/ui/alert-dialog";
 import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
-import type { Room } from "@bhms/shared/entities/room";
+import type { Room } from "@bhms/shared";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface DeleteRoomDialogProps {

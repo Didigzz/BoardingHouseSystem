@@ -1,7 +1,7 @@
 "use client";
 
 import { orpc } from "@/lib/orpc-client";
-import { BoarderCard } from "@bhms/shared/entities/boarder";
+import { BoarderCard } from "@bhms/shared";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { useRouter } from "next/navigation";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { orpc } from "@/lib/orpc-client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Button } from "@bhms/ui/button";
 import { Skeleton } from "@bhms/ui/skeleton";
@@ -179,7 +179,7 @@ export default function RoomDetailPage(): JSX.Element {
         <CardContent>
           {room.boarders && room.boarders.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2">
-              {room.boarders.map((boarder: any) => (
+              {room.boarders.map((boarder) => (
                 <div
                   key={boarder.id}
                   className="p-4 border rounded-lg cursor-pointer hover:bg-accent"
@@ -203,7 +203,7 @@ export default function RoomDetailPage(): JSX.Element {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {room.utilityReadings.map((reading: any) => (
+              {room.utilityReadings.map((reading) => (
                 <div key={reading.id} className="flex justify-between items-center py-2 border-b last:border-0">
                   <div>
                     <span className="font-medium">{reading.type}</span>

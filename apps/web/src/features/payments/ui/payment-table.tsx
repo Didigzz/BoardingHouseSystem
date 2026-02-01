@@ -1,6 +1,7 @@
 "use client";
 
-import { api } from "@/lib/orpc-client";
+import { useQueryClient } from "@tanstack/react-query";
+import { orpc } from "@/lib/orpc-client";
 import {
   Table,
   TableBody,
@@ -10,20 +11,20 @@ import {
   TableRow,
 } from "@bhms/ui/table";
 import { Skeleton } from "@bhms/ui/skeleton";
-import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
+import { PaymentStatusBadge } from "@bhms/shared";
 import { Button } from "@bhms/ui/button";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { Check } from "lucide-react";
 import { toast } from "@bhms/ui";
 
 export function PaymentTable() {
-  const utils = orpc.useUtils();
+  const queryClient = useQueryClient();
   const { data: payments, isLoading } = orpc.payment.getAll.useQuery();
 
   const markAsPaid = orpc.payment.markAsPaid.useMutation({
     onSuccess: () => {
       toast({ title: "Payment marked as paid" });
-      queryClient.payment.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({ queryKey: ["payment.getAll"] });
     },
   });
 
@@ -39,7 +40,7 @@ export function PaymentTable() {
 
   if (!payments?.length) {
     return (
-      <div className="text-center py-10 text-muted-foreground">
+      <div className="py-10 text-center text-muted-foreground">
         No payments found.
       </div>
     );
@@ -66,7 +67,7 @@ export function PaymentTable() {
                   {payment.boarder?.firstName} {payment.boarder?.lastName}
                 </span>
                 {payment.boarder?.room && (
-                  <span className="text-muted-foreground text-sm ml-2">
+                  <span className="ml-2 text-sm text-muted-foreground">
                     Room {payment.boarder.room.roomNumber}
                   </span>
                 )}
@@ -97,4 +98,3 @@ export function PaymentTable() {
     </Table>
   );
 }
-

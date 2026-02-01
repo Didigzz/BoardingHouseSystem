@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/lib/orpc-client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Button } from "@bhms/ui/button";
 import { Skeleton } from "@bhms/ui/skeleton";
@@ -54,7 +54,7 @@ export default function PaymentsPage(): JSX.Element {
           <CardContent>
             {payments && payments.length > 0 ? (
               <div className="space-y-2">
-                {payments.map((payment: any) => (
+                {payments.map((payment) => (
                   <div key={payment.id} className="p-4 border rounded-lg flex justify-between items-center">
                     <div>
                       <p className="font-semibold">{payment.boarder?.firstName} {payment.boarder?.lastName}</p>

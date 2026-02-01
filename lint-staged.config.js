@@ -25,5 +25,5 @@ module.exports = {
   "*.prisma": ["prettier --write", "git add"],
 
   // TypeScript type checking (run once for all TS files)
-  "**/*.{ts,tsx}": () => "pnpm typecheck",
+  "**/*.{ts,tsx}": () => "bun typecheck",
 };

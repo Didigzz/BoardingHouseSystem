@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@bhms/ui/table";
 import { Skeleton } from "@bhms/ui/skeleton";
-import { BoarderAvatar, BoarderStatusBadge } from "@bhms/shared/entities/boarder";
+
 import { Button } from "@bhms/ui/button";
 import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import {
@@ -21,12 +21,30 @@ import {
 } from "@bhms/ui/dropdown-menu";
 import { formatDate } from "@bhms/shared";
 
-interface BoarderTableProps {
-  onEdit?: (boarder: any) => void;
-  onDelete?: (boarder: any) => void;
+interface Boarder {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  room?: {
+    id: string;
+    number: string;
+  };
+  isActive?: boolean;
+  moveInDate?: string;
 }
 
-export function BoarderTable({ onEdit, onDelete }: BoarderTableProps) {
+interface BoarderTableProps {
+  boarders: Boarder[];
+  onEdit?: (boarder: Boarder) => void;
+  onDelete?: (boarder: Boarder) => void;
+}
+
+export function BoarderTable({
+  onEdit,
+  onDelete,
+}: BoarderTableProps): JSX.Element {
   const { data: boarders, isLoading } = orpc.boarder.getAll.useQuery();
 
   if (isLoading) {
@@ -41,7 +59,7 @@ export function BoarderTable({ onEdit, onDelete }: BoarderTableProps) {
 
   if (!boarders?.length) {
     return (
-      <div className="text-center py-10 text-muted-foreground">
+      <div className="py-10 text-center text-muted-foreground">
         No boarders found.
       </div>
     );
@@ -60,24 +78,32 @@ export function BoarderTable({ onEdit, onDelete }: BoarderTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {boarders.map((boarder) => (
+        {boarders?.map((boarder: Boarder) => (
           <TableRow key={boarder.id}>
             <TableCell>
               <div className="flex items-center gap-3">
-                <BoarderAvatar
-                  firstName={boarder.firstName}
-                  lastName={boarder.lastName}
-                />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground">
+                  {boarder.firstName?.[0]}
+                  {boarder.lastName?.[0]}
+                </div>
                 <span className="font-medium">
                   {boarder.firstName} {boarder.lastName}
                 </span>
               </div>
             </TableCell>
             <TableCell>{boarder.email}</TableCell>
-            <TableCell>{boarder.room?.roomNumber ?? "-"}</TableCell>
-            <TableCell>{formatDate(boarder.moveInDate)}</TableCell>
+            <TableCell>{boarder.room?.number ?? "-"}</TableCell>
             <TableCell>
-              <BoarderStatusBadge isActive={boarder.isActive} />
+              {boarder.moveInDate
+                ? new Date(boarder.moveInDate).toLocaleDateString()
+                : "-"}
+            </TableCell>
+            <TableCell>
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${boarder.isActive ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}
+              >
+                {boarder.isActive ? "Active" : "Inactive"}
+              </span>
             </TableCell>
             <TableCell>
               <DropdownMenu>
@@ -107,4 +133,3 @@ export function BoarderTable({ onEdit, onDelete }: BoarderTableProps) {
     </Table>
   );
 }
-

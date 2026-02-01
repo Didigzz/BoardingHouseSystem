@@ -13,7 +13,7 @@ import {
 import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import { useRouter } from "next/navigation";
-import type { Boarder } from "@bhms/shared/entities/boarder";
+import type { Boarder } from "@bhms/shared";
 
 interface DeleteBoarderDialogProps {
   boarder: Boarder | null;
@@ -34,8 +34,8 @@ export function DeleteBoarderDialog({
   const deleteBoarder = orpc.boarder.delete.useMutation({
     onSuccess: () => {
       toast({ title: "Boarder deleted successfully" });
-      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
-      queryClient.room.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({ queryKey: ["boarder.getAll"] });
+      queryClient.invalidateQueries({ queryKey: ["room.getAll"] });
       onOpenChange(false);
       if (redirectOnDelete) {
         router.push("/landlord/boarders");

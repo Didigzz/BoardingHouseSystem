@@ -1,6 +1,6 @@
 # Dependencies
 node_modules
-.pnpm-store
+.bun
 
 # Build outputs
 dist
@@ -27,7 +27,7 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
-pnpm-debug.log*
+bun-debug.log*
 
 # Testing
 coverage

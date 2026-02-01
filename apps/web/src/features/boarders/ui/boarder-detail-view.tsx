@@ -1,12 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Button } from "@bhms/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bhms/ui/tabs";
-import { ArrowLeft, Mail, Phone, Calendar, DoorOpen, CreditCard, User } from "lucide-react";
-import { BoarderStatusBadge } from "@bhms/shared/entities/boarder";
-import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
+import {
+  ArrowLeft,
+  Mail,
+  Phone,
+  Calendar,
+  DoorOpen,
+  CreditCard,
+  User,
+} from "lucide-react";
+import { BoarderStatusBadge } from "@bhms/ui";
+import { PaymentStatusBadge } from "@bhms/ui";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { EditBoarderDialog } from "./edit-boarder-dialog";
 import type { Boarder, Room, Payment } from "@bhms/database";
@@ -22,6 +31,7 @@ interface BoarderDetailViewProps {
 
 export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
   const router = useRouter();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -36,9 +46,22 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
             </h1>
             <p className="text-muted-foreground">{boarder.email}</p>
           </div>
-          <BoarderStatusBadge isActive={boarder.isActive} />
+          <div className="flex items-center gap-2">
+            <BoarderStatusBadge isActive={boarder.isActive} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditDialogOpen(true)}
+            >
+              Edit
+            </Button>
+          </div>
         </div>
-        <EditBoarderDialog boarder={boarder} />
+        <EditBoarderDialog
+          boarder={boarder}
+          open={isEditDialogOpen}
+          onOpenChange={setIsEditDialogOpen}
+        />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -82,7 +105,9 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {boarder.room ? formatCurrency(Number(boarder.room.monthlyRate)) : "N/A"}
+              {boarder.room
+                ? formatCurrency(Number(boarder.room.monthlyRate))
+                : "N/A"}
             </div>
           </CardContent>
         </Card>
@@ -125,7 +150,9 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
                 )}
               </>
             ) : (
-              <p className="text-muted-foreground">No emergency contact provided</p>
+              <p className="text-muted-foreground">
+                No emergency contact provided
+              </p>
             )}
           </CardContent>
         </Card>
@@ -152,7 +179,9 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <p className="font-medium">{formatCurrency(Number(payment.amount))}</p>
+                        <p className="font-medium">
+                          {formatCurrency(Number(payment.amount))}
+                        </p>
                         {payment.paidDate && (
                           <p className="text-sm text-muted-foreground">
                             Paid: {formatDate(payment.paidDate)}
@@ -177,4 +206,3 @@ export function BoarderDetailView({ boarder }: BoarderDetailViewProps) {
     </div>
   );
 }
-

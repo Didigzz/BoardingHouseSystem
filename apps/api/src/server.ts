@@ -61,20 +61,22 @@ app.all("/api/health", (req, res) => {
 app.use("/orpc", authMiddleware);
 
 // Create protected procedure with auth check
-const protectedProcedure = publicProcedure.use(async ({ context, next }) => {
-  if (!context.session || !(context.session as any).user) {
-    throw new ORPCError("UNAUTHORIZED", {
-      message: "You must be logged in to access this resource",
+const protectedProcedure = publicProcedure.use(
+  async ({ context, next }: { context: any; next: any }) => {
+    if (!context.session || !(context.session as any).user) {
+      throw new ORPCError("UNAUTHORIZED", {
+        message: "You must be logged in to access this resource",
+      });
+    }
+
+    return next({
+      context: {
+        ...context,
+        session: context.session,
+      },
     });
   }
-
-  return next({
-    context: {
-      ...context,
-      session: context.session,
-    },
-  });
-});
+);
 
 // Create simple inline routers to get server running
 const createBoarderRouter = (protectedProcedure: any) => ({

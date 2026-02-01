@@ -30,16 +30,19 @@ import {
 import { Plus } from "lucide-react";
 import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
+import { useQueryClient } from "@tanstack/react-query";
 import {
-  createBoarderSchema,
   type CreateBoarderInput,
-} from "@bhms/shared/entities/boarder";
+  createBoarderSchema,
+  type Room,
+} from "@bhms/shared";
+import type { Room as PrismaRoom } from "@bhms/database";
 
 export function AddBoarderDialog() {
   const [open, setOpen] = useState(false);
-  const utils = orpc.useUtils();
+  const queryClient = useQueryClient();
 
-  const { data: rooms } = orpc.room.getAll.useQuery({ status: "AVAILABLE" });
+  const { data: rooms } = api.room.getAll.useQuery({ status: "AVAILABLE" });
 
   const form = useForm<CreateBoarderInput>({
     resolver: zodResolver(createBoarderSchema),
@@ -55,15 +58,15 @@ export function AddBoarderDialog() {
     },
   });
 
-  const createBoarder = orpc.boarder.create.useMutation({
+  const createBoarder = api.boarder.create.useMutation({
     onSuccess: () => {
       toast({ title: "Boarder added successfully" });
-      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
-      queryClient.room.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({ queryKey: ["boarder.getAll"] });
+      queryClient.invalidateQueries({ queryKey: ["room.getAll"] });
       setOpen(false);
       form.reset();
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error adding boarder",
         description: error.message,
@@ -154,14 +157,17 @@ export function AddBoarderDialog() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Assign Room (Optional)</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a room" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {rooms?.map((room) => (
+                      {rooms?.map((room: PrismaRoom) => (
                         <SelectItem key={room.id} value={room.id}>
                           Room {room.roomNumber} (Floor {room.floor})
                         </SelectItem>
@@ -213,4 +219,3 @@ export function AddBoarderDialog() {
     </Dialog>
   );
 }
-

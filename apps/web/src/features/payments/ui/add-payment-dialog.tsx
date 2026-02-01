@@ -28,13 +28,17 @@ import {
   SelectValue,
 } from "@bhms/ui/select";
 import { Plus } from "lucide-react";
-import { api } from "@/lib/orpc-client";
+import { useQueryClient } from "@tanstack/react-query";
+import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
-import { createPaymentSchema, type CreatePaymentInput } from "@bhms/shared/entities/payment";
+import {
+  createPaymentSchema,
+  type CreatePaymentInput,
+} from "@bhms/shared";
 
 export function AddPaymentDialog() {
   const [open, setOpen] = useState(false);
-  const utils = orpc.useUtils();
+  const queryClient = useQueryClient();
 
   const { data: boarders } = orpc.boarder.getAll.useQuery({ isActive: true });
 
@@ -52,7 +56,7 @@ export function AddPaymentDialog() {
   const createPayment = orpc.payment.create.useMutation({
     onSuccess: () => {
       toast({ title: "Payment created successfully" });
-      queryClient.payment.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({ queryKey: ["payment.getAll"] });
       setOpen(false);
       form.reset();
     },
@@ -157,7 +161,11 @@ export function AddPaymentDialog() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={createPayment.isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={createPayment.isPending}
+            >
               {createPayment.isPending ? "Creating..." : "Create Payment"}
             </Button>
           </form>
@@ -166,4 +174,3 @@ export function AddPaymentDialog() {
     </Dialog>
   );
 }
-

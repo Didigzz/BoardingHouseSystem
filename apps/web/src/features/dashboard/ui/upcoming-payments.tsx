@@ -1,21 +1,25 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
-import { api } from "@/lib/orpc-client";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency, formatDate } from "@bhms/shared";
 import { Button } from "@bhms/ui/button";
 import { toast } from "@bhms/ui";
+import { orpc } from "@/lib/orpc-client";
 
 export function UpcomingPayments() {
-  const utils = orpc.useUtils();
-  const { data: payments, isLoading } = orpc.dashboard.getUpcomingPayments.useQuery();
+  const queryClient = useQueryClient();
+  const { data: payments, isLoading } =
+    orpc.dashboard.getUpcomingPayments.useQuery();
 
   const markAsPaid = orpc.payment.markAsPaid.useMutation({
     onSuccess: () => {
       toast({ title: "Payment marked as paid" });
-      queryClient.dashboard.getUpcomingPayments.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
-      queryClient.dashboard.getStats.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard.getUpcomingPayments"],
+      });
+      queryClient.invalidateQueries({ queryKey: ["dashboard.getStats"] });
     },
   });
 
@@ -56,12 +60,15 @@ export function UpcomingPayments() {
                     {payment.boarder.firstName} {payment.boarder.lastName}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {payment.boarder.room?.roomNumber && `Room ${payment.boarder.room.roomNumber} • `}
+                    {payment.boarder.room?.roomNumber &&
+                      `Room ${payment.boarder.room.roomNumber} • `}
                     Due: {formatDate(payment.dueDate)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">{formatCurrency(Number(payment.amount))}</span>
+                  <span className="font-semibold">
+                    {formatCurrency(Number(payment.amount))}
+                  </span>
                   <Button
                     size="sm"
                     onClick={() => markAsPaid.mutate({ id: payment.id })}
@@ -78,4 +85,3 @@ export function UpcomingPayments() {
     </Card>
   );
 }
-

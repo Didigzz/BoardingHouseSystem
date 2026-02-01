@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback } from "@bhms/ui/avatar";
 import { Badge } from "@bhms/ui/badge";
 import { ArrowLeft, Edit, Trash2, Mail, Phone, DoorOpen, Calendar, AlertCircle } from "lucide-react";
 import { useState } from "react";
+import type { Payment } from "@bhms/shared";
 
 const formatDate = (date: Date | string) => {
   return new Date(date).toLocaleDateString("en-US", {
@@ -175,7 +176,7 @@ export default function BoarderDetailPage(): JSX.Element {
         <CardContent>
           {boarder.payments && boarder.payments.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2">
-              {boarder.payments.map((payment: any) => (
+              {boarder.payments.map((payment: Payment) => (
                 <Card key={payment.id}>
                   <CardContent className="pt-6">
                     <div className="flex justify-between items-start">

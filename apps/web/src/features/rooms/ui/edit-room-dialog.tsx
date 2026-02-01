@@ -28,7 +28,7 @@ import {
 } from "@bhms/ui/select";
 import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
-import { updateRoomSchema, type UpdateRoomInput, type Room } from "@bhms/shared/entities/room";
+import { updateRoomSchema, type UpdateRoomInput, type Room } from "@bhms/shared";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface EditRoomDialogProps {

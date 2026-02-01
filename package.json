@@ -14,14 +14,14 @@
     "db:push": "turbo run db:push",
     "db:studio": "turbo run db:studio",
     "db:seed": "turbo run db:seed",
-    "db:migrate": "pnpm --filter @bhms/database db:migrate",
+    "db:migrate": "bun --filter @bhms/database db:migrate",
     "prepare": "husky",
-    "web:dev": "pnpm --filter @bhms/web dev",
-    "web:build": "pnpm --filter @bhms/web build",
-    "api:dev": "pnpm --filter @bhms/api-server dev",
-    "api:build": "pnpm --filter @bhms/api-server build",
-    "mobile:dev": "pnpm --filter @bhms/mobile dev",
-    "check:all": "pnpm lint && pnpm typecheck && pnpm format:check",
+    "web:dev": "bun --filter @bhms/web dev",
+    "web:build": "bun --filter @bhms/web build",
+    "api:dev": "bun --filter @bhms/api-server dev",
+    "api:build": "bun --filter @bhms/api-server build",
+    "mobile:dev": "bun --filter @bhms/mobile dev",
+    "check:all": "bun lint && bun typecheck && bun format:check",
     "docker:up": "docker-compose up -d",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up -d",
     "docker:down": "docker-compose down",
@@ -41,5 +41,9 @@
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
   },
-  "packageManager": "pnpm@9.0.0"
+  "packageManager": "bun@1.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

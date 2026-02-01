@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Badge } from "@bhms/ui/badge";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency } from "@bhms/shared";
-import { RoomStatusBadge } from "@bhms/shared/entities/room";
+import { RoomStatusBadge } from "@bhms/shared";
 import { EditRoomDialog } from "./edit-room-dialog";
 import { DeleteRoomDialog } from "./delete-room-dialog";
 

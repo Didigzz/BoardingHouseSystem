@@ -1,29 +1,36 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createORPCClient, ORPCProvider } from "@orpc/client/react";
-import { useState } from "react";
-import superjson from "superjson";
+import { createORPCReactQueryUtils } from "@orpc/react-query";
+import { createContext, useContext, useState } from "react";
 
-import type { AppRouter } from "./orpc-server";
 import { orpc } from "./orpc-client";
 
-function getBaseUrl() {
-  if (typeof window !== "undefined") return window.location.origin;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return `http://localhost:${process.env.PORT ?? 3000}`;
+// Create the oRPC React Query utilities
+const orpcUtils = createORPCReactQueryUtils(orpc);
+
+// Create context for oRPC utilities
+const ORPCContext = createContext<typeof orpcUtils | undefined>(undefined);
+
+export function useORPC() {
+  const context = useContext(ORPCContext);
+  if (!context) {
+    throw new Error("useORPC must be used within ORPCReactProvider");
+  }
+  return context;
 }
 
 export function ORPCReactProvider(props: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
-  const client = useState(() => orpc)[0];
-
   return (
     <QueryClientProvider client={queryClient}>
-      <ORPCProvider client={client} queryClient={queryClient}>
+      <ORPCContext.Provider value={orpcUtils}>
         {props.children}
-      </ORPCProvider>
+      </ORPCContext.Provider>
     </QueryClientProvider>
   );
 }
+
+// Re-export the utils for direct use
+export { orpcUtils as orpc };

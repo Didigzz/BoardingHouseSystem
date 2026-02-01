@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/lib/orpc-client";
-import { PaymentCard } from "@bhms/shared/entities/payment";
+import { PaymentCard } from "@bhms/shared";
 import { Skeleton } from "@bhms/ui/skeleton";
 
 export function PaymentList() {

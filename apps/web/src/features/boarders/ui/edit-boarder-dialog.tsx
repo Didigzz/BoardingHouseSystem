@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -26,13 +27,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@bhms/ui/select";
-import { api } from "@/lib/orpc-client";
+import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
 import {
   updateBoarderSchema,
   type UpdateBoarderInput,
   type Boarder,
-} from "@bhms/shared/entities/boarder";
+} from "@bhms/shared";
 
 interface EditBoarderDialogProps {
   boarder: Boarder | null;
@@ -45,7 +46,7 @@ export function EditBoarderDialog({
   open,
   onOpenChange,
 }: EditBoarderDialogProps) {
-  const utils = orpc.useUtils();
+  const queryClient = useQueryClient();
   const { data: rooms } = orpc.room.getAll.useQuery();
 
   const form = useForm<UpdateBoarderInput>({
@@ -81,7 +82,7 @@ export function EditBoarderDialog({
   const updateBoarder = orpc.boarder.update.useMutation({
     onSuccess: () => {
       toast({ title: "Boarder updated successfully" });
-      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({ queryKey: ["boarder.getAll"] });
       onOpenChange(false);
     },
     onError: (error) => {
@@ -211,7 +212,7 @@ export function EditBoarderDialog({
                 </FormItem>
               )}
             />
-            <div className="flex gap-2 justify-end">
+            <div className="flex justify-end gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -229,4 +230,3 @@ export function EditBoarderDialog({
     </Dialog>
   );
 }
-

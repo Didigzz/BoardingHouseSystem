@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +19,8 @@ import {
 import { Label } from "@bhms/ui/label";
 import { api } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
-import type { Boarder } from "@bhms/shared/entities/boarder";
+import type { Boarder, Room } from "@bhms/shared";
+import type { Room as PrismaRoom } from "@bhms/database";
 
 interface AssignRoomDialogProps {
   boarder: Boarder | null;
@@ -26,20 +28,24 @@ interface AssignRoomDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function AssignRoomDialog({ boarder, open, onOpenChange }: AssignRoomDialogProps) {
+export function AssignRoomDialog({
+  boarder,
+  open,
+  onOpenChange,
+}: AssignRoomDialogProps) {
   const [selectedRoomId, setSelectedRoomId] = useState<string>("");
-  const utils = orpc.useUtils();
+  const queryClient = useQueryClient();
 
-  const { data: rooms } = orpc.room.getAll.useQuery({ status: "AVAILABLE" });
+  const { data: rooms } = api.room.getAll.useQuery({ status: "AVAILABLE" });
 
-  const assignRoom = orpc.boarder.assignRoom.useMutation({
+  const assignRoom = api.boarder.assignRoom.useMutation({
     onSuccess: () => {
       toast({ title: "Room assigned successfully" });
-      queryClient.boarder.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
-      queryClient.room.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({ queryKey: ["boarder.getAll"] });
+      queryClient.invalidateQueries({ queryKey: ["room.getAll"] });
       onOpenChange(false);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error assigning room",
         description: error.message,
@@ -74,7 +80,7 @@ export function AssignRoomDialog({ boarder, open, onOpenChange }: AssignRoomDial
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">No Room (Unassign)</SelectItem>
-                {rooms?.map((room) => (
+                {rooms?.map((room: PrismaRoom) => (
                   <SelectItem key={room.id} value={room.id}>
                     Room {room.roomNumber} (Floor {room.floor})
                   </SelectItem>
@@ -82,7 +88,7 @@ export function AssignRoomDialog({ boarder, open, onOpenChange }: AssignRoomDial
               </SelectContent>
             </Select>
           </div>
-          <div className="flex gap-2 justify-end">
+          <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
@@ -95,4 +101,3 @@ export function AssignRoomDialog({ boarder, open, onOpenChange }: AssignRoomDial
     </Dialog>
   );
 }
-

@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/lib/orpc-client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Button } from "@bhms/ui/button";
 import { Skeleton } from "@bhms/ui/skeleton";
@@ -55,7 +55,7 @@ export default function UtilitiesPage(): JSX.Element {
           <CardContent>
             {utilities && utilities.length > 0 ? (
               <div className="space-y-2">
-                {utilities.map((utility: any) => (
+                {utilities.map((utility) => (
                   <div key={utility.id} className="p-4 border rounded-lg">
                     <div className="flex justify-between">
                       <div>

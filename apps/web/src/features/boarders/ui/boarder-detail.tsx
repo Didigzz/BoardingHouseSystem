@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Badge } from "@bhms/ui/badge";
 import { Skeleton } from "@bhms/ui/skeleton";
 import { formatCurrency, formatDate } from "@bhms/shared";
-import { PaymentStatusBadge } from "@bhms/shared/entities/payment";
+import { PaymentStatusBadge } from "@bhms/shared";
 import { EditBoarderDialog } from "./edit-boarder-dialog";
 
 interface BoarderDetailProps {

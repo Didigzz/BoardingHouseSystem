@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/orpc-client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Button } from "@bhms/ui/button";
 import { Skeleton } from "@bhms/ui/skeleton";
@@ -61,7 +61,7 @@ export default function RoomsPage(): JSX.Element {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {rooms && rooms.length > 0 ? (
-            rooms.map((room: any) => (
+            rooms.map((room) => (
               <Card
                 key={room.id}
                 className="cursor-pointer hover:bg-accent transition-colors"

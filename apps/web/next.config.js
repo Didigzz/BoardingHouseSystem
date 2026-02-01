@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   transpilePackages: [
     "@bhms/api",
     "@bhms/auth",
@@ -10,9 +9,7 @@ const nextConfig = {
     "@bhms/ui",
     "@bhms/validation",
   ],
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client"],
-  },
+  serverExternalPackages: ["@prisma/client"],
 };
 
 module.exports = nextConfig;

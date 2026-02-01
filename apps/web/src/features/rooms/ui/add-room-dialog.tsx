@@ -23,7 +23,7 @@ import { Input } from "@bhms/ui/input";
 import { Plus } from "lucide-react";
 import { orpc } from "@/lib/orpc-client";
 import { toast } from "@bhms/ui";
-import { createRoomSchema, type CreateRoomInput } from "@bhms/shared/entities/room";
+import { createRoomSchema, type CreateRoomInput } from "@bhms/shared";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function AddRoomDialog() {

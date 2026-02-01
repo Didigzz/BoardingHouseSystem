@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/lib/orpc-client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@bhms/ui/card";
 import { Button } from "@bhms/ui/button";
 import { Skeleton } from "@bhms/ui/skeleton";
@@ -38,7 +38,7 @@ export default function BoardersPage(): JSX.Element {
           <CardContent>
             {boarders && boarders.length > 0 ? (
               <div className="space-y-2">
-                {boarders.map((boarder: any) => (
+                {boarders.map((boarder) => (
                   <div key={boarder.id} className="p-4 border rounded-lg">
                     <p className="font-semibold">{boarder.firstName} {boarder.lastName}</p>
                     <p className="text-sm text-muted-foreground">{boarder.email}</p>

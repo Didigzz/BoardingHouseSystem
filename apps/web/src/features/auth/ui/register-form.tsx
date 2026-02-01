@@ -54,12 +54,12 @@ export function RegisterForm(): JSX.Element {
     },
   });
 
-  const register = orpc.user.register.useMutation({
+  const register = api.user.register.useMutation({
     onSuccess: () => {
       toast({ title: "Account created successfully" });
       router.push("/login");
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Registration failed",
         description: error.message,
@@ -169,4 +169,3 @@ export function RegisterForm(): JSX.Element {
     </Card>
   );
 }
-

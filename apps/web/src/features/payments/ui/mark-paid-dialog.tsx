@@ -10,10 +10,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@bhms/ui/alert-dialog";
-import { api } from "@/lib/orpc-client";
+import { useQueryClient } from "@tanstack/react-query";
+import { orpc } from "@/lib/orpc-client";
 import { useToast } from "@bhms/ui";
 import { formatCurrency } from "@bhms/shared";
-import type { Payment } from "@bhms/shared/entities/payment/model/types";
+import type { Payment } from "@bhms/shared/model/types";
 
 interface MarkPaidDialogProps {
   payment: Payment | null;
@@ -21,16 +22,20 @@ interface MarkPaidDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function MarkPaidDialog({ payment, open, onOpenChange }: MarkPaidDialogProps) {
+export function MarkPaidDialog({
+  payment,
+  open,
+  onOpenChange,
+}: MarkPaidDialogProps) {
   const { toast } = useToast();
-  const utils = orpc.useUtils();
+  const queryClient = useQueryClient();
 
   const markAsPaid = orpc.payment.markAsPaid.useMutation({
     onSuccess: () => {
       toast({ title: "Payment marked as paid" });
-      queryClient.payment.getAll.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
-      queryClient.payment.getSummary.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
-      queryClient.dashboard.getStats.invalidateQueries\(\{ queryKey: \[[^"\]+\] \}\);
+      queryClient.invalidateQueries({ queryKey: ["payment.getAll"] });
+      queryClient.invalidateQueries({ queryKey: ["payment.getSummary"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard.getStats"] });
       onOpenChange(false);
     },
     onError: (error) => {
@@ -54,7 +59,8 @@ export function MarkPaidDialog({ payment, open, onOpenChange }: MarkPaidDialogPr
         <AlertDialogHeader>
           <AlertDialogTitle>Mark Payment as Paid?</AlertDialogTitle>
           <AlertDialogDescription>
-            Confirm that you have received {formatCurrency(Number(payment?.amount ?? 0))} from{" "}
+            Confirm that you have received{" "}
+            {formatCurrency(Number(payment?.amount ?? 0))} from{" "}
             {payment?.boarder?.firstName} {payment?.boarder?.lastName}.
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -68,4 +74,3 @@ export function MarkPaidDialog({ payment, open, onOpenChange }: MarkPaidDialogPr
     </AlertDialog>
   );
 }
-

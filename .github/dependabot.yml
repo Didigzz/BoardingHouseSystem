@@ -1,102 +1,91 @@
-# Dependabot configuration file
-# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
-
 version: 2
 updates:
-  # npm dependencies for the web app
+  # Enable version updates for npm (root)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
       time: "09:00"
-      timezone: "Asia/Manila"
     open-pull-requests-limit: 10
+    reviewers:
+      - "Didigzz"
+    assignees:
+      - "Didigzz"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
     labels:
       - "dependencies"
-      - "npm"
-    commit-message:
-      prefix: "chore(deps)"
-    groups:
-      # Group all minor and patch updates together
-      minor-and-patch:
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-      # Group development dependencies
-      dev-dependencies:
-        patterns:
-          - "@types/*"
-          - "eslint*"
-          - "prettier*"
-          - "typescript"
-          - "@typescript-eslint/*"
-        dependency-type: "development"
-      # Group React ecosystem updates
-      react:
-        patterns:
-          - "react"
-          - "react-dom"
-          - "@types/react"
-          - "@types/react-dom"
-      # Group Next.js ecosystem
-      nextjs:
-        patterns:
-          - "next"
-          - "next-auth"
-          - "@next/*"
-      # Group Prisma
-      prisma:
-        patterns:
-          - "prisma"
-          - "@prisma/*"
-      # Group tRPC
-      trpc:
-        patterns:
-          - "@trpc/*"
-      # Group shadcn/ui dependencies
-      ui:
-        patterns:
-          - "@radix-ui/*"
-          - "class-variance-authority"
-          - "clsx"
-          - "tailwind-merge"
-          - "lucide-react"
-    ignore:
-      # Ignore major version updates for critical packages (review manually)
-      - dependency-name: "next"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "react"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "react-dom"
-        update-types: ["version-update:semver-major"]
+      - "auto-merge"
+
+  # Enable version updates for each app
+  - package-ecosystem: "npm"
+    directory: "/apps/admin"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "admin-app"
+      - "auto-merge"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "api-app"
+      - "auto-merge"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/mobile"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "mobile-app"
+      - "auto-merge"
+
+  # Enable version updates for packages
+  - package-ecosystem: "npm"
+    directory: "/packages/database"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "database-package"
+      - "auto-merge"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/auth"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "auth-package"
+      - "auto-merge"
+
+  - package-ecosystem: "npm"
+    directory: "/packages/ui"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ui-package"
+      - "auto-merge"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Asia/Manila"
     labels:
-      - "dependencies"
       - "github-actions"
-    commit-message:
-      prefix: "ci(deps)"
-
-  # Docker
-  - package-ecosystem: "docker"
-    directory: "/infrastructure/docker"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Asia/Manila"
-    labels:
-      - "dependencies"
-      - "docker"
-    commit-message:
-      prefix: "chore(docker)"
+      - "auto-merge"

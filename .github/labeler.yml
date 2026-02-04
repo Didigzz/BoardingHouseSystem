@@ -1,120 +1,81 @@
-# PR Labeler Configuration
-# https://github.com/actions/labeler
+# Configuration for the labeler action
 
 # Documentation changes
 documentation:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "docs/**/*"
-          - "**/*.md"
-          - "README.md"
+  - '**/*.md'
+  - 'docs/**/*'
+  - '.github/**/*.md'
 
-# Frontend/Web app changes
-frontend:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/**/*"
-
-# Component changes
-components:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/src/shared/ui/**/*"
-          - "packages/ui/**/*"
-
-# Feature changes
-feature:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/src/features/**/*"
-
-# Entity changes
-entities:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/src/entities/**/*"
-
-# Widget changes
-widgets:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/src/widgets/**/*"
-
-# API/Backend changes
-api:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/src/server/**/*"
-          - "apps/web/src/app/api/**/*"
-
-# Database/Prisma changes
+# Database changes
 database:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/prisma/**/*"
-          - "packages/database/**/*"
+  - 'packages/database/**/*'
+  - '**/*.prisma'
+  - '**/migrations/**/*'
+
+# API changes
+api:
+  - 'apps/api/**/*'
+  - 'packages/api/**/*'
+
+# Frontend changes
+frontend:
+  - 'apps/(public)/**/*'
+  - 'apps/boarder/**/*'
+  - 'apps/landlord/**/*'
+  - 'apps/(auth)/**/*'
+
+# Admin changes
+admin:
+  - 'apps/admin/**/*'
+
+# Mobile changes
+mobile:
+  - 'apps/mobile/**/*'
+
+# UI/Components changes
+ui:
+  - 'packages/ui/**/*'
+  - '**/*.tsx'
+  - '**/*.jsx'
 
 # Authentication changes
 auth:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "apps/web/src/server/auth/**/*"
-          - "apps/web/src/features/auth/**/*"
-
-# Infrastructure changes
-infrastructure:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "infrastructure/**/*"
-          - "Dockerfile*"
-          - "docker-compose*.yml"
-
-# CI/CD changes
-ci:
-  - changed-files:
-      - any-glob-to-any-file:
-          - ".github/**/*"
+  - 'packages/auth/**/*'
+  - '**/auth/**/*'
 
 # Configuration changes
 config:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "*.config.*"
-          - "*.json"
-          - "*.yaml"
-          - "*.yml"
-          - ".eslintrc*"
-          - ".prettierrc*"
-          - "tsconfig*.json"
+  - 'packages/config/**/*'
+  - '**/*.config.*'
+  - '**/tsconfig.json'
+  - '**/package.json'
+  - 'turbo.json'
+
+# CI/CD changes
+ci:
+  - '.github/workflows/**/*'
+  - '.github/actions/**/*'
 
 # Dependencies
 dependencies:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "package.json"
-          - "pnpm-lock.yaml"
-          - "**/package.json"
+  - 'package.json'
+  - 'bun.lock'
+  - '**/package.json'
 
-# Test changes
+# Tests
 tests:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "**/*.test.*"
-          - "**/*.spec.*"
-          - "**/__tests__/**/*"
-          - "**/tests/**/*"
+  - '**/*.test.*'
+  - '**/*.spec.*'
+  - '**/tests/**/*'
+  - '**/__tests__/**/*'
 
-# TypeScript config changes
-typescript:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "packages/typescript-config/**/*"
-          - "**/tsconfig*.json"
+# Docker
+docker:
+  - '**/Dockerfile'
+  - '**/docker-compose*.yml'
+  - '**/.dockerignore'
 
-# Styling changes
-styling:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "**/*.css"
-          - "**/tailwind.config.*"
-          - "**/postcss.config.*"
+# Security
+security:
+  - '.github/dependabot.yml'
+  - '**/security/**/*'

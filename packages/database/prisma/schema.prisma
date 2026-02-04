@@ -12,6 +12,13 @@ datasource db {
 enum UserRole {
   LANDLORD
   BOARDER
+  ADMIN
+}
+
+enum UserStatus {
+  PENDING
+  APPROVED
+  SUSPENDED
 }
 
 enum RoomStatus {
@@ -44,21 +51,117 @@ enum UtilityType {
 // ============ MODELS ============
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
+  id            String     @id @default(cuid())
+  email         String     @unique
   name          String?
   password      String
-  role          UserRole  @default(LANDLORD)
+  role          UserRole   @default(BOARDER)
+  status        UserStatus @default(APPROVED)
+  phone         String?
   image         String?
   emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
-  boarder  Boarder?
-  accounts Account[]
-  sessions Session[]
+  boarder            Boarder?
+  accounts           Account[]
+  sessions           Session[]
+  landlordProfile    LandlordProfile?
 
   @@map("users")
+}
+
+model LandlordProfile {
+  id                String     @id @default(cuid())
+  userId            String     @unique @map("user_id")
+  businessName      String?    @map("business_name")
+  businessType      String?    @map("business_type")
+  yearsExperience   Int?       @map("years_experience")
+  description       String?
+  documents         Json?
+  applicationNotes  String?    @map("application_notes")
+  reviewedBy        String?    @map("reviewed_by")
+  reviewedAt        DateTime?  @map("reviewed_at")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  properties        Property[]
+
+  @@map("landlord_profiles")
+}
+
+model Property {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  address         String
+  city            String
+  province        String?
+  zipCode         String?  @map("zip_code")
+  latitude        Float?
+  longitude       Float?
+  monthlyRent     Decimal  @map("monthly_rent") @db.Decimal(10, 2)
+  totalRooms      Int      @map("total_rooms")
+  availableRooms  Int      @map("available_rooms")
+  amenities       String[] @default([])
+  images          String[] @default([])
+  isPublished     Boolean  @default(false) @map("is_published")
+  isFeatured      Boolean  @default(false) @map("is_featured")
+  rating          Float?   @default(0)
+  reviewCount     Int      @default(0) @map("review_count")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  landlordId      String   @map("landlord_id")
+  landlord        LandlordProfile @relation(fields: [landlordId], references: [id], onDelete: Cascade)
+
+  bookings        Booking[]
+  savedBy         SavedListing[]
+
+  @@index([city])
+  @@index([isPublished])
+  @@map("properties")
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  propertyId      String        @map("property_id")
+  boarderId       String        @map("boarder_id")
+  status          BookingStatus @default(PENDING)
+  startDate       DateTime      @map("start_date")
+  endDate         DateTime?     @map("end_date")
+  monthlyRent     Decimal       @map("monthly_rent") @db.Decimal(10, 2)
+  notes           String?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  property        Property      @relation(fields: [propertyId], references: [id])
+  boarder         Boarder       @relation(fields: [boarderId], references: [id])
+
+  @@index([propertyId])
+  @@index([boarderId])
+  @@map("bookings")
+}
+
+model SavedListing {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  propertyId  String   @map("property_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, propertyId])
+  @@map("saved_listings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  ACTIVE
+  COMPLETED
+  CANCELLED
 }
 
 model Account {
@@ -117,7 +220,7 @@ model Boarder {
   phone            String?
   emergencyContact String?   @map("emergency_contact")
   emergencyPhone   String?   @map("emergency_phone")
-  moveInDate       DateTime  @map("move_in_date")
+  moveInDate       DateTime? @map("move_in_date")
   moveOutDate      DateTime? @map("move_out_date")
   isActive         Boolean   @default(true) @map("is_active")
   accessCode       String?   @unique @map("access_code")
@@ -131,6 +234,7 @@ model Boarder {
   user   User?   @relation(fields: [userId], references: [id])
 
   payments Payment[]
+  bookings Booking[]
 
   @@map("boarders")
 }

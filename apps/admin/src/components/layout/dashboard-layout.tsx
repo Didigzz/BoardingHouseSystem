@@ -10,23 +10,23 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar isCollapsed={isCollapsed} onToggle={() => setIsCollapsed(!isCollapsed)} />
-
-      {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Header */}
-        <Header />
-
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-muted/30 p-4 lg:p-6">
-          {children}
-        </main>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
+      <Header sidebarCollapsed={sidebarCollapsed} />
+      <main
+        className={cn(
+          "min-h-screen pt-16 transition-all duration-300",
+          sidebarCollapsed ? "pl-16" : "pl-64"
+        )}
+      >
+        <div className="p-6">{children}</div>
+      </main>
     </div>
   );
 }

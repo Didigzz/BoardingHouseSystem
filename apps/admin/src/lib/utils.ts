@@ -9,24 +9,34 @@ export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat("en-PH", {
     style: "currency",
     currency: "PHP",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(amount);
 }
 
 export function formatDate(date: Date | string): string {
-  return new Intl.DateTimeFormat("en-PH", {
+  return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
-    month: "short",
+    month: "long",
     day: "numeric",
   }).format(new Date(date));
 }
 
 export function formatDateTime(date: Date | string): string {
-  return new Intl.DateTimeFormat("en-PH", {
+  return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+  }).format(new Date(date));
+}
+
+export function formatShortDate(date: Date | string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   }).format(new Date(date));
 }
 
@@ -39,22 +49,29 @@ export function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-export function calculateOccupancyRate(occupied: number, total: number): number {
-  if (total === 0) return 0;
-  return Math.round((occupied / total) * 100);
+export function formatNumber(num: number): string {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + "M";
+  }
+  if (num >= 1000) {
+    return (num / 1000).toFixed(1) + "K";
+  }
+  return num.toString();
 }
 
-export function getStatusColor(status: string): string {
-  const statusColors: Record<string, string> = {
-    active: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-    inactive: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
-    maintenance: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-    available: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-    occupied: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-    paid: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-    overdue: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-    cancelled: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
-  };
-  return statusColors[status.toLowerCase()] || statusColors.inactive;
+export function getRelativeTime(date: Date | string): string {
+  const now = new Date();
+  const past = new Date(date);
+  const diff = now.getTime() - past.getTime();
+  
+  const minutes = Math.floor(diff / (1000 * 60));
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days < 7) return `${days}d ago`;
+  
+  return formatShortDate(date);
 }

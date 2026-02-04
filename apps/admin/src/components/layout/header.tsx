@@ -1,95 +1,99 @@
 "use client";
 
 import * as React from "react";
+import { Bell, Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import {
-  Bell,
-  ChevronDown,
-  LogOut,
-  Moon,
-  Search,
-  Settings,
-  Sun,
-  User,
-  Building2,
-  Check,
-} from "lucide-react";
-import { Button } from "@bhms/ui";
-import { Input } from "@bhms/ui";
+import { Button, Input } from "@bhms/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useProperty } from "@/lib/property-context";
-import { cn, getInitials } from "@/lib/utils";
-import { mockNotifications } from "@/lib/mock-data";
+import { cn } from "@/lib/utils";
 
-export function Header() {
-  const { theme, setTheme } = useTheme();
-  const { currentProperty, properties, setCurrentProperty, isLoading } = useProperty();
+interface HeaderProps {
+  sidebarCollapsed: boolean;
+}
+
+export function Header({ sidebarCollapsed }: HeaderProps) {
+  const { setTheme, theme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
-  // Prevent hydration mismatch
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
-  const unreadNotifications = mockNotifications.filter((n) => !n.isRead);
-
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
+    <header
+      className={cn(
+        "fixed right-0 top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300",
+        sidebarCollapsed ? "left-16" : "left-64"
+      )}
+    >
       {/* Search */}
-      <div className="flex flex-1 items-center gap-4">
-        <div className="relative hidden w-full max-w-md lg:block">
+      <div className="flex items-center gap-4">
+        <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search tenants, rooms, payments..."
-            className="pl-10"
+            type="search"
+            placeholder="Search users, listings, bookings..."
+            className="w-80 pl-9"
           />
         </div>
       </div>
 
-      {/* Right side actions */}
+      {/* Actions */}
       <div className="flex items-center gap-2">
-        {/* Property Selector */}
+        {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="gap-2" disabled={isLoading}>
-              <Building2 className="h-4 w-4" />
-              <span className="hidden md:inline">
-                {isLoading ? "Loading..." : currentProperty?.name || "Select Property"}
+            <Button variant="ghost" size="icon" className="relative">
+              <Bell className="h-5 w-5" />
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground">
+                5
               </span>
-              <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-64">
-            <DropdownMenuLabel>Switch Property</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {properties.map((property) => (
-              <DropdownMenuItem
-                key={property.id}
-                onClick={() => setCurrentProperty(property)}
-                className="flex items-center justify-between"
-              >
-                <div>
-                  <p className="font-medium">{property.name}</p>
-                  <p className="text-xs text-muted-foreground">{property.address}</p>
+          <DropdownMenuContent align="end" className="w-80">
+            <div className="p-4">
+              <h4 className="mb-2 font-semibold">Notifications</h4>
+              <div className="space-y-3">
+                <div className="flex gap-3 rounded-lg p-2 hover:bg-muted">
+                  <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
+                  <div className="flex-1">
+                    <p className="text-sm">New landlord application</p>
+                    <p className="text-xs text-muted-foreground">
+                      John Doe submitted an application
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">2 min ago</p>
+                  </div>
                 </div>
-                {currentProperty?.id === property.id && (
-                  <Check className="h-4 w-4 text-primary" />
-                )}
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-primary">
-              <Building2 className="mr-2 h-4 w-4" />
-              View All Properties
-            </DropdownMenuItem>
+                <div className="flex gap-3 rounded-lg p-2 hover:bg-muted">
+                  <div className="h-2 w-2 mt-2 rounded-full bg-destructive" />
+                  <div className="flex-1">
+                    <p className="text-sm">Dispute reported</p>
+                    <p className="text-xs text-muted-foreground">
+                      Payment dispute on booking #1234
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">15 min ago</p>
+                  </div>
+                </div>
+                <div className="flex gap-3 rounded-lg p-2 hover:bg-muted">
+                  <div className="h-2 w-2 mt-2 rounded-full bg-yellow-500" />
+                  <div className="flex-1">
+                    <p className="text-sm">Listing flagged</p>
+                    <p className="text-xs text-muted-foreground">
+                      &quot;Sunny Room&quot; has been flagged for review
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">1 hour ago</p>
+                  </div>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm" className="mt-3 w-full">
+                View all notifications
+              </Button>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -107,86 +111,6 @@ export function Header() {
             )}
           </Button>
         )}
-
-        {/* Notifications */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              {unreadNotifications.length > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground">
-                  {unreadNotifications.length}
-                </span>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel className="flex items-center justify-between">
-              <span>Notifications</span>
-              <Button variant="ghost" size="sm" className="h-auto p-0 text-xs">
-                Mark all as read
-              </Button>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {mockNotifications.slice(0, 5).map((notification) => (
-              <DropdownMenuItem
-                key={notification.id}
-                className={cn(
-                  "flex flex-col items-start gap-1 p-3",
-                  !notification.isRead && "bg-muted/50"
-                )}
-              >
-                <div className="flex w-full items-center justify-between">
-                  <span className="font-medium">{notification.title}</span>
-                  {!notification.isRead && (
-                    <span className="h-2 w-2 rounded-full bg-primary" />
-                  )}
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {notification.message}
-                </span>
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="justify-center text-primary">
-              View all notifications
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* User Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="gap-2 pl-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/avatars/admin.png" />
-                <AvatarFallback>AD</AvatarFallback>
-              </Avatar>
-              <div className="hidden flex-col items-start md:flex">
-                <span className="text-sm font-medium">Admin User</span>
-                <span className="text-xs text-muted-foreground">Administrator</span>
-              </div>
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
-              <LogOut className="mr-2 h-4 w-4" />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </header>
   );

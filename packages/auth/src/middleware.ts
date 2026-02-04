@@ -34,22 +34,83 @@ export function createRoleMiddleware(requiredRole: string) {
 }
 
 /**
- * Create landlord-only middleware
+ * Create status-based middleware
+ */
+export function createStatusMiddleware(requiredStatus: string | string[]) {
+  const allowedStatuses = Array.isArray(requiredStatus) ? requiredStatus : [requiredStatus];
+  
+  return ({ ctx, next }: { ctx: any; next: any }) => {
+    if (!ctx.session?.user || !allowedStatuses.includes(ctx.session.user.status)) {
+      throw new TRPCError({ 
+        code: "FORBIDDEN",
+        message: "Account status does not permit this action"
+      });
+    }
+    return next({ ctx });
+  };
+}
+
+/**
+ * Create landlord-only middleware (requires APPROVED status)
  */
 export function createLandlordMiddleware() {
-  return createRoleMiddleware("LANDLORD");
+  return ({ ctx, next }: { ctx: any; next: any }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    
+    if (ctx.session.user.role !== "LANDLORD") {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Landlords only" });
+    }
+    
+    if (ctx.session.user.status !== "APPROVED") {
+      throw new TRPCError({ 
+        code: "FORBIDDEN", 
+        message: "Your account is pending approval" 
+      });
+    }
+    
+    return next({ ctx });
+  };
 }
 
 /**
- * Create boarder-only middleware
+ * Create boarder-only middleware (requires non-SUSPENDED status)
  */
 export function createBoarderMiddleware() {
-  return createRoleMiddleware("BOARDER");
+  return ({ ctx, next }: { ctx: any; next: any }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    
+    if (ctx.session.user.role !== "BOARDER") {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Boarders only" });
+    }
+    
+    if (ctx.session.user.status === "SUSPENDED") {
+      throw new TRPCError({ 
+        code: "FORBIDDEN", 
+        message: "Your account has been suspended" 
+      });
+    }
+    
+    return next({ ctx });
+  };
 }
 
 /**
- * Create admin middleware (for future use)
+ * Create admin middleware
  */
 export function createAdminMiddleware() {
-  return createRoleMiddleware("ADMIN");
+  return ({ ctx, next }: { ctx: any; next: any }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    
+    if (ctx.session.user.role !== "ADMIN") {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Administrators only" });
+    }
+    
+    return next({ ctx });
+  };
 }

@@ -1,0 +1,37 @@
+/* Leaflet CSS styles for map components */
+@import "leaflet/dist/leaflet.css";
+
+/* Custom overrides for leaflet popups */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.leaflet-popup-content {
+  margin: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.leaflet-popup-tip {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Custom marker styling */
+.leaflet-marker-icon {
+  transition: transform 0.2s ease;
+}
+
+.leaflet-marker-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Dark mode support */
+.dark .leaflet-popup-content-wrapper {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+
+.dark .leaflet-popup-tip {
+  background-color: hsl(var(--card));
+}

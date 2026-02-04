@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  transpilePackages: ["@bhms/ui", "@bhms/shared", "@bhms/validation"],
+  transpilePackages: ["@bhms/ui", "@bhms/shared", "@bhms/validation", "@bhms/database"],
   experimental: {
-    optimizePackageImports: ["@bhms/ui", "lucide-react", "recharts"],
+    optimizePackageImports: ["@bhms/ui", "lucide-react"],
   },
 };
 

@@ -1,0 +1,120 @@
+"use client";
+
+import { Bell, Moon, Search, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Button, Input } from "@bhms/ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+
+export function Header() {
+  const { setTheme, theme } = useTheme();
+
+  return (
+    <header className="flex h-16 items-center justify-between border-b bg-background px-4 lg:px-6">
+      {/* Search */}
+      <div className="flex flex-1 items-center gap-4">
+        <div className="relative hidden w-full max-w-md md:block">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Search listings, bookings..."
+            className="w-full pl-10"
+          />
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-2">
+        {/* Theme Toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        >
+          {theme === "light" ? (
+            <Moon className="h-5 w-5" />
+          ) : (
+            <Sun className="h-5 w-5" />
+          )}
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+
+        {/* Notifications */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative">
+              <Bell className="h-5 w-5" />
+              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                2
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
+              <span className="font-medium">Booking Confirmed</span>
+              <span className="text-sm text-muted-foreground">
+                Your booking at Sunrise Boarding House has been confirmed.
+              </span>
+              <span className="text-xs text-muted-foreground">2 hours ago</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
+              <span className="font-medium">New Message</span>
+              <span className="text-sm text-muted-foreground">
+                Maria Santos sent you a message about your inquiry.
+              </span>
+              <span className="text-xs text-muted-foreground">5 hours ago</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/notifications" className="w-full text-center text-primary">
+                View all notifications
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Profile */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+              <Avatar className="h-9 w-9">
+                <AvatarImage src="/avatar.png" alt="User" />
+                <AvatarFallback>JD</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium">John Doe</p>
+                <p className="text-xs text-muted-foreground">
+                  john.doe@example.com
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/profile">Profile</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/settings">Settings</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-destructive">
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
+  );
+}

@@ -1,11 +1,10 @@
 "use client";
 
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "@bhms/ui";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
-import { PropertyProvider } from "@/lib/property-context";
+import { Toaster } from "@bhms/ui";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -29,10 +28,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          <PropertyProvider>
-            {children}
-            <Toaster />
-          </PropertyProvider>
+          {children}
+          <Toaster />
         </ThemeProvider>
       </QueryClientProvider>
     </SessionProvider>

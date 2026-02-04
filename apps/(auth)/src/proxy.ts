@@ -1,7 +1,10 @@
 import NextAuth from "next-auth";
-import { authConfigEdge } from "@bhms/auth/config.edge";
+import { authConfigEdge } from "@bhms/auth";
 
-export const { auth: middleware } = NextAuth(authConfigEdge);
+const { auth } = NextAuth(authConfigEdge);
+
+// Export as named "proxy" function for Next.js 16
+export const proxy = auth;
 
 export const config = {
   matcher: [

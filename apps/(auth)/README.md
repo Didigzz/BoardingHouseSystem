@@ -15,7 +15,7 @@ Centralized authentication and user onboarding for the Boarding House Management
 - **User Registration**: Role-based registration (Boarder/Landlord)
 - **Social Login**: OAuth providers (Google, Facebook, etc.)
 - **Password Recovery**: Forgot password flow
-- **Session Management**: Secure session handling
+- **Session Management**: Secure session handling   
 
 ### User Onboarding
 - **Role Selection**: Choose between Boarder and Landlord

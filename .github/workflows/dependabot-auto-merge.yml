@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   dependabot:
-    name: Auto-approve and merge Dependabot PRs
+    name: Handle Dependabot PRs
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     
@@ -21,22 +21,25 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Auto-approve minor and patch updates
-        if: |
-          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
-          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+      - name: Auto-approve patch updates only
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
         run: |
           gh pr review --approve "$PR_URL"
+          echo "✅ Auto-approved patch update: ${{ steps.metadata.outputs.dependency-names }}"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Enable auto-merge for minor and patch updates
-        if: |
-          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
-          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+      - name: Comment on minor updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor'
         run: |
-          gh pr merge --auto --squash --delete-branch "$PR_URL"
+          gh pr comment "$PR_URL" --body "🔍 **Minor version update detected**
+          
+          This is a minor version update for: ${{ steps.metadata.outputs.dependency-names }}
+          
+          **Please review manually** to ensure compatibility before merging.
+          
+          If you're confident this change is safe, add the \`safe-auto-merge\` label to enable auto-merge."
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +47,17 @@ jobs:
       - name: Comment on major updates
         if: steps.metadata.outputs.update-type == 'version-update:semver-major'
         run: |
-          gh pr comment "$PR_URL" --body "🚨 This is a major version update. Please review manually before merging."
+          gh pr comment "$PR_URL" --body "🚨 **Major version update detected**
+          
+          This is a major version update for: ${{ steps.metadata.outputs.dependency-names }}
+          
+          **⚠️ Manual review required** - Major updates may contain breaking changes.
+          
+          Please:
+          1. Review the changelog for breaking changes
+          2. Test the application thoroughly
+          3. Update any affected code
+          4. Only merge after thorough testing"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

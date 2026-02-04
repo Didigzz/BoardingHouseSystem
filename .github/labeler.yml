@@ -1,81 +1,95 @@
-# Configuration for the labeler action
+# Configuration for the labeler action (v5 format)
 
-# Documentation changes
 documentation:
-  - '**/*.md'
-  - 'docs/**/*'
-  - '.github/**/*.md'
+  - changed-files:
+    - any-glob-to-any-file: 
+      - '**/*.md'
+      - 'docs/**/*'
+      - '.github/**/*.md'
 
-# Database changes
 database:
-  - 'packages/database/**/*'
-  - '**/*.prisma'
-  - '**/migrations/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'packages/database/**/*'
+      - '**/*.prisma'
+      - '**/migrations/**/*'
 
-# API changes
 api:
-  - 'apps/api/**/*'
-  - 'packages/api/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'apps/api/**/*'
+      - 'packages/api/**/*'
 
-# Frontend changes
 frontend:
-  - 'apps/(public)/**/*'
-  - 'apps/boarder/**/*'
-  - 'apps/landlord/**/*'
-  - 'apps/(auth)/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'apps/(public)/**/*'
+      - 'apps/boarder/**/*'
+      - 'apps/landlord/**/*'
+      - 'apps/(auth)/**/*'
 
-# Admin changes
 admin:
-  - 'apps/admin/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'apps/admin/**/*'
 
-# Mobile changes
 mobile:
-  - 'apps/mobile/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'apps/mobile/**/*'
 
-# UI/Components changes
 ui:
-  - 'packages/ui/**/*'
-  - '**/*.tsx'
-  - '**/*.jsx'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'packages/ui/**/*'
+      - '**/*.tsx'
+      - '**/*.jsx'
 
-# Authentication changes
 auth:
-  - 'packages/auth/**/*'
-  - '**/auth/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'packages/auth/**/*'
+      - '**/auth/**/*'
 
-# Configuration changes
 config:
-  - 'packages/config/**/*'
-  - '**/*.config.*'
-  - '**/tsconfig.json'
-  - '**/package.json'
-  - 'turbo.json'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'packages/config/**/*'
+      - '**/*.config.*'
+      - '**/tsconfig.json'
+      - '**/package.json'
+      - 'turbo.json'
 
-# CI/CD changes
 ci:
-  - '.github/workflows/**/*'
-  - '.github/actions/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**/*'
+      - '.github/actions/**/*'
 
-# Dependencies
 dependencies:
-  - 'package.json'
-  - 'bun.lock'
-  - '**/package.json'
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'bun.lock'
+      - '**/package.json'
 
-# Tests
 tests:
-  - '**/*.test.*'
-  - '**/*.spec.*'
-  - '**/tests/**/*'
-  - '**/__tests__/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.test.*'
+      - '**/*.spec.*'
+      - '**/tests/**/*'
+      - '**/__tests__/**/*'
 
-# Docker
 docker:
-  - '**/Dockerfile'
-  - '**/docker-compose*.yml'
-  - '**/.dockerignore'
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/Dockerfile'
+      - '**/docker-compose*.yml'
+      - '**/.dockerignore'
 
-# Security
 security:
-  - '.github/dependabot.yml'
-  - '**/security/**/*'
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/dependabot.yml'
+      - '**/security/**/*'

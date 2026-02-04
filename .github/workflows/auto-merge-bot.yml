@@ -14,16 +14,73 @@ jobs:
     if: |
       github.event.pull_request.draft == false &&
       (
-        github.actor == 'Drakaniia' ||
+        (github.actor == 'Drakaniia' && contains(github.event.pull_request.labels.*.name, 'safe-auto-merge')) ||
         github.actor == 'dependabot[bot]' ||
-        contains(github.event.pull_request.labels.*.name, 'auto-merge')
+        (contains(github.event.pull_request.labels.*.name, 'auto-merge') && github.event.pull_request.changed_files <= 5)
       )
     
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check PR size and safety
+        id: safety-check
+        run: |
+          # Get PR details
+          PR_DATA=$(gh pr view ${{ github.event.pull_request.number }} --json additions,deletions,changedFiles,labels)
+          
+          ADDITIONS=$(echo "$PR_DATA" | jq '.additions')
+          DELETIONS=$(echo "$PR_DATA" | jq '.deletions')
+          CHANGED_FILES=$(echo "$PR_DATA" | jq '.changedFiles')
+          
+          echo "additions=$ADDITIONS" >> $GITHUB_OUTPUT
+          echo "deletions=$DELETIONS" >> $GITHUB_OUTPUT
+          echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          
+          # Safety thresholds
+          MAX_ADDITIONS=100
+          MAX_DELETIONS=50
+          MAX_FILES=10
+          
+          # Check if PR is too large
+          if [ "$ADDITIONS" -gt "$MAX_ADDITIONS" ] || [ "$DELETIONS" -gt "$MAX_DELETIONS" ] || [ "$CHANGED_FILES" -gt "$MAX_FILES" ]; then
+            echo "PR too large for auto-merge: +$ADDITIONS -$DELETIONS files:$CHANGED_FILES"
+            echo "safe=false" >> $GITHUB_OUTPUT
+          else
+            echo "PR size acceptable for auto-merge"
+            echo "safe=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for risky file changes
+        id: file-check
+        run: |
+          # Get list of changed files
+          CHANGED_FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
+          
+          # Define risky patterns
+          RISKY_PATTERNS=(
+            "packages/database/prisma/schema.prisma"
+            "packages/auth/"
+            "apps/api/src/"
+            "docker-compose"
+            ".env"
+            "package.json"
+          )
+          
+          RISKY_FOUND=false
+          for pattern in "${RISKY_PATTERNS[@]}"; do
+            if echo "$CHANGED_FILES" | grep -q "$pattern"; then
+              echo "Risky file pattern found: $pattern"
+              RISKY_FOUND=true
+            fi
+          done
+          
+          if [ "$RISKY_FOUND" = true ]; then
+            echo "risky=true" >> $GITHUB_OUTPUT
+          else
+            echo "risky=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Wait for required checks
         uses: lewagon/wait-on-check-action@v1.3.4
@@ -36,9 +93,37 @@ jobs:
         continue-on-error: true
 
       - name: Enable auto-merge for PR
-        if: success()
+        if: |
+          success() &&
+          steps.safety-check.outputs.safe == 'true' &&
+          (
+            steps.file-check.outputs.risky == 'false' ||
+            contains(github.event.pull_request.labels.*.name, 'override-safety')
+          )
         run: |
           gh pr merge --auto --squash --delete-branch ${{ github.event.pull_request.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add safety warning comment
+        if: |
+          steps.safety-check.outputs.safe == 'false' ||
+          steps.file-check.outputs.risky == 'true'
+        run: |
+          COMMENT="⚠️ **Auto-merge blocked for safety reasons:**\n\n"
+          
+          if [ "${{ steps.safety-check.outputs.safe }}" = "false" ]; then
+            COMMENT="${COMMENT}- PR is too large (+${{ steps.safety-check.outputs.additions }} -${{ steps.safety-check.outputs.deletions }} files:${{ steps.safety-check.outputs.changed_files }})\n"
+          fi
+          
+          if [ "${{ steps.file-check.outputs.risky }}" = "true" ]; then
+            COMMENT="${COMMENT}- Contains changes to critical files (database, auth, API)\n"
+          fi
+          
+          COMMENT="${COMMENT}\n**To override:** Add the \`override-safety\` label if you're confident these changes are safe.\n"
+          COMMENT="${COMMENT}**Recommendation:** Consider manual review for these changes."
+          
+          gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

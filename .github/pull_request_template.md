@@ -30,7 +30,19 @@ Brief description of the changes made in this PR.
 
 ## Auto-merge
 
-- [ ] This PR should be auto-merged when checks pass (add `auto-merge` label)
+**Choose the appropriate option:**
+
+- [ ] **Manual review required** (default - for business logic, breaking changes, large PRs)
+- [ ] **Safe auto-merge** (documentation, small config changes, dependency updates)
+- [ ] **Override safety checks** (maintainers only - requires justification below)
+
+**Auto-merge will be blocked if:**
+- PR is too large (>100 additions, >50 deletions, >10 files)
+- Critical files are changed (database, auth, API)
+- CI checks fail
+
+**Justification for override (if applicable):**
+<!-- Explain why this change is safe despite triggering safety checks -->
 
 ## Additional Notes
 

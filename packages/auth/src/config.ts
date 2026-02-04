@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from 'next-auth';
+import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { db } from '@bhms/database';
@@ -43,8 +44,15 @@ export const authConfig: NextAuthConfig = {
                     email: user.email,
                     name: user.name,
                     role: user.role,
+                    status: user.status,
+                    image: user.image,
                 };
             },
         }),
     ],
 };
+
+/**
+ * NextAuth instance with handlers and utilities
+ */
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

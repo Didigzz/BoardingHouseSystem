@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev --port 3001",
-    "lint": "eslint src",
-    "start": "next start --port 3001",
+    "dev": "next dev --port 3004",
+    "lint": "eslint src --no-error-on-unmatched-pattern",
+    "start": "next start --port 3004",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

@@ -52,7 +52,7 @@
   "devDependencies": {
     "@bhms/eslint-config": "workspace:*",
     "@bhms/typescript-config": "workspace:*",
-    "@types/node": "^20.10.4",
+    "@types/node": "^25.2.0",
     "@types/react": "^18.2.42",
     "@types/react-dom": "^18.2.17",
     "autoprefixer": "^10.4.16",

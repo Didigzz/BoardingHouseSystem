@@ -1,7 +1,7 @@
 import { IRoomApi } from './room-api.interface';
 import { RoomModule } from '../room.module';
 import { Room } from '../domain/entities/room.entity';
-import { RoomStats } from '../../../shared/src/entities/room/model/types';
+import { RoomStats } from '../domain/repositories/room.repository.interface';
 
 export class RoomApiFacade implements IRoomApi {
   private static instance: RoomApiFacade;

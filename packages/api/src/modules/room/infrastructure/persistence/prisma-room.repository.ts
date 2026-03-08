@@ -1,10 +1,10 @@
 import { Room } from '../../domain/entities/room.entity';
 import { RoomStatus } from '../../domain/value-objects/room-status.vo';
 import { IRoomRepository, RoomFilters, RoomStats } from '../../domain/repositories/room.repository.interface';
-import { PrismaClient } from '@bhms/database';
+import { PrismaClientType } from '@bhms/database';
 
 export class PrismaRoomRepository implements IRoomRepository {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaClientType) {}
 
   async findById(id: string): Promise<Room | null> {
     const roomData = await this.prisma.room.findUnique({
@@ -39,7 +39,7 @@ export class PrismaRoomRepository implements IRoomRepository {
       orderBy: { roomNumber: 'asc' },
     });
 
-    return roomsData.map(room => this.mapToDomain(room));
+    return roomsData.map((room: any) => this.mapToDomain(room));
   }
 
   async save(room: Room): Promise<Room> {

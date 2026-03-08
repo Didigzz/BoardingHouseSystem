@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { PrismaRoomRepository } from '../../infrastructure/persistence/prisma-room.repository';
-import { RoomService } from '../../domain/services/room.service';
-import { CreateRoomHandler } from '../../application/handlers/create-room.handler';
-import { UpdateRoomHandler } from '../../application/handlers/update-room.handler';
-import { DeleteRoomHandler } from '../../application/handlers/delete-room.handler';
-import { GetRoomHandler } from '../../application/handlers/get-room.handler';
-import { ListRoomsHandler } from '../../application/handlers/list-rooms.handler';
-import { GetRoomStatsHandler } from '../../application/handlers/get-room-stats.handler';
+import { PrismaRoomRepository } from '../infrastructure/persistence/prisma-room.repository';
+import { RoomService } from '../domain/services/room.service';
+import { CreateRoomHandler } from '../application/handlers/create-room.handler';
+import { UpdateRoomHandler } from '../application/handlers/update-room.handler';
+import { DeleteRoomHandler } from '../application/handlers/delete-room.handler';
+import { GetRoomHandler } from '../application/handlers/get-room.handler';
+import { ListRoomsHandler } from '../application/handlers/list-rooms.handler';
+import { GetRoomStatsHandler } from '../application/handlers/get-room-stats.handler';
 
 type ProtectedProcedure = any;
 
@@ -31,7 +31,7 @@ export const createRoomRouter = (protectedProcedure: ProtectedProcedure) => {
         const rooms = await listRoomsHandler.handle(input);
 
         // Convert to DTO format for response
-        return rooms.map(room => ({
+        return rooms.map((room: any) => ({
           id: room.id,
           roomNumber: room.roomNumber,
           floor: room.floor,

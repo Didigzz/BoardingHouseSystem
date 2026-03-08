@@ -5,11 +5,16 @@ export type { IRoomRepository, RoomFilters, RoomStats } from './domain/repositor
 export { RoomService } from './domain/services/room.service';
 
 // Application Layer
-export type { CreateRoomCommand, CreateRoomCommandSchema } from './application/commands/create-room.command';
-export type { UpdateRoomCommand, UpdateRoomCommandSchema } from './application/commands/update-room.command';
-export type { DeleteRoomCommand, DeleteRoomCommandSchema } from './application/commands/delete-room.command';
-export type { GetRoomQuery, GetRoomQuerySchema } from './application/queries/get-room.query';
-export type { ListRoomsQuery, ListRoomsQuerySchema } from './application/queries/list-rooms.query';
+export type { CreateRoomCommand } from './application/commands/create-room.command';
+export { CreateRoomCommandSchema } from './application/commands/create-room.command';
+export type { UpdateRoomCommand } from './application/commands/update-room.command';
+export { UpdateRoomCommandSchema } from './application/commands/update-room.command';
+export type { DeleteRoomCommand } from './application/commands/delete-room.command';
+export { DeleteRoomCommandSchema } from './application/commands/delete-room.command';
+export type { GetRoomQuery } from './application/queries/get-room.query';
+export { GetRoomQuerySchema } from './application/queries/get-room.query';
+export type { ListRoomsQuery } from './application/queries/list-rooms.query';
+export { ListRoomsQuerySchema } from './application/queries/list-rooms.query';
 export type { GetRoomStatsQuery } from './application/queries/get-room-stats.query';
 export { CreateRoomHandler } from './application/handlers/create-room.handler';
 export { UpdateRoomHandler } from './application/handlers/update-room.handler';
@@ -28,4 +33,3 @@ export { RoomModule } from './room.module';
 export * from './domain/events';
 export * from './integration-events';
 export * from './api';
-export * from './config';

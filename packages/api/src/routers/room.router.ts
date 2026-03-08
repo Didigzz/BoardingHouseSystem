@@ -17,7 +17,7 @@ export const createRoomRouter = (protectedProcedure: any) => {
           })
           .optional()
       )
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         return ctx.db.room.findMany({
           where: {
             status: input?.status,
@@ -40,7 +40,7 @@ export const createRoomRouter = (protectedProcedure: any) => {
 
     getById: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         return ctx.db.room.findUnique({
           where: { id: input.id },
           include: {
@@ -55,7 +55,7 @@ export const createRoomRouter = (protectedProcedure: any) => {
 
     create: protectedProcedure
       .input(createRoomSchema)
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         return ctx.db.room.create({
           data: input,
         });
@@ -63,7 +63,7 @@ export const createRoomRouter = (protectedProcedure: any) => {
 
     update: protectedProcedure
       .input(updateRoomSchema)
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const { id, ...data } = input;
         return ctx.db.room.update({
           where: { id },
@@ -73,13 +73,13 @@ export const createRoomRouter = (protectedProcedure: any) => {
 
     delete: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         return ctx.db.room.delete({
           where: { id: input.id },
         });
       }),
 
-    getStats: protectedProcedure.query(async ({ ctx }) => {
+    getStats: protectedProcedure.query(async ({ ctx }: any) => {
       const [total, available, occupied, maintenance] = await Promise.all([
         ctx.db.room.count(),
         ctx.db.room.count({ where: { status: "AVAILABLE" } }),

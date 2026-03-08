@@ -1,5 +1,5 @@
 import { AggregateRoot } from '../../../../shared/kernel/domain/aggregate-root';
-import { RoomStatus } from './room-status.vo';
+import { RoomStatus } from '../value-objects/room-status.vo';
 
 export interface RoomProps {
   id: string;
@@ -19,11 +19,8 @@ export interface RoomProps {
  * Represents a room in the boarding house
  */
 export class Room extends AggregateRoot<RoomProps> {
-  protected props: RoomProps;
-
   constructor(props: RoomProps) {
-    super(props.id);
-    this.props = props;
+    super(props.id, props);
   }
 
   get roomNumber(): string {

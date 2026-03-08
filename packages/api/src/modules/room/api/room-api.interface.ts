@@ -1,5 +1,5 @@
 import { Room } from '../domain/entities/room.entity';
-import { RoomStats } from '../../../shared/src/entities/room/model/types';
+import { RoomStats } from '../domain/repositories/room.repository.interface';
 
 export interface IRoomApi {
   createRoom(data: any): Promise<Room>;

@@ -8,7 +8,7 @@ export class EventBus implements IEventBus {
     this.handlers = new Map();
   }
 
-  static getInstance(): EventBus {
+  public static getInstance(): EventBus {
     if (!EventBus.instance) {
       EventBus.instance = new EventBus();
     }
@@ -18,7 +18,7 @@ export class EventBus implements IEventBus {
   async publish(event: any): Promise<void> {
     const eventType = event.type;
     const handlers = this.handlers.get(eventType);
-    
+
     if (handlers) {
       await Promise.all(
         Array.from(handlers).map(handler => handler(event))
@@ -26,14 +26,14 @@ export class EventBus implements IEventBus {
     }
   }
 
-  subscribe(eventType: string, handler: (event: any) => Promise<void>): void {
+  public subscribe(eventType: string, handler: (event: any) => Promise<void>): void {
     if (!this.handlers.has(eventType)) {
       this.handlers.set(eventType, new Set());
     }
     this.handlers.get(eventType)!.add(handler);
   }
 
-  unsubscribe(eventType: string, handler: (event: any) => void): void {
+  public unsubscribe(eventType: string, handler: (event: any) => Promise<void>): void {
     const handlers = this.handlers.get(eventType);
     if (handlers) {
       handlers.delete(handler);
@@ -41,4 +41,4 @@ export class EventBus implements IEventBus {
   }
 }
 
-export const eventBus = new EventBus();
+export const eventBus = EventBus.getInstance();

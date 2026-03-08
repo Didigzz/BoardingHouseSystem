@@ -60,9 +60,13 @@ export async function POST(request: Request) {
 
       // Create role-specific profile
       if (role === "BOARDER") {
+        const [firstName, lastName] = name.split(" ");
         await tx.boarder.create({
           data: {
             userId: newUser.id,
+            firstName: firstName || name,
+            lastName: lastName || "",
+            email,
           },
         });
       } else if (role === "LANDLORD") {

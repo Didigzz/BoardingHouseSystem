@@ -16,9 +16,7 @@ const registerSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number").optional().or(z.literal("")),
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string(),
-  role: z.enum(["BOARDER", "LANDLORD"], {
-    required_error: "Please select an account type",
-  }),
+  role: z.enum(["BOARDER", "LANDLORD"], { message: "Please select an account type" }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],

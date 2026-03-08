@@ -14,16 +14,43 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, typography, borderRadius } from '@/lib/theme';
 import { Button, Input } from '@/components/ui';
 import { useAuthStore } from '@/lib/store';
+import { trpc } from '@/lib/trpc';
 import { setAuthToken } from '@/lib/trpc';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
   const { setUser } = useAuthStore();
+
+  const utils = trpc.useUtils();
+
+  const loginMutation = trpc.user.login.useMutation({
+    onSuccess: async (data) => {
+      await setAuthToken(data.token);
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        role: data.user.role.toLowerCase() as 'landlord' | 'boarder',
+      });
+      
+      // Invalidate queries to refresh data
+      utils.invalidate();
+      
+      // Redirect based on role
+      if (data.user.role === 'LANDLORD') {
+        router.replace('/(landlord)/dashboard');
+      } else if (data.user.role === 'BOARDER') {
+        router.replace('/(boarder)/home');
+      }
+    },
+    onError: (error) => {
+      setErrors({ email: error.message || 'Invalid credentials' });
+    },
+  });
 
   const validate = () => {
     const newErrors: typeof errors = {};
@@ -39,28 +66,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!validate()) return;
-
-    setLoading(true);
-    try {
-      // TODO: Replace with actual tRPC mutation
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Mock successful login
-      await setAuthToken('mock_token');
-      setUser({
-        id: '1',
-        email,
-        name: 'John Doe',
-        role: 'landlord',
-      });
-
-      router.replace('/(landlord)/dashboard');
-    } catch {
-      setErrors({ email: 'Invalid credentials' });
-    } finally {
-      setLoading(false);
-    }
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -113,7 +119,13 @@ export default function LoginScreen() {
               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
             </TouchableOpacity>
 
-            <Button onPress={handleLogin} loading={loading} fullWidth size="lg">
+            <Button 
+              onPress={handleLogin} 
+              loading={loginMutation.isPending} 
+              fullWidth 
+              size="lg"
+              disabled={!email || !password}
+            >
               Sign In
             </Button>
           </View>

@@ -4,23 +4,18 @@ import { QueryClient } from '@tanstack/react-query';
 import superjson from 'superjson';
 import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
+import type { AppRouter } from '@bhms/api';
 
-// Placeholder AppRouter type - replace with actual import when API package is ready
-// import type { AppRouter } from '@bhms/api';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AppRouter = any;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const trpc = createTRPCReact<AppRouter>() as any;
+export const trpc = createTRPCReact<AppRouter>();
 
 const getBaseUrl = () => {
   const debuggerHost = Constants.expoConfig?.hostUri;
   const localhost = debuggerHost?.split(':')[0];
 
   if (!localhost) {
-    return 'http://localhost:3000';
+    return 'http://localhost:3001'; // API server port
   }
-  return `http://${localhost}:3000`;
+  return `http://${localhost}:3001`;
 };
 
 export const getAuthToken = async () => {
@@ -31,8 +26,12 @@ export const getAuthToken = async () => {
   }
 };
 
-export const setAuthToken = async (token: string) => {
-  await SecureStore.setItemAsync('auth_token', token);
+export const setAuthToken = async (token: string | null) => {
+  if (token === null) {
+    await SecureStore.deleteItemAsync('auth_token');
+  } else {
+    await SecureStore.setItemAsync('auth_token', token);
+  }
 };
 
 export const removeAuthToken = async () => {
@@ -48,8 +47,7 @@ export const queryClient = new QueryClient({
   },
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const trpcClient = (trpc as any).createClient({
+export const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
       url: `${getBaseUrl()}/api/trpc`,

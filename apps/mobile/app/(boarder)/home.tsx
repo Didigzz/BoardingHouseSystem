@@ -17,49 +17,36 @@ import {
 } from '@/lib/theme';
 import { Card, Badge, Button } from '@/components/ui';
 import { useAuthStore } from '@/lib/store';
+import { trpc } from '@/lib/trpc';
 
 export default function BoarderHomeScreen() {
   const { user } = useAuthStore();
   const [refreshing, setRefreshing] = useState(false);
 
+  const { data: boarder, isLoading, refetch } = trpc.boarder.getCurrent.useQuery(undefined, {
+    enabled: !!user,
+    retry: false,
+  });
+
   const onRefresh = async () => {
     setRefreshing(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await refetch();
     setRefreshing(false);
   };
 
-  // Mock data
-  const roomInfo = {
-    roomNumber: '101',
-    floor: 1,
-    monthlyRate: 5000,
-    amenities: ['AC', 'WiFi', 'Private Bath'],
-    moveInDate: '2024-01-15',
-  };
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <View style={styles.loadingContainer}>
+          <Ionicons name="hourglass-outline" size={48} color={colors.primary[700]} />
+          <Text style={styles.loadingText}>Loading your dashboard...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
-  const nextPayment = {
-    amount: 5000,
-    dueDate: '2024-02-05',
-    daysUntilDue: 5,
-    status: 'pending' as const,
-  };
-
-  const announcements = [
-    {
-      id: 1,
-      title: 'Water Interruption Notice',
-      message: 'Scheduled maintenance on Feb 10, 8AM-12PM',
-      date: '2024-02-01',
-      type: 'warning',
-    },
-    {
-      id: 2,
-      title: 'WiFi Upgrade',
-      message: 'Internet speed upgraded to 100Mbps',
-      date: '2024-01-28',
-      type: 'info',
-    },
-  ];
+  const roomInfo = boarder?.room;
+  const nextPayment = boarder?.payments?.[0];
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -73,7 +60,7 @@ export default function BoarderHomeScreen() {
         <View style={styles.header}>
           <View>
             <Text style={styles.greeting}>Welcome back,</Text>
-            <Text style={styles.userName}>{user?.name || 'Boarder'}</Text>
+            <Text style={styles.userName}>{boarder?.firstName || user?.name || 'Boarder'}</Text>
           </View>
           <View style={styles.notificationButton}>
             <Ionicons
@@ -84,127 +71,115 @@ export default function BoarderHomeScreen() {
           </View>
         </View>
 
-        <Card style={styles.roomCard}>
-          <View style={styles.roomHeader}>
-            <View style={styles.roomIconContainer}>
-              <Ionicons name="bed" size={28} color={colors.primary[700]} />
+        {roomInfo && (
+          <Card style={styles.roomCard}>
+            <View style={styles.roomHeader}>
+              <View style={styles.roomIconContainer}>
+                <Ionicons name="bed" size={28} color={colors.primary[700]} />
+              </View>
+              <View style={styles.roomInfo}>
+                <Text style={styles.roomLabel}>Your Room</Text>
+                <Text style={styles.roomNumber}>Room {roomInfo.roomNumber}</Text>
+              </View>
+              <Badge variant={roomInfo.status === 'OCCUPIED' ? 'success' : 'info'}>
+                {roomInfo.status}
+              </Badge>
             </View>
-            <View style={styles.roomInfo}>
-              <Text style={styles.roomLabel}>Your Room</Text>
-              <Text style={styles.roomNumber}>Room {roomInfo.roomNumber}</Text>
-            </View>
-            <Badge variant="success">Active</Badge>
-          </View>
 
-          <View style={styles.roomDetails}>
-            <View style={styles.roomDetailItem}>
-              <Ionicons
-                name="layers-outline"
-                size={18}
-                color={colors.neutral[500]}
-              />
-              <Text style={styles.roomDetailText}>Floor {roomInfo.floor}</Text>
-            </View>
-            <View style={styles.roomDetailItem}>
-              <Ionicons
-                name="cash-outline"
-                size={18}
-                color={colors.neutral[500]}
-              />
-              <Text style={styles.roomDetailText}>
-                ₱{roomInfo.monthlyRate.toLocaleString()}/mo
-              </Text>
-            </View>
-            <View style={styles.roomDetailItem}>
-              <Ionicons
-                name="calendar-outline"
-                size={18}
-                color={colors.neutral[500]}
-              />
-              <Text style={styles.roomDetailText}>
-                Since {roomInfo.moveInDate}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.amenitiesContainer}>
-            <Text style={styles.amenitiesLabel}>Amenities</Text>
-            <View style={styles.amenities}>
-              {roomInfo.amenities.map((amenity, index) => (
-                <View key={index} style={styles.amenityTag}>
-                  <Text style={styles.amenityText}>{amenity}</Text>
+            <View style={styles.roomDetails}>
+              <View style={styles.roomDetailItem}>
+                <Ionicons
+                  name="layers-outline"
+                  size={18}
+                  color={colors.neutral[500]}
+                />
+                <Text style={styles.roomDetailText}>Floor {roomInfo.floor}</Text>
+              </View>
+              <View style={styles.roomDetailItem}>
+                <Ionicons
+                  name="cash-outline"
+                  size={18}
+                  color={colors.neutral[500]}
+                />
+                <Text style={styles.roomDetailText}>
+                  ₱{roomInfo.monthlyRate.toNumber().toLocaleString()}/mo
+                </Text>
+              </View>
+              {boarder?.moveInDate && (
+                <View style={styles.roomDetailItem}>
+                  <Ionicons
+                    name="calendar-outline"
+                    size={18}
+                    color={colors.neutral[500]}
+                  />
+                  <Text style={styles.roomDetailText}>
+                    Since {new Date(boarder.moveInDate).toLocaleDateString()}
+                  </Text>
                 </View>
-              ))}
+              )}
             </View>
-          </View>
-        </Card>
 
-        <Card style={styles.paymentCard}>
-          <View style={styles.paymentHeader}>
-            <Text style={styles.paymentTitle}>Next Payment</Text>
-            <Badge variant={nextPayment.daysUntilDue <= 3 ? 'warning' : 'info'}>
-              Due in {nextPayment.daysUntilDue} days
-            </Badge>
-          </View>
+            {roomInfo.amenities && roomInfo.amenities.length > 0 && (
+              <View style={styles.amenitiesContainer}>
+                <Text style={styles.amenitiesLabel}>Amenities</Text>
+                <View style={styles.amenities}>
+                  {roomInfo.amenities.map((amenity: string, index: number) => (
+                    <View key={index} style={styles.amenityTag}>
+                      <Text style={styles.amenityText}>{amenity}</Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+          </Card>
+        )}
 
-          <View style={styles.paymentAmount}>
-            <Text style={styles.currencySymbol}>₱</Text>
-            <Text style={styles.amountValue}>
-              {nextPayment.amount.toLocaleString()}
+        {nextPayment && (
+          <Card style={styles.paymentCard}>
+            <View style={styles.paymentHeader}>
+              <Text style={styles.paymentTitle}>Next Payment</Text>
+              <Badge variant={nextPayment.status === 'PAID' ? 'success' : 'warning'}>
+                {nextPayment.status}
+              </Badge>
+            </View>
+
+            <View style={styles.paymentAmount}>
+              <Text style={styles.currencySymbol}>₱</Text>
+              <Text style={styles.amountValue}>
+                {nextPayment.amount.toNumber().toLocaleString()}
+              </Text>
+            </View>
+
+            <Text style={styles.dueDate}>
+              Due: {new Date(nextPayment.dueDate).toLocaleDateString()}
             </Text>
-          </View>
 
-          <Text style={styles.dueDate}>Due: {nextPayment.dueDate}</Text>
-
-          <Button onPress={() => {}} fullWidth style={styles.payButton}>
-            View Payment Details
-          </Button>
-        </Card>
+            <Button 
+              onPress={() => {}} 
+              fullWidth 
+              style={styles.payButton}
+              disabled={nextPayment.status === 'PAID'}
+            >
+              {nextPayment.status === 'PAID' ? 'Paid' : 'Pay Now'}
+            </Button>
+          </Card>
+        )}
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Announcements</Text>
-          {announcements.map((announcement) => (
-            <Card key={announcement.id} style={styles.announcementCard}>
-              <View style={styles.announcementHeader}>
-                <View
-                  style={[
-                    styles.announcementIcon,
-                    {
-                      backgroundColor:
-                        announcement.type === 'warning'
-                          ? colors.warning + '15'
-                          : colors.info + '15',
-                    },
-                  ]}
-                >
-                  <Ionicons
-                    name={
-                      announcement.type === 'warning'
-                        ? 'warning-outline'
-                        : 'information-circle-outline'
-                    }
-                    size={20}
-                    color={
-                      announcement.type === 'warning'
-                        ? colors.warning
-                        : colors.info
-                    }
-                  />
-                </View>
-                <View style={styles.announcementContent}>
-                  <Text style={styles.announcementTitle}>
-                    {announcement.title}
-                  </Text>
-                  <Text style={styles.announcementMessage}>
-                    {announcement.message}
-                  </Text>
-                  <Text style={styles.announcementDate}>
-                    {announcement.date}
-                  </Text>
-                </View>
+          <Card style={styles.announcementCard}>
+            <View style={styles.announcementHeader}>
+              <View style={[styles.announcementIcon, { backgroundColor: colors.info + '15' }]}>
+                <Ionicons name="information-circle-outline" size={20} color={colors.info} />
               </View>
-            </Card>
-          ))}
+              <View style={styles.announcementContent}>
+                <Text style={styles.announcementTitle}>No Announcements</Text>
+                <Text style={styles.announcementMessage}>
+                  Check back later for updates from your landlord.
+                </Text>
+              </View>
+            </View>
+          </Card>
         </View>
 
         <Card style={styles.contactCard}>
@@ -232,6 +207,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.neutral[50],
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: spacing.md,
+    fontSize: typography.fontSize.base,
+    color: colors.neutral[500],
   },
   scrollContent: {
     paddingHorizontal: spacing.md,
@@ -406,11 +391,6 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.sm,
     color: colors.neutral[600],
     marginTop: 2,
-  },
-  announcementDate: {
-    fontSize: typography.fontSize.xs,
-    color: colors.neutral[400],
-    marginTop: spacing.xs,
   },
   contactCard: {
     alignItems: 'center',

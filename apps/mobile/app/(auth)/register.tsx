@@ -13,14 +13,34 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, typography, borderRadius } from '@/lib/theme';
 import { Button, Input } from '@/components/ui';
+import { useAuthStore } from '@/lib/store';
+import { trpc, setAuthToken } from '@/lib/trpc';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { setUser } = useAuthStore();
+
+  const registerMutation = trpc.user.register.useMutation({
+    onSuccess: async (data) => {
+      await setAuthToken(data.token);
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        role: data.user.role.toLowerCase() as 'landlord' | 'boarder',
+      });
+      
+      // Redirect to login or directly to dashboard
+      router.replace('/(auth)/login');
+    },
+    onError: (error) => {
+      setErrors({ email: error.message || 'Registration failed. Please try again.' });
+    },
+  });
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -40,16 +60,12 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     if (!validate()) return;
 
-    setLoading(true);
-    try {
-      // TODO: Replace with actual tRPC mutation
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      router.replace('/(auth)/login');
-    } catch {
-      setErrors({ email: 'Registration failed. Please try again.' });
-    } finally {
-      setLoading(false);
-    }
+    registerMutation.mutate({ 
+      name, 
+      email, 
+      password, 
+      role: 'BOARDER' // Default role, can be made selectable
+    });
   };
 
   return (
@@ -119,10 +135,11 @@ export default function RegisterScreen() {
 
             <Button
               onPress={handleRegister}
-              loading={loading}
+              loading={registerMutation.isPending}
               fullWidth
               size="lg"
               style={styles.registerButton}
+              disabled={!name || !email || !password || !confirmPassword}
             >
               Create Account
             </Button>

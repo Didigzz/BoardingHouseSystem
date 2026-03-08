@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { 
+import {
+  loginSchema,
   registerSchema,
   updateUserSchema,
   changePasswordSchema
@@ -10,9 +11,47 @@ import { TRPCError } from "@trpc/server";
 
 export const createUserRouter = (protectedProcedure: any) => {
   return createTRPCRouter({
+    login: publicProcedure
+      .input(loginSchema)
+      .mutation(async ({ ctx, input }: any) => {
+        const user = await ctx.db.user.findUnique({
+          where: { email: input.email },
+        });
+
+        if (!user) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid email or password",
+          });
+        }
+
+        const isValid = await bcrypt.compare(input.password, user.password);
+
+        if (!isValid) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid email or password",
+          });
+        }
+
+        // Return user data without password
+        const { password, ...userWithoutPassword } = user;
+        
+        // Generate a simple token (in production, use JWT)
+        const token = Buffer.from(JSON.stringify({ 
+          userId: user.id, 
+          email: user.email 
+        })).toString('base64');
+
+        return {
+          user: userWithoutPassword,
+          token,
+        };
+      }),
+
     register: publicProcedure
       .input(registerSchema)
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const existingUser = await ctx.db.user.findUnique({
           where: { email: input.email },
         });
@@ -35,10 +74,19 @@ export const createUserRouter = (protectedProcedure: any) => {
           },
         });
 
-        return { id: user.id, email: user.email, name: user.name };
+        // Generate token for newly registered user
+        const token = Buffer.from(JSON.stringify({ 
+          userId: user.id, 
+          email: user.email 
+        })).toString('base64');
+
+        return {
+          user: { id: user.id, email: user.email, name: user.name, role: user.role },
+          token,
+        };
       }),
 
-    getProfile: protectedProcedure.query(async ({ ctx }) => {
+    getProfile: protectedProcedure.query(async ({ ctx }: any) => {
       return ctx.db.user.findUnique({
         where: { id: ctx.session.user.id },
         select: {
@@ -59,7 +107,7 @@ export const createUserRouter = (protectedProcedure: any) => {
           image: z.string().optional(),
         })
       )
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         return ctx.db.user.update({
           where: { id: ctx.session.user.id },
           data: input,
@@ -68,7 +116,7 @@ export const createUserRouter = (protectedProcedure: any) => {
 
     changePassword: protectedProcedure
       .input(changePasswordSchema)
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const user = await ctx.db.user.findUnique({
           where: { id: ctx.session.user.id },
         });

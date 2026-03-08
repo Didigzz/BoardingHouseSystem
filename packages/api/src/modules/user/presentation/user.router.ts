@@ -5,9 +5,9 @@ import {
   registerSchema,
   changePasswordSchema
 } from "@bhms/validation";
-import { PrismaUserRepository } from "../../infrastructure/persistence/prisma-user.repository";
-import { UserService } from "../../domain/services/user.service";
-import { User } from "../../domain/entities/user.entity";
+import { PrismaUserRepository } from "../infrastructure/persistence/prisma-user.repository";
+import { UserService } from "../domain/services/user.service";
+import { User } from "../domain/entities/user.entity";
 
 type ProtectedProcedure = any;
 

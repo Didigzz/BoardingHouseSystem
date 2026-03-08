@@ -33,7 +33,7 @@ export class User extends Entity<UserProps> {
   }
 
   private constructor(props: UserProps) {
-    super(props);
+    super(props.id, props);
   }
 
   static create(props: Omit<UserProps, "id" | "createdAt" | "updatedAt">): User {

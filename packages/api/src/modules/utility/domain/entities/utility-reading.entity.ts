@@ -56,7 +56,7 @@ export class UtilityReading extends Entity<UtilityReadingProps> {
   }
 
   private constructor(props: UtilityReadingProps) {
-    super(props);
+    super(props.id, props);
   }
 
   static create(props: Omit<UtilityReadingProps, "id" | "createdAt" | "updatedAt">): UtilityReading {

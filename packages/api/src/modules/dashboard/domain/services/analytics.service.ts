@@ -31,8 +31,8 @@ export class AnalyticsService {
       },
       payments: {
         pendingCount: data.pendingPayments._count,
-        pendingAmount: data.pendingPayments._sum.amount?.toNumber() ?? 0,
-        paidThisMonth: data.paidPaymentsThisMonth._sum.amount?.toNumber() ?? 0,
+        pendingAmount: Number(data.pendingPayments._sum.amount) ?? 0,
+        paidThisMonth: Number(data.paidPaymentsThisMonth._sum.amount) ?? 0,
       },
       occupancyRate,
     });
@@ -44,7 +44,7 @@ export class AnalyticsService {
         id: p.id,
         type: "payment" as const,
         title: `Payment ${p.status.toLowerCase()}`,
-        description: `${p.boarder.firstName} ${p.boarder.lastName} - ₱${p.amount.toNumber().toLocaleString()}`,
+        description: `${p.boarder.firstName} ${p.boarder.lastName} - ₱${Number(p.amount).toLocaleString()}`,
         date: p.createdAt,
       })),
       ...boarders.map((b: any) => ({

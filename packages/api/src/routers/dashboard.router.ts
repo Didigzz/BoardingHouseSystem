@@ -2,7 +2,7 @@ import { createTRPCRouter } from "../trpc";
 
 export const createDashboardRouter = (protectedProcedure: any) => {
   return createTRPCRouter({
-    getStats: protectedProcedure.query(async ({ ctx }) => {
+    getStats: protectedProcedure.query(async ({ ctx }: any) => {
       const [
         totalRooms,
         availableRooms,
@@ -55,7 +55,7 @@ export const createDashboardRouter = (protectedProcedure: any) => {
       };
     }),
 
-    getRecentActivity: protectedProcedure.query(async ({ ctx }) => {
+    getRecentActivity: protectedProcedure.query(async ({ ctx }: any) => {
       const [recentPayments, recentBoarders] = await Promise.all([
         ctx.db.payment.findMany({
           take: 5,
@@ -78,14 +78,14 @@ export const createDashboardRouter = (protectedProcedure: any) => {
       ]);
 
       const activities = [
-        ...recentPayments.map((p) => ({
+        ...recentPayments.map((p: any) => ({
           id: p.id,
           type: "payment" as const,
           title: `Payment ${p.status.toLowerCase()}`,
           description: `${p.boarder.firstName} ${p.boarder.lastName} - ₱${p.amount.toNumber().toLocaleString()}`,
           date: p.createdAt,
         })),
-        ...recentBoarders.map((b) => ({
+        ...recentBoarders.map((b: any) => ({
           id: b.id,
           type: "boarder" as const,
           title: "New boarder",
@@ -97,7 +97,7 @@ export const createDashboardRouter = (protectedProcedure: any) => {
       return activities.slice(0, 10);
     }),
 
-    getUpcomingPayments: protectedProcedure.query(async ({ ctx }) => {
+    getUpcomingPayments: protectedProcedure.query(async ({ ctx }: any) => {
       const nextWeek = new Date();
       nextWeek.setDate(nextWeek.getDate() + 7);
 

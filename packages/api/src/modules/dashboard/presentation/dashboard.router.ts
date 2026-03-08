@@ -1,7 +1,7 @@
-import { AnalyticsService } from "../../domain/services/analytics.service";
-import { GetDashboardStatsHandler } from "../../application/handlers/get-dashboard-stats.handler";
-import { GetRecentActivityHandler } from "../../application/handlers/get-recent-activity.handler";
-import { GetUpcomingPaymentsHandler } from "../../application/handlers/get-upcoming-payments.handler";
+import { AnalyticsService } from "../domain/services/analytics.service";
+import { GetDashboardStatsHandler } from "../application/handlers/get-dashboard-stats.handler";
+import { GetRecentActivityHandler } from "../application/handlers/get-recent-activity.handler";
+import { GetUpcomingPaymentsHandler } from "../application/handlers/get-upcoming-payments.handler";
 
 type ProtectedProcedure = any;
 

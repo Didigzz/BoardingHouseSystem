@@ -36,7 +36,8 @@ export class DashboardStats extends Entity<DashboardStatsProps> {
   }
 
   private constructor(props: DashboardStatsProps) {
-    super(props);
+    // DashboardStats doesn't have a real id, use a derived one
+    super(`stats-${props.occupancyRate}`, props);
   }
 
   static create(props: DashboardStatsProps): DashboardStats {

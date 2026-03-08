@@ -19,7 +19,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
           })
           .optional()
       )
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         return ctx.db.utilityReading.findMany({
           where: {
             type: input?.type,
@@ -40,7 +40,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
 
     getById: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         return ctx.db.utilityReading.findUnique({
           where: { id: input.id },
           include: { room: true },
@@ -49,7 +49,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
 
     create: protectedProcedure
       .input(createUtilityReadingSchema)
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         return ctx.db.utilityReading.create({
           data: input,
         });
@@ -57,7 +57,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
 
     update: protectedProcedure
       .input(updateUtilityReadingSchema)
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const { id, ...data } = input;
         return ctx.db.utilityReading.update({
           where: { id },
@@ -67,7 +67,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
 
     delete: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         return ctx.db.utilityReading.delete({
           where: { id: input.id },
         });
@@ -75,7 +75,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
 
     getLatestByRoom: protectedProcedure
       .input(z.object({ roomId: z.string(), type: UtilityTypeEnum }))
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         return ctx.db.utilityReading.findFirst({
           where: {
             roomId: input.roomId,
@@ -93,7 +93,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
           months: z.number().default(6),
         })
       )
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         const startDate = new Date();
         startDate.setMonth(startDate.getMonth() - input.months);
 
@@ -107,7 +107,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
           orderBy: { readingDate: "asc" },
         });
 
-        return readings.map((reading) => ({
+        return readings.map((reading: any) => ({
           id: reading.id,
           room: reading.room.roomNumber,
           type: reading.type,

@@ -4,13 +4,13 @@ import {
   updateUtilityReadingSchema,
   UtilityTypeEnum
 } from "@bhms/validation";
-import { PrismaUtilityRepository } from "../../infrastructure/persistence/prisma-utility.repository";
-import { UtilityService } from "../../domain/services/utility.service";
-import { CreateUtilityReadingHandler } from "../../application/handlers/create-utility-reading.handler";
-import { GetUtilityReadingHandler } from "../../application/handlers/get-utility-reading.handler";
-import { ListUtilityReadingsHandler } from "../../application/handlers/list-utility-readings.handler";
-import { GetLatestReadingHandler } from "../../application/handlers/get-latest-reading.handler";
-import { GetConsumptionSummaryHandler } from "../../application/handlers/get-consumption-summary.handler";
+import { PrismaUtilityRepository } from "../infrastructure/persistence/prisma-utility.repository";
+import { UtilityService } from "../domain/services/utility.service";
+import { CreateUtilityReadingHandler } from "../application/handlers/create-utility-reading.handler";
+import { GetUtilityReadingHandler } from "../application/handlers/get-utility-reading.handler";
+import { ListUtilityReadingsHandler } from "../application/handlers/list-utility-readings.handler";
+import { GetLatestReadingHandler } from "../application/handlers/get-latest-reading.handler";
+import { GetConsumptionSummaryHandler } from "../application/handlers/get-consumption-summary.handler";
 
 type ProtectedProcedure = any;
 

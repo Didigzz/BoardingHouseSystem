@@ -22,12 +22,12 @@
     "react": "^18.2.0",
     "tailwind-merge": "^2.5.4",
     "zustand": "^4.4.7",
-    "zod": "^3.22.4"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@bhms/typescript-config": "workspace:*",
     "@types/node": "^20.11.5",
-    "@types/react": "^18.2.0",
+    "@types/react": "^19.2.14",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^10.0.2",

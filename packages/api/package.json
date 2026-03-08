@@ -12,9 +12,9 @@
     "@bhms/database": "workspace:*",
     "@bhms/validation": "workspace:*",
     "@trpc/server": "^11.0.0-rc.297",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.3",
     "superjson": "^2.2.6",
-    "zod": "^3.22.4"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@bhms/typescript-config": "workspace:*",

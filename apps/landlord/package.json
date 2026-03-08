@@ -13,7 +13,7 @@
     "@bhms/shared": "workspace:*",
     "@bhms/ui": "workspace:*",
     "@bhms/validation": "workspace:*",
-    "@hookform/resolvers": "^3.3.2",
+    "@hookform/resolvers": "^5.2.2",
     "@orpc/client": "^1.13.4",
     "@orpc/react": "^1.13.4",
     "@orpc/react-query": "^1.13.4",

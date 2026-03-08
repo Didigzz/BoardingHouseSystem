@@ -3,33 +3,18 @@
  * This file exports a handler that can be deployed to serverless platforms
  */
 
-import NextAuth from "next-auth";
-import { authConfig } from "@bhms/auth";
-
-/**
- * Create NextAuth handlers
- */
-const handlers = NextAuth(authConfig);
+import { handlers } from "@bhms/auth";
 
 /**
  * Export handlers for serverless platforms
  * @param req - Request object
  * @returns Response object
  */
-export const GET = async (req: Request) => {
-  // @ts-ignore - NextAuth version mismatch between packages
-  return handlers.handler(req);
-};
+export const GET = handlers.GET;
 
-export const POST = async (req: Request) => {
-  // @ts-ignore - NextAuth version mismatch between packages
-  return handlers.handler(req);
-};
+export const POST = handlers.POST;
 
 /**
  * Default export for platforms that require it
  */
-export default async (req: Request) => {
-  // @ts-ignore - NextAuth version mismatch between packages
-  return handlers.handler(req);
-};
+export default GET;

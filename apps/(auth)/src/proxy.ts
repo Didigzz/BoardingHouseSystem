@@ -12,3 +12,5 @@ export const config = {
     "/((?!_next/static|_next/image|favicon.ico|api/auth|api/register).*)",
   ],
 };
+
+export const runtime = "edge";

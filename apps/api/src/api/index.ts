@@ -13,25 +13,29 @@ import { appRouter } from "../lib/trpc";
  * @param req - Request object
  * @returns Response object
  */
-export const handler = async (req: Request): Promise<Response> => {
-  return fetchRequestHandler({
-    endpoint: "/api/trpc",
-    req,
-    router: appRouter,
-    createContext: () =>
-      createTRPCContext({
-        headers: req.headers,
-      }),
-    onError:
-      process.env.NODE_ENV === "development"
-        ? ({ path, error }) => {
-            console.error(
-              `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`
-            );
-          }
-        : undefined,
-  });
+const createHandler = () => {
+  return async (req: Request): Promise<Response> => {
+    return fetchRequestHandler({
+      endpoint: "/api/trpc",
+      req,
+      router: appRouter,
+      createContext: () =>
+        createTRPCContext({
+          headers: req.headers,
+        }),
+      onError:
+        process.env.NODE_ENV === "development"
+          ? ({ path, error }) => {
+              console.error(
+                `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`
+              );
+            }
+          : undefined,
+    });
+  };
 };
+
+export const handler = createHandler();
 
 /**
  * Export for Vercel serverless functions
@@ -42,8 +46,3 @@ export default handler;
  * Export for AWS Lambda with @vercel/lambda adapter
  */
 export { handler as GET, handler as POST, handler as PUT, handler as DELETE, handler as PATCH };
-
-/**
- * Export for Cloudflare Workers
- */
-export { handler };

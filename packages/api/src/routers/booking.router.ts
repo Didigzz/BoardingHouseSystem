@@ -27,7 +27,7 @@ export const createBookingRouter = (
           message: z.string().optional(),
         })
       )
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         // Get boarder profile
         const boarder = await ctx.db.boarder.findUnique({
           where: { userId: ctx.session.user.id },
@@ -96,7 +96,7 @@ export const createBookingRouter = (
             .optional(),
         })
       )
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         const boarder = await ctx.db.boarder.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -143,7 +143,7 @@ export const createBookingRouter = (
             .optional(),
         })
       )
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -185,7 +185,7 @@ export const createBookingRouter = (
     // Confirm a booking (landlord)
     confirm: landlordProc
       .input(z.object({ bookingId: z.string() }))
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -239,7 +239,7 @@ export const createBookingRouter = (
           reason: z.string().optional(),
         })
       )
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -276,7 +276,7 @@ export const createBookingRouter = (
     // Cancel a booking (boarder - only for pending/confirmed)
     cancel: boarderProc
       .input(z.object({ bookingId: z.string() }))
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const boarder = await ctx.db.boarder.findUnique({
           where: { userId: ctx.session.user.id },
         });

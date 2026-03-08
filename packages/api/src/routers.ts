@@ -14,7 +14,7 @@ import {
 /**
  * Factory function to create the app router with platform-specific procedures
  * This allows different platforms (web, mobile) to provide their own auth middleware
- * 
+ *
  * @param protectedProcedure - Base protected procedure requiring authentication
  * @param adminProcedure - Admin-only procedure (optional, defaults to protectedProcedure)
  * @param landlordProcedure - Landlord-only procedure (optional, defaults to protectedProcedure)
@@ -39,5 +39,18 @@ export const createAppRouter = (
   });
 };
 
-// Export the type - this will be inferred from the actual implementation
-export type AppRouter = ReturnType<typeof createAppRouter>;
+// Export the type - use a default router instance to infer the type
+const _dummyProcedure = { query: () => ({}), mutation: () => ({}), input: () => ({}) };
+const _dummyRouter = createTRPCRouter({
+  boarder: createBoarderRouter(_dummyProcedure),
+  payment: createPaymentRouter(_dummyProcedure),
+  room: createRoomRouter(_dummyProcedure),
+  utility: createUtilityRouter(_dummyProcedure),
+  user: createUserRouter(_dummyProcedure),
+  dashboard: createDashboardRouter(_dummyProcedure),
+  admin: createAdminRouter(_dummyProcedure, _dummyProcedure),
+  property: createPropertyRouter(_dummyProcedure, _dummyProcedure),
+  booking: createBookingRouter(_dummyProcedure, _dummyProcedure, _dummyProcedure),
+});
+
+export type AppRouter = typeof _dummyRouter;

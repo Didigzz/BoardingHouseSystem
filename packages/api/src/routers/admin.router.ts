@@ -21,7 +21,7 @@ export const createAdminRouter = (
           search: z.string().optional(),
         })
       )
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         const { page, limit, role, status, search } = input;
         const skip = (page - 1) * limit;
 
@@ -74,7 +74,7 @@ export const createAdminRouter = (
       }),
 
     // Get pending landlord approvals
-    getPendingLandlords: adminProcedure.query(async ({ ctx }) => {
+    getPendingLandlords: adminProcedure.query(async ({ ctx }: any) => {
       return ctx.db.user.findMany({
         where: {
           role: "LANDLORD",
@@ -103,7 +103,7 @@ export const createAdminRouter = (
     // Approve a landlord
     approveLandlord: adminProcedure
       .input(z.object({ userId: z.string() }))
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const user = await ctx.db.user.findUnique({
           where: { id: input.userId },
         });
@@ -146,7 +146,7 @@ export const createAdminRouter = (
           reason: z.string().min(10, "Please provide a reason"),
         })
       )
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const user = await ctx.db.user.findUnique({
           where: { id: input.userId },
         });
@@ -191,7 +191,7 @@ export const createAdminRouter = (
           reason: z.string().min(10, "Please provide a reason"),
         })
       )
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const user = await ctx.db.user.findUnique({
           where: { id: input.userId },
         });
@@ -220,7 +220,7 @@ export const createAdminRouter = (
     // Reactivate a suspended user
     reactivateUser: adminProcedure
       .input(z.object({ userId: z.string() }))
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const user = await ctx.db.user.findUnique({
           where: { id: input.userId },
         });
@@ -247,7 +247,7 @@ export const createAdminRouter = (
       }),
 
     // Get dashboard stats
-    getDashboardStats: adminProcedure.query(async ({ ctx }) => {
+    getDashboardStats: adminProcedure.query(async ({ ctx }: any) => {
       const [
         totalUsers,
         totalLandlords,
@@ -279,7 +279,7 @@ export const createAdminRouter = (
     // Get user details by ID
     getUserById: adminProcedure
       .input(z.object({ userId: z.string() }))
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         const user = await ctx.db.user.findUnique({
           where: { id: input.userId },
           include: {

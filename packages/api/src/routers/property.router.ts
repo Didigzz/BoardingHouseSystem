@@ -26,7 +26,7 @@ export const createPropertyRouter = (
           city: z.string().optional(),
         })
       )
-      .query(async ({ ctx, input }) => {
+      .query(async ({ ctx, input }: any) => {
         const { page, limit, search, minPrice, maxPrice, amenities, city } =
           input;
         const skip = (page - 1) * limit;
@@ -72,7 +72,6 @@ export const createPropertyRouter = (
                       image: true,
                     },
                   },
-                  isVerified: true,
                 },
               },
             },
@@ -110,7 +109,6 @@ export const createPropertyRouter = (
                   },
                 },
                 businessName: true,
-                isVerified: true,
               },
             },
           },
@@ -127,7 +125,7 @@ export const createPropertyRouter = (
       }),
 
     // Get landlord's own properties
-    getMyProperties: landlordProc.query(async ({ ctx }) => {
+    getMyProperties: landlordProc.query(async ({ ctx }: any) => {
       const landlordProfile = await ctx.db.landlordProfile.findUnique({
         where: { userId: ctx.session.user.id },
       });
@@ -169,7 +167,7 @@ export const createPropertyRouter = (
           availableRooms: z.number().min(0).default(1),
         })
       )
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -210,7 +208,7 @@ export const createPropertyRouter = (
           isActive: z.boolean().optional(),
         })
       )
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const { id, ...data } = input;
 
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
@@ -245,7 +243,7 @@ export const createPropertyRouter = (
     // Delete a property
     delete: landlordProc
       .input(z.object({ id: z.string() }))
-      .mutation(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }: any) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });

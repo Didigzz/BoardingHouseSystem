@@ -3,5 +3,5 @@
 
 export * from './trpc';
 export * from './routers';
+export * from './types';
 export { createAppRouter } from './routers';
-export type { AppRouter } from './routers';

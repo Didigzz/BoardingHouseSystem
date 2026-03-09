@@ -91,8 +91,8 @@ export const createAuditLogRouter = (
           limit: z.number().min(1).max(100).default(50),
         })
       )
-      .query(async ({ input, ctx }) => {
-        const { entity, entityId, limit } = input;
+      .query(async ({ input, ctx }: ProcedureContext) => {
+        const { entity, entityId, limit } = input as { entity: string; entityId: string; limit: number };
 
         const logs = await db.auditLog.findMany({
           where: {

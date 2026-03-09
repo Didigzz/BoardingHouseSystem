@@ -1,5 +1,4 @@
 import { TRPCError } from "@trpc/server";
-import type { ProcedureMiddleware } from "@trpc/server";
 
 interface RateLimitOptions {
   windowMs: number; // Time window in milliseconds
@@ -18,12 +17,13 @@ const rateLimitStore = new Map<string, RateLimitData>();
 /**
  * Creates a rate limiting middleware for tRPC procedures
  * @param options - Rate limit configuration
- * @returns tRPC middleware
+ * @returns tRPC-compatible middleware function
  */
-export function createRateLimitMiddleware(options: RateLimitOptions): ProcedureMiddleware {
+export function createRateLimitMiddleware(options: RateLimitOptions) {
   const { windowMs, maxRequests, message = "Too many requests, please try again later." } = options;
 
-  return t.middleware(async ({ next, ctx, path, type }) => {
+  return async (opts: { next: () => Promise<any>; ctx: any; path: string; type: string }) => {
+    const { next, ctx, path } = opts;
     // Skip rate limiting in development
     if (process.env.NODE_ENV === "development") {
       return next();
@@ -34,7 +34,6 @@ export function createRateLimitMiddleware(options: RateLimitOptions): ProcedureM
     const key = `${identifier}:${path}`;
 
     const now = Date.now();
-    const windowStart = now - windowMs;
 
     // Get existing rate limit data
     const existing = rateLimitStore.get(key);
@@ -69,7 +68,7 @@ export function createRateLimitMiddleware(options: RateLimitOptions): ProcedureM
     });
 
     return next();
-  });
+  };
 }
 
 /**

@@ -5,7 +5,6 @@ import { db } from "@bhms/database";
 export const createORPCContext = async (opts: { headers: Headers }) => {
   // This will be provided by the platform-specific adapter
   // For Next.js, this will include session from NextAuth
-  // For mobile, this might include different auth context
   return {
     db,
     session: null, // Will be set by auth middleware

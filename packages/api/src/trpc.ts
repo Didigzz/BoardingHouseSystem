@@ -7,7 +7,6 @@ import { createRateLimitMiddleware, rateLimits } from "./middleware/rate-limit";
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   // This will be provided by the platform-specific adapter
   // For Next.js, this will include session from NextAuth
-  // For mobile, this might include different auth context
   return {
     db,
     session: null, // Will be set by auth middleware

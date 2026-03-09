@@ -6,8 +6,8 @@ import { z } from "zod";
  */
 export interface UploadValidationOptions {
   maxFileSize?: number; // in bytes
-  allowedMimeTypes?: string[];
-  allowedExtensions?: string[];
+  allowedMimeTypes?: readonly string[];
+  allowedExtensions?: readonly string[];
   maxWidth?: number; // for images
   maxHeight?: number; // for images
   minDimensions?: { width: number; height: number }; // for images
@@ -98,7 +98,7 @@ export function validateFileSize(
  */
 export function validateFileType(
   file: FileMetadata,
-  allowedMimeTypes: string[]
+  allowedMimeTypes: readonly string[]
 ): void {
   if (!allowedMimeTypes || allowedMimeTypes.length === 0) {
     return; // No type restrictions
@@ -117,7 +117,7 @@ export function validateFileType(
  */
 export function validateFileExtension(
   file: FileMetadata,
-  allowedExtensions: string[]
+  allowedExtensions: readonly string[]
 ): void {
   if (!allowedExtensions || allowedExtensions.length === 0) {
     return; // No extension restrictions

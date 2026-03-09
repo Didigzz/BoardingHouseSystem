@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach, type Mock } from 'vitest';
 
 // Mock ioredis
 vi.mock('ioredis', () => {
@@ -50,7 +50,7 @@ describe('Cache Utilities', () => {
     process.env.REDIS_URL = 'redis://localhost:6379';
     
     // Mock Redis constructor
-    (Redis as unknown as vi.Mock).mockImplementation(() => mockRedisInstance);
+    (Redis as unknown as Mock).mockImplementation(() => mockRedisInstance);
   });
 
   afterEach(async () => {

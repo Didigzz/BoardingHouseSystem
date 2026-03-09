@@ -9,13 +9,14 @@ import { createAdminRouter } from "./admin.router";
 import { createPropertyRouter } from "./property.router";
 import { createBookingRouter } from "./booking.router";
 import { createAuditLogRouter } from "./audit-log.router";
+import type { AnyRouter } from "@trpc/server";
 
 export const createAppRouter = (
     protectedProcedure: any,
     adminProcedure?: any,
     landlordProcedure?: any,
     boarderProcedure?: any
-) => {
+): AnyRouter => {
     return createTRPCRouter({
         boarder: createBoarderRouter(protectedProcedure),
         payment: createPaymentRouter(protectedProcedure),
@@ -27,10 +28,8 @@ export const createAppRouter = (
         property: createPropertyRouter(protectedProcedure, landlordProcedure),
         booking: createBookingRouter(protectedProcedure, boarderProcedure, landlordProcedure),
         auditLog: createAuditLogRouter(protectedProcedure, adminProcedure || protectedProcedure),
-    });
+    }) as AnyRouter;
 };
-
-export type AppRouter = ReturnType<typeof createAppRouter>;
 
 export { createBoarderRouter } from './boarder.router';
 export { createPaymentRouter } from './payment.router';

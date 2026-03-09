@@ -28,9 +28,6 @@ describe('Rate Limit Middleware', () => {
         path: 'test.procedure',
         type: 'query',
         next,
-        getRawInput: vi.fn(),
-        getInput: vi.fn(),
-        meta: undefined,
       });
     }
 
@@ -54,9 +51,6 @@ describe('Rate Limit Middleware', () => {
         path: 'test.procedure',
         type: 'query',
         next,
-        getRawInput: vi.fn(),
-        getInput: vi.fn(),
-        meta: undefined,
       });
     }
 
@@ -67,9 +61,6 @@ describe('Rate Limit Middleware', () => {
         path: 'test.procedure',
         type: 'query',
         next,
-        getRawInput: vi.fn(),
-        getInput: vi.fn(),
-        meta: undefined,
       })
     ).rejects.toThrow(TRPCError);
 
@@ -79,9 +70,6 @@ describe('Rate Limit Middleware', () => {
         path: 'test.procedure',
         type: 'query',
         next,
-        getRawInput: vi.fn(),
-        getInput: vi.fn(),
-        meta: undefined,
       })
     ).rejects.toThrowError('Too many requests');
   });
@@ -101,18 +89,12 @@ describe('Rate Limit Middleware', () => {
       path: 'test.procedure',
       type: 'query',
       next,
-      getRawInput: vi.fn(),
-      getInput: vi.fn(),
-      meta: undefined,
     });
     await middleware({
       ctx,
       path: 'test.procedure',
       type: 'query',
       next,
-      getRawInput: vi.fn(),
-      getInput: vi.fn(),
-      meta: undefined,
     });
 
     // Advance time by 1 minute + 1 second
@@ -124,9 +106,6 @@ describe('Rate Limit Middleware', () => {
       path: 'test.procedure',
       type: 'query',
       next,
-      getRawInput: vi.fn(),
-      getInput: vi.fn(),
-      meta: undefined,
     });
 
     expect(next).toHaveBeenCalledTimes(3);
@@ -146,18 +125,12 @@ describe('Rate Limit Middleware', () => {
       path: 'test.procedure',
       type: 'query',
       next,
-      getRawInput: vi.fn(),
-      getInput: vi.fn(),
-      meta: undefined,
     });
     await middleware({
       ctx: { session: { user: { id: 'user1' } } },
       path: 'test.procedure',
       type: 'query',
       next,
-      getRawInput: vi.fn(),
-      getInput: vi.fn(),
-      meta: undefined,
     });
 
     // User 2 should still be able to make requests
@@ -166,9 +139,6 @@ describe('Rate Limit Middleware', () => {
       path: 'test.procedure',
       type: 'query',
       next,
-      getRawInput: vi.fn(),
-      getInput: vi.fn(),
-      meta: undefined,
     });
 
     expect(next).toHaveBeenCalledTimes(3);
@@ -193,9 +163,6 @@ describe('Rate Limit Middleware', () => {
         path: 'test.procedure',
         type: 'query',
         next,
-        getRawInput: vi.fn(),
-        getInput: vi.fn(),
-        meta: undefined,
       });
     }
 

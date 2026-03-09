@@ -54,8 +54,8 @@ model User {
   email         String     @unique
   name          String?
   password      String
-  role          UserRole   @default(BOARDER) @index
-  status        UserStatus @default(APPROVED) @index
+  role          UserRole   @default(BOARDER)
+  status        UserStatus @default(APPROVED)
   phone         String?
   image         String?
   emailVerified DateTime?
@@ -67,6 +67,8 @@ model User {
   sessions           Session[]
   landlordProfile    LandlordProfile?
 
+  @@index([role])
+  @@index([status])
   @@map("users")
 }
 
@@ -299,14 +301,17 @@ model Setting {
 model AuditLog {
   id          String   @id @default(cuid())
   userId      String   @map("user_id")
-  action      String   @index
-  entity      String   @index
+  action      String
+  entity      String
   entityId    String?  @map("entity_id")
   changes     Json?
   ipAddress   String?  @map("ip_address")
   userAgent   String?  @map("user_agent")
-  timestamp   DateTime @default(now()) @index
+  timestamp   DateTime @default(now())
 
+  @@index([action])
+  @@index([entity])
+  @@index([timestamp])
   @@index([userId])
   @@index([entity, entityId])
   @@map("audit_logs")

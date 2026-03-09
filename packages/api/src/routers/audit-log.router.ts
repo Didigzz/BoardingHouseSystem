@@ -3,6 +3,11 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { db } from "@bhms/database";
 
+interface ProcedureContext {
+  ctx: Record<string, unknown>;
+  input: Record<string, unknown>;
+}
+
 /**
  * Audit log router - Admin only access
  * Provides endpoints for viewing and querying audit logs
@@ -28,8 +33,17 @@ export const createAuditLogRouter = (
           endDate: z.date().optional(),
         })
       )
-      .query(async ({ input, ctx }) => {
-        const { page, limit, userId, action, entity, entityId, startDate, endDate } = input;
+      .query(async ({ input, ctx }: ProcedureContext) => {
+        const { page, limit, userId, action, entity, entityId, startDate, endDate } = input as {
+          page: number;
+          limit: number;
+          userId?: string;
+          action?: string;
+          entity?: string;
+          entityId?: string;
+          startDate?: Date;
+          endDate?: Date;
+        };
         const skip = (page - 1) * limit;
 
         const where: Record<string, unknown> = {};
@@ -38,7 +52,7 @@ export const createAuditLogRouter = (
         if (action) where.action = action;
         if (entity) where.entity = entity;
         if (entityId) where.entityId = entityId;
-        
+
         if (startDate || endDate) {
           where.timestamp = {};
           if (startDate) (where.timestamp as Record<string, unknown>).gte = startDate;
@@ -102,8 +116,8 @@ export const createAuditLogRouter = (
           limit: z.number().min(1).max(100).default(50),
         })
       )
-      .query(async ({ input, ctx }) => {
-        const { userId, limit } = input;
+      .query(async ({ input, ctx }: ProcedureContext) => {
+        const { userId, limit } = input as { userId: string; limit: number };
 
         const logs = await db.auditLog.findMany({
           where: { userId },
@@ -124,8 +138,8 @@ export const createAuditLogRouter = (
           endDate: z.date().optional(),
         })
       )
-      .query(async ({ input, ctx }) => {
-        const { startDate, endDate } = input;
+      .query(async ({ input, ctx }: ProcedureContext) => {
+        const { startDate, endDate } = input as { startDate?: Date; endDate?: Date };
 
         const where: Record<string, unknown> = {};
         if (startDate || endDate) {
@@ -155,15 +169,15 @@ export const createAuditLogRouter = (
 
         return {
           total,
-          byAction: byAction.map((item) => ({
+          byAction: byAction.map((item: any) => ({
             action: item.action,
             count: item._count,
           })),
-          byEntity: byEntity.map((item) => ({
+          byEntity: byEntity.map((item: any) => ({
             entity: item.entity,
             count: item._count,
           })),
-          byUser: byUser.map((item) => ({
+          byUser: byUser.map((item: any) => ({
             userId: item.userId,
             count: item._count,
           })),
@@ -180,8 +194,8 @@ export const createAuditLogRouter = (
           limit: z.number().min(1).max(100).default(50),
         })
       )
-      .query(async ({ input, ctx }) => {
-        const { hours, limit } = input;
+      .query(async ({ input, ctx }: ProcedureContext) => {
+        const { hours, limit } = input as { hours: number; limit: number };
         const startDate = new Date(Date.now() - hours * 60 * 60 * 1000);
 
         const logs = await db.auditLog.findMany({

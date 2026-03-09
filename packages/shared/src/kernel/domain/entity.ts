@@ -63,10 +63,8 @@ export abstract class Entity<TProps extends EntityProps = EntityProps> {
    * Convert entity to plain object
    */
   toObject(): TProps & { id: string } {
-    return {
-      id: this._id,
-      ...this.props,
-    };
+    const props = { ...this.props };
+    return Object.assign(props, { id: this._id });
   }
 
   /**

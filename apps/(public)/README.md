@@ -1,12 +1,12 @@
 # Public Platform
 
-The public-facing marketplace for the Boarding House Management System. This application serves as the discovery layer where visitors can browse, search, and view boarding house listings without authentication.
+The public-facing marketplace for the Boarding House Management System. This application serves as the discovery layer where visitors can browse, search, and view boarding house listings, and includes integrated authentication.
 
 ## 🌐 Overview
 
-**Port**: 3000  
-**URL**: http://localhost:3000  
-**Purpose**: Public marketplace and property discovery
+**Port**: 3000
+**URL**: http://localhost:3000
+**Purpose**: Public marketplace, property discovery, and authentication
 
 ## ✨ Features
 
@@ -16,15 +16,31 @@ The public-facing marketplace for the Boarding House Management System. This app
 - **Interactive Map**: See property locations with clustering
 - **Property Details**: Comprehensive listing pages with photo galleries
 
-### User Onboarding
-- **Registration Flow**: Sign up as boarder or apply as landlord
-- **Authentication**: Login/logout functionality
-- **Role Routing**: Redirect to appropriate dashboard after login
+### Authentication
+- **Login/Register**: Integrated authentication with NextAuth.js
+- **Role-based Registration**: Sign up as Boarder or Landlord
+- **Social Login**: OAuth providers (Google, Facebook, etc.)
+- **Session Management**: Secure session handling
 
 ### Public Information
 - **About Pages**: Platform information and how it works
 - **Contact**: Support and inquiry forms
 - **Terms & Privacy**: Legal documentation
+
+## 🔐 Authentication
+
+Authentication is **built into this app** using NextAuth.js:
+
+| Page | Route |
+|------|-------|
+| Login | `/login` |
+| Register | `/register` |
+| Become a Landlord | `/become-landlord` |
+
+After successful authentication, users are redirected to their role-specific dashboard:
+- **Boarders** → Boarder Dashboard (port 3004)
+- **Landlords** → Landlord Portal (port 3005)
+- **Admins** → Admin Dashboard (port 3002)
 
 ## 🏗️ Architecture
 
@@ -37,9 +53,15 @@ src/app/
 │   └── [id]/page.tsx       # Individual property details
 ├── map/
 │   └── page.tsx            # Map view of all properties
-├── login/page.tsx          # Login page
-├── register/page.tsx       # Registration page
-├── become-landlord/page.tsx # Landlord application
+├── login/
+│   └── page.tsx            # Login page
+├── register/
+│   └── page.tsx            # Registration page
+├── become-landlord/
+│   └── page.tsx            # Landlord information page
+├── api/
+│   ├── auth/[...nextauth]/ # NextAuth.js API route
+│   └── register/           # User registration API
 └── not-found.tsx           # 404 page
 ```
 
@@ -165,22 +187,29 @@ const { data: properties, isLoading } = api.property.search.useQuery({
 </MapContainer>
 ```
 
-## 🔐 Authentication Integration
+## 🔐 Authentication Implementation
 
-### Registration Flow
-1. User selects role (Boarder or Landlord)
-2. Fills registration form
-3. Account created with appropriate role
-4. Redirected to role-specific dashboard
+Authentication uses NextAuth.js with credentials provider:
 
-### Login Flow
-1. User enters credentials
-2. NextAuth validates and creates session
-3. Redirected based on role and status:
-   - Boarders → Boarder Dashboard
-   - Approved Landlords → Landlord Portal
-   - Pending Landlords → Pending Status Page
-   - Admins → Admin Dashboard
+```tsx
+// In your component
+import { signIn, signOut, useSession } from "next-auth/react";
+
+// Sign in
+await signIn("credentials", { email, password });
+
+// Sign out
+await signOut();
+
+// Get session
+const { data: session } = useSession();
+```
+
+### User Journey
+
+1. **Browse** - User discovers properties on Public Platform (port 3000)
+2. **Auth** - User clicks "Sign up" → fills registration form
+3. **Dashboard** - After auth, user redirected to role-specific dashboard
 
 ## 📱 Responsive Design
 

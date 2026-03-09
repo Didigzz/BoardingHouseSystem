@@ -10,9 +10,12 @@
   },
   "scripts": {
     "lint": "eslint src/ --no-error-on-unmatched-pattern",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@bhms/config": "workspace:*",
     "@bhms/shared": "workspace:*",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -39,13 +42,18 @@
   },
   "devDependencies": {
     "@bhms/typescript-config": "workspace:*",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.14",
     "@typescript-eslint/eslint-plugin": "^8.13.0",
     "@typescript-eslint/parser": "^8.13.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.1",
+    "jsdom": "^23.0.1",
     "react": "^19.2.4",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^1.1.0"
   },
   "peerDependencies": {
     "react": "^18.0.0"

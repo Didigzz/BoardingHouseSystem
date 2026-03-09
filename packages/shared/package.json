@@ -7,7 +7,9 @@
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*.ts",
-    "./*.tsx": "./src/*.tsx",
+    "./layouts": "./src/components/layouts/index.ts",
+    "./providers": "./src/components/providers/index.ts",
+    "./components": "./src/components/index.ts",
     "./src/*": "./src/*"
   },
   "scripts": {
@@ -16,10 +18,14 @@
   },
   "dependencies": {
     "@bhms/database": "workspace:*",
+    "@bhms/ui": "workspace:*",
     "@bhms/validation": "workspace:*",
-    "@prisma/client": "^5.6.0",
+    "@prisma/client": "^7.4.2",
+    "@tanstack/react-query": "^5.90.16",
     "clsx": "^2.1.1",
-    "react": "^18.2.0",
+    "next-auth": "5.0.0-beta.30",
+    "next-themes": "^0.4.6",
+    "react": "^18.3.1",
     "tailwind-merge": "^2.5.4",
     "zustand": "^4.4.7",
     "zod": "^4.3.6"
@@ -27,7 +33,7 @@
   "devDependencies": {
     "@bhms/typescript-config": "workspace:*",
     "@types/node": "^20.11.5",
-    "@types/react": "^19.2.14",
+    "@types/react": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^10.0.2",
@@ -35,5 +41,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
   }
 }

@@ -4,7 +4,7 @@ import * as React from "react";
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -54,9 +54,9 @@ const commonAmenities = [
 
 const roomSchema = z.object({
   roomNumber: z.string().min(1, "Room number is required"),
-  floor: z.coerce.number().min(1, "Floor must be at least 1"),
-  capacity: z.coerce.number().min(1, "Capacity must be at least 1"),
-  monthlyRate: z.coerce.number().min(0, "Monthly rate must be a positive number"),
+  floor: z.preprocess((val) => (val === "" || val === undefined ? 1 : Number(val)), z.number().min(1, "Floor must be at least 1")),
+  capacity: z.preprocess((val) => (val === "" || val === undefined ? 1 : Number(val)), z.number().min(1, "Capacity must be at least 1")),
+  monthlyRate: z.preprocess((val) => (val === "" || val === undefined ? 0 : Number(val)), z.number().min(0, "Monthly rate must be a positive number")),
   description: z.string().optional(),
   status: z.enum(["AVAILABLE", "OCCUPIED", "MAINTENANCE"]),
 });
@@ -90,7 +90,7 @@ export default function EditRoomPage({
     watch,
     formState: { errors },
   } = useForm<RoomFormData>({
-    resolver: zodResolver(roomSchema),
+    resolver: zodResolver(roomSchema) as unknown as Resolver<RoomFormData>,
     defaultValues: room
       ? {
           roomNumber: room.roomNumber,
@@ -107,7 +107,7 @@ export default function EditRoomPage({
 
   useEffect(() => {
     if (room) {
-      setSelectedAmenities(room.amenities);
+      setSelectedAmenities(room.amenities || []);
     }
   }, [room]);
 
@@ -371,12 +371,12 @@ export default function EditRoomPage({
       </Card>
 
       {/* Current Occupancy Notice */}
-      {room.currentTenants > 0 && (
+      {room.currentTenants && room.currentTenants.length > 0 && (
         <Card className="border-blue-200 bg-blue-50">
           <CardHeader>
             <CardTitle className="text-blue-700">Active Tenants</CardTitle>
             <CardDescription className="text-blue-600">
-              This room currently has {room.currentTenants} tenant(s). Changing the
+              This room currently has {room.currentTenants.length} tenant(s). Changing the
               status to &quot;Maintenance&quot; may require tenant coordination.
             </CardDescription>
           </CardHeader>

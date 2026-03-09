@@ -19,6 +19,8 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
       ? images
       : ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800"];
 
+  const currentImage = displayImages[currentIndex] ?? displayImages[0]!;
+
   const goToPrevious = () => {
     setCurrentIndex((prev) =>
       prev === 0 ? displayImages.length - 1 : prev - 1
@@ -42,7 +44,7 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
             onClick={() => setIsFullscreen(true)}
           >
             <Image
-              src={displayImages[0]}
+              src={displayImages[0]!}
               alt={name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -120,7 +122,7 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
           {/* Image */}
           <div className="relative w-full max-w-5xl h-[80vh] mx-4">
             <Image
-              src={displayImages[currentIndex]}
+              src={currentImage}
               alt={`${name} - Image ${currentIndex + 1}`}
               fill
               className="object-contain"

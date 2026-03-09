@@ -1,14 +1,12 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import {
   Plus,
   Search,
   MoreHorizontal,
   Shield,
   User,
-  Mail,
   Edit,
   Trash2,
   Key,
@@ -40,7 +38,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { formatDate, getInitials, cn } from "@/lib/utils";
+import { formatDate, getInitials } from "@/lib/utils";
 
 // Mock user data
 const mockUsers = [

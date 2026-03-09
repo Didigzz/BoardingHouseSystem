@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { Home } from "lucide-react";
-import { RegisterForm } from "./register-form";
+import { RegisterForm } from "@/components/auth/register-form";
 
 export default function RegisterPage() {
   return (

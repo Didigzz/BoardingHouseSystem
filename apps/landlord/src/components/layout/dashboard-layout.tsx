@@ -3,7 +3,6 @@
 import * as React from "react";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
-import { cn } from "@/lib/utils";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

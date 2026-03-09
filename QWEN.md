@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-BHMS is a comprehensive **multi-tenant monorepo platform** for managing boarding houses, connecting landlords with boarders through modern web and mobile interfaces. Built with **Next.js 16**, **React 18**, **TypeScript**, **tRPC**, **Prisma**, and **PostgreSQL**, the platform follows a phased architecture serving multiple user roles.
+BHMS is a comprehensive **multi-tenant monorepo platform** for managing boarding houses, connecting landlords with boarders through modern web interfaces. Built with **Next.js 16**, **React 18**, **TypeScript**, **tRPC**, **Prisma**, and **PostgreSQL**, the platform follows a phased architecture serving multiple user roles.
 
 ### Core User Roles
 | Role | Access Level | Status Required |
@@ -16,7 +16,6 @@ BHMS is a comprehensive **multi-tenant monorepo platform** for managing boarding
 - **Backend**: tRPC, Express.js, Next.js API Routes
 - **Database**: PostgreSQL 15 with Prisma ORM
 - **Authentication**: NextAuth.js with role-based access control
-- **Mobile**: React Native with Expo
 - **Monorepo**: Turborepo with Bun package manager
 - **Containerization**: Docker & Docker Compose
 
@@ -27,32 +26,28 @@ BHMS is a comprehensive **multi-tenant monorepo platform** for managing boarding
 ```
 BoardingHouseSystem/
 ├── apps/                          # Application layer
-│   ├── (auth)/          :3003     # Authentication & onboarding
 │   ├── (public)/        :3000     # Public marketplace (landing)
+│   ├── server/          :3006     # Backend API server (tRPC + Auth)
 │   ├── admin/           :3002     # Platform admin dashboard
-│   ├── api/             :3001     # Backend API server (tRPC)
 │   ├── boarder/         :3004     # Boarder dashboard
-│   ├── landlord/        :3005     # Landlord management portal
-│   └── mobile/                    # React Native mobile app
+│   └── landlord/        :3005     # Landlord management portal
 │
 ├── packages/                      # Shared packages
 │   ├── api/                       # tRPC routers & procedures
-│   ├── api-client/                # API client utilities
 │   ├── auth/                      # NextAuth.js configuration
 │   ├── config/                    # Shared configurations
 │   ├── database/                  # Prisma schema & client
 │   ├── eslint-config/             # Shared ESLint rules
+│   ├── layouts/                   # Shared layout components
+│   ├── providers/                 # React context providers
 │   ├── shared/                    # Business logic & utilities
-│   ├── types/                     # TypeScript type definitions
 │   ├── typescript-config/         # Shared TS configurations
 │   ├── ui/                        # Shared React components
-│   ├── utils/                     # Utility functions
 │   └── validation/                # Zod validation schemas
 │
 ├── docs/                          # Documentation
 │   ├── PLAN.md                    # System specification
-│   ├── flow.md                    # Architecture diagrams
-│   └── DEVELOPMENT.md             # Development guidelines
+│   └── APPS.md                    # Application documentation
 │
 ├── nginx/                         # Nginx configuration
 ├── .github/workflows/             # CI/CD pipelines
@@ -117,13 +112,11 @@ bun run dev
 
 ```bash
 # Start specific app
-bun --filter @bhms/public dev      # Public platform (:3000)
-bun --filter @bhms/api-server dev  # API server (:3001)
-bun --filter @bhms/admin dev       # Admin dashboard (:3002)
-bun --filter @bhms/auth-app dev    # Auth app (:3003)
-bun --filter @bhms/boarder dev     # Boarder dashboard (:3004)
-bun --filter @bhms/landlord dev    # Landlord portal (:3005)
-bun --filter @bhms/mobile dev      # Mobile app (Expo)
+bun --filter @bhms/public dev       # Public platform (:3000)
+bun --filter @bhms/api-server dev   # API server (:3006)
+bun --filter @bhms/admin dev        # Admin dashboard (:3002)
+bun --filter @bhms/boarder dev      # Boarder dashboard (:3004)
+bun --filter @bhms/landlord dev     # Landlord portal (:3005)
 
 # Build specific app
 bun --filter @bhms/public build
@@ -177,10 +170,11 @@ Pre-commit hooks automatically run on staged files:
 
 | File Type | Actions |
 |-----------|---------|
-| `*.{js,jsx,ts,tsx}` | ESLint fix + Prettier |
+| `apps/**/*.{js,jsx,ts,tsx}` | ESLint fix + Prettier |
+| `packages/**/*.{js,jsx,ts,tsx}` | ESLint fix + Prettier |
 | `*.{json,yaml,yml,md}` | Prettier |
 | `*.prisma` | Prettier (Prisma plugin) |
-| `*.{ts,tsx}` | TypeScript type check |
+| `**/*.{ts,tsx}` | TypeScript type check |
 
 ### ESLint Configuration
 - Extends: `eslint:recommended`
@@ -218,10 +212,10 @@ Triggered on push/PR to `main` and `develop`:
 #### 2. CodeQL (`.github/workflows/codeql.yml`)
 Security scanning for vulnerabilities.
 
-### Dependabot (`.github/dependabot.yml`)
+### Dependabot
 Automated dependency updates for:
 - Root npm dependencies
-- Individual apps (admin, api, mobile)
+- Individual apps (admin, api)
 - Packages (database, auth, ui)
 - GitHub Actions
 
@@ -239,16 +233,17 @@ Automated dependency updates for:
 | **Phase 4** | Admin Dashboard (Platform Management) | Core |
 
 ### Authentication Flow
-1. Users authenticate through `(auth)` app (port 3003)
-2. Role-based redirect to appropriate dashboard
-3. Session managed via NextAuth.js with JWT
-4. API enforces role-based access control
+1. Authentication handled via `packages/auth/` (NextAuth.js configuration)
+2. Auth endpoints served through `apps/server/` API routes
+3. Role-based redirect to appropriate dashboard after login
+4. Session managed via NextAuth.js with JWT
+5. API enforces role-based access control via tRPC middleware
 
 ### tRPC API Architecture
 - All apps communicate with API server via tRPC
 - Type-safe end-to-end communication
 - Routers defined in `packages/api/`
-- API server runs on port 3001
+- API server runs on port 3006
 
 ### Database Schema
 Key entities: Users, Boarding Houses, Bookings, Payments, Messages, Reviews, Applications. See `packages/database/schema.prisma` for full schema.
@@ -277,36 +272,9 @@ Key entities: Users, Boarding Houses, Bookings, Payments, Messages, Reviews, App
 | Document | Location |
 |----------|----------|
 | System Specification | `docs/PLAN.md` |
-| Architecture Diagrams | `docs/flow.md` |
-| Development Guidelines | `docs/DEVELOPMENT.md` |
+| Application Documentation | `docs/APPS.md` |
 | Apps Documentation | `apps/README.md` |
 | Packages Documentation | `packages/README.md` |
-
----
-
-## Common Tasks
-
-### Adding a New Feature
-1. Create feature branch: `git checkout -b feat/feature-name`
-2. Implement changes following existing patterns
-3. Run `bun run check:all` to verify code quality
-4. Commit with conventional commit message
-5. Push and create PR
-
-### Debugging
-- Use Prisma Studio: `bun run db:studio`
-- Check Docker logs: `bun run docker:logs`
-- View build artifacts in `.next/` directories
-
-### Environment Variables
-Required in `.env`:
-```env
-DATABASE_URL="postgresql://postgres:password@localhost:5432/boarding_house_db?schema=public"
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
-API_URL="http://localhost:3001"
-NEXT_PUBLIC_API_URL="http://localhost:3001"
-```
 
 ---
 

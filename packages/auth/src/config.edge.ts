@@ -13,8 +13,8 @@ export const authConfigEdge: NextAuthConfig = {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
-                token.role = (user as any).role;
-                token.status = (user as any).status;
+                token.role = user as unknown as string;
+                token.status = user as unknown as string;
             }
             return token;
         },
@@ -26,7 +26,7 @@ export const authConfigEdge: NextAuthConfig = {
             }
             return session;
         },
-        authorized({ auth }) {
+        authorized() {
             return true; // Let middleware handle authorization
         },
     },

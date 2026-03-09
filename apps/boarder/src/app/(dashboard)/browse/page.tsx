@@ -506,7 +506,7 @@ export default function BrowsePage() {
               )}
               {filters.amenities.map((amenity) => (
                 <Badge key={amenity} variant="secondary" className="gap-1">
-                  {amenityIcons[amenity].label}
+                  {amenityIcons[amenity]?.label}
                   <X
                     className="h-3 w-3 cursor-pointer"
                     onClick={() => toggleAmenity(amenity)}
@@ -598,9 +598,9 @@ export default function BrowsePage() {
                     <div
                       key={amenity}
                       className="p-1.5 rounded-md bg-muted text-muted-foreground"
-                      title={amenityIcons[amenity].label}
+                      title={amenityIcons[amenity]?.label}
                     >
-                      {amenityIcons[amenity].icon}
+                      {amenityIcons[amenity]?.icon}
                     </div>
                   ))}
                   {listing.amenities.length > 4 && (
@@ -694,9 +694,9 @@ export default function BrowsePage() {
                       <div
                         key={amenity}
                         className="p-1.5 rounded-md bg-muted text-muted-foreground"
-                        title={amenityIcons[amenity].label}
+                        title={amenityIcons[amenity]?.label}
                       >
-                        {amenityIcons[amenity].icon}
+                        {amenityIcons[amenity]?.icon}
                       </div>
                     ))}
                   </div>

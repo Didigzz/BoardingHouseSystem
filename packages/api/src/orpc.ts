@@ -5,7 +5,6 @@ import { db } from "@bhms/database";
 export const createORPCContext = async (opts: { headers: Headers }) => {
   // This will be provided by the platform-specific adapter
   // For Next.js, this will include session from NextAuth
-  // For mobile, this might include different auth context
   return {
     db,
     session: null, // Will be set by auth middleware
@@ -37,5 +36,5 @@ export const publicProcedure = o.use(timingMiddleware);
 
 // Base protected procedure - platforms can extend this with their auth
 export const createProtectedProcedure = (authMiddleware: any) => {
-  return o.use(timingMiddleware).use(authMiddleware);
+  return o.use(timingMiddleware).use(authMiddleware) as ReturnType<typeof o.use>;
 };

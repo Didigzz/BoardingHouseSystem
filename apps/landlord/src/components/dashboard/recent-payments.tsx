@@ -10,7 +10,7 @@ import {
 } from "@bhms/ui";
 import { Badge } from "@bhms/ui";
 import { mockPayments } from "@/lib/mock-data";
-import { formatCurrency, formatDate, getStatusColor } from "@/lib/utils";
+import { formatCurrency, getStatusColor } from "@/lib/utils";
 
 interface RecentPaymentsProps {
   propertyId?: string;

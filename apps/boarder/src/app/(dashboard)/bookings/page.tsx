@@ -199,9 +199,9 @@ export default function BookingsPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="font-semibold">{booking.propertyName}</h3>
-                <Badge className={statusConfig[booking.status].color}>
-                  {statusConfig[booking.status].icon}
-                  <span className="ml-1">{statusConfig[booking.status].label}</span>
+                <Badge className={statusConfig[booking.status]?.color}>
+                  {statusConfig[booking.status]?.icon}
+                  <span className="ml-1">{statusConfig[booking.status]?.label}</span>
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground flex items-center gap-1">
@@ -415,23 +415,28 @@ export default function BookingsPage() {
           {selectedBookingData && (
             <>
               <DialogHeader>
-                <DialogTitle>{selectedBookingData.propertyName}</DialogTitle>
+                <DialogTitle>{selectedBookingData?.propertyName}</DialogTitle>
                 <DialogDescription>
-                  Booking ID: #{selectedBookingData.id}
+                  Booking ID: #{selectedBookingData?.id}
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Badge className={statusConfig[selectedBookingData.status].color}>
-                    {statusConfig[selectedBookingData.status].icon}
-                    <span className="ml-1">
-                      {statusConfig[selectedBookingData.status].label}
+              {selectedBookingData && (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    {(() => {
+                      const status = statusConfig[selectedBookingData.status];
+                      if (!status) return null;
+                      return (
+                        <Badge className={status.color}>
+                          {status.icon}
+                          <span className="ml-1">{status.label}</span>
+                        </Badge>
+                      );
+                    })()}
+                    <span className="text-sm text-muted-foreground">
+                      Requested on {formatDate(selectedBookingData.requestedAt)}
                     </span>
-                  </Badge>
-                  <span className="text-sm text-muted-foreground">
-                    Requested on {formatDate(selectedBookingData.requestedAt)}
-                  </span>
-                </div>
+                  </div>
 
                 <Separator />
 
@@ -440,21 +445,21 @@ export default function BookingsPage() {
                     <p className="text-sm text-muted-foreground">Location</p>
                     <p className="font-medium flex items-center gap-1">
                       <MapPin className="h-4 w-4" />
-                      {selectedBookingData.location}
+                      {selectedBookingData?.location}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Room Type</p>
-                    <p className="font-medium">{selectedBookingData.roomType}</p>
+                    <p className="font-medium">{selectedBookingData?.roomType}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Landlord</p>
-                    <p className="font-medium">{selectedBookingData.landlord}</p>
+                    <p className="font-medium">{selectedBookingData?.landlord}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Monthly Rate</p>
                     <p className="font-medium">
-                      {formatCurrency(selectedBookingData.monthlyRate)}
+                      {formatCurrency(selectedBookingData?.monthlyRate || 0)}
                     </p>
                   </div>
                 </div>
@@ -465,22 +470,22 @@ export default function BookingsPage() {
                   <div>
                     <p className="text-sm text-muted-foreground">Check-in Date</p>
                     <p className="font-medium">
-                      {formatDate(selectedBookingData.checkIn)}
+                      {formatDate(selectedBookingData?.checkIn || "")}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Check-out Date</p>
                     <p className="font-medium">
-                      {formatDate(selectedBookingData.checkOut)}
+                      {formatDate(selectedBookingData?.checkOut || "")}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Deposit Paid</p>
                     <p className="font-medium">
-                      {formatCurrency(selectedBookingData.depositPaid)}
+                      {formatCurrency(selectedBookingData?.depositPaid || 0)}
                     </p>
                   </div>
-                  {selectedBookingData.nextPayment && (
+                  {selectedBookingData?.nextPayment && (
                     <div>
                       <p className="text-sm text-muted-foreground">Next Payment</p>
                       <p className="font-medium text-orange-600">
@@ -490,14 +495,15 @@ export default function BookingsPage() {
                   )}
                 </div>
               </div>
+              )}
               <DialogFooter>
                 <Button variant="outline" asChild>
-                  <Link href={`/messages?landlord=${selectedBookingData.landlord}`}>
+                  <Link href={`/messages?landlord=${selectedBookingData?.landlord}`}>
                     <MessageSquare className="h-4 w-4 mr-2" />
                     Contact Landlord
                   </Link>
                 </Button>
-                {selectedBookingData.status === "active" && (
+                {selectedBookingData?.status === "active" && (
                   <Button asChild>
                     <Link href="/payments">Make Payment</Link>
                   </Button>

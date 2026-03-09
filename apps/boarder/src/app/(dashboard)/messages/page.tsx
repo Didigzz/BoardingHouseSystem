@@ -386,10 +386,12 @@ export default function MessagesPage() {
                   <div className="space-y-4">
                     {messages.map((message, index) => {
                       const isMe = message.senderId === "me";
+                      const prevMessage = messages[index - 1];
                       const showDate =
                         index === 0 ||
+                        !prevMessage ||
                         new Date(message.timestamp).toDateString() !==
-                          new Date(messages[index - 1].timestamp).toDateString();
+                          new Date(prevMessage.timestamp).toDateString();
 
                       return (
                         <div key={message.id}>

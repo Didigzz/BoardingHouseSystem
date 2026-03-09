@@ -304,8 +304,8 @@ export default function PaymentsPage() {
                         Due {formatDate(payment.dueDate)}
                       </p>
                     </div>
-                    <Badge className={statusConfig[payment.status].color}>
-                      {statusConfig[payment.status].label}
+                    <Badge className={statusConfig[payment.status]?.color}>
+                      {statusConfig[payment.status]?.label}
                     </Badge>
                     <Button onClick={() => handlePay(payment)}>Pay Now</Button>
                   </div>
@@ -394,8 +394,8 @@ export default function PaymentsPage() {
                         </p>
                       </td>
                       <td className="p-4">
-                        <Badge className={statusConfig[payment.status].color}>
-                          {statusConfig[payment.status].label}
+                        <Badge className={statusConfig[payment.status]?.color}>
+                          {statusConfig[payment.status]?.label}
                         </Badge>
                       </td>
                       <td className="p-4">
@@ -440,8 +440,8 @@ export default function PaymentsPage() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Status</span>
-                  <Badge className={statusConfig[selectedPaymentData.status].color}>
-                    {statusConfig[selectedPaymentData.status].label}
+                  <Badge className={statusConfig[selectedPaymentData.status]?.color}>
+                    {statusConfig[selectedPaymentData.status]?.label}
                   </Badge>
                 </div>
                 <Separator />

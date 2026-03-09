@@ -1,4 +1,5 @@
 import { createTRPCRouter } from './trpc';
+import type { AnyRouter } from '@trpc/server';
 import {
   createBoarderRouter,
   createPaymentRouter,
@@ -13,7 +14,6 @@ import {
 
 /**
  * Factory function to create the app router with platform-specific procedures
- * This allows different platforms (web, mobile) to provide their own auth middleware
  *
  * @param protectedProcedure - Base protected procedure requiring authentication
  * @param adminProcedure - Admin-only procedure (optional, defaults to protectedProcedure)
@@ -25,7 +25,7 @@ export const createAppRouter = (
   adminProcedure?: any,
   landlordProcedure?: any,
   boarderProcedure?: any
-) => {
+): AnyRouter => {
   return createTRPCRouter({
     boarder: createBoarderRouter(protectedProcedure),
     payment: createPaymentRouter(protectedProcedure),
@@ -36,21 +36,7 @@ export const createAppRouter = (
     admin: createAdminRouter(protectedProcedure, adminProcedure || protectedProcedure),
     property: createPropertyRouter(protectedProcedure, landlordProcedure),
     booking: createBookingRouter(protectedProcedure, boarderProcedure, landlordProcedure),
-  });
+  }) as AnyRouter;
 };
 
-// Export the type - use a default router instance to infer the type
-const _dummyProcedure = { query: () => ({}), mutation: () => ({}), input: () => ({}) };
-const _dummyRouter = createTRPCRouter({
-  boarder: createBoarderRouter(_dummyProcedure),
-  payment: createPaymentRouter(_dummyProcedure),
-  room: createRoomRouter(_dummyProcedure),
-  utility: createUtilityRouter(_dummyProcedure),
-  user: createUserRouter(_dummyProcedure),
-  dashboard: createDashboardRouter(_dummyProcedure),
-  admin: createAdminRouter(_dummyProcedure, _dummyProcedure),
-  property: createPropertyRouter(_dummyProcedure, _dummyProcedure),
-  booking: createBookingRouter(_dummyProcedure, _dummyProcedure, _dummyProcedure),
-});
-
-export type AppRouter = typeof _dummyRouter;
+// Note: AppRouter type is now exported from types.ts to avoid circular dependencies

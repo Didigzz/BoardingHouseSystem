@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -42,7 +42,7 @@ import { useToast } from "@bhms/ui";
 
 const paymentSchema = z.object({
   tenantId: z.string().min(1, "Please select a tenant"),
-  amount: z.coerce.number().min(1, "Amount must be greater than 0"),
+  amount: z.preprocess((val) => (val === "" || val === undefined ? 0 : Number(val)), z.number().min(1, "Amount must be greater than 0")),
   type: z.enum(["RENT", "UTILITY", "DEPOSIT", "OTHER"]),
   dueDate: z.string().min(1, "Due date is required"),
   description: z.string().optional(),
@@ -84,11 +84,11 @@ export default function NewPaymentPage() {
     watch,
     formState: { errors },
   } = useForm<PaymentFormData>({
-    resolver: zodResolver(paymentSchema),
+    resolver: zodResolver(paymentSchema) as unknown as Resolver<PaymentFormData>,
     defaultValues: {
       tenantId: tenantIdParam || "",
       amount: 0,
-      type: "RENT",
+      type: "RENT" as const,
       dueDate: new Date().toISOString().split("T")[0],
       description: "",
     },
@@ -99,9 +99,9 @@ export default function NewPaymentPage() {
   // Auto-fill amount based on payment type and tenant
   React.useEffect(() => {
     if (selectedTenant && paymentType === "RENT") {
-      setValue("amount", selectedTenant.monthlyRent);
+      setValue("amount", selectedTenant.monthlyRent ?? 0);
     } else if (selectedTenant && paymentType === "DEPOSIT") {
-      setValue("amount", selectedTenant.depositAmount);
+      setValue("amount", selectedTenant.depositAmount ?? 0);
     }
   }, [selectedTenant, paymentType, setValue]);
 
@@ -148,7 +148,7 @@ export default function NewPaymentPage() {
     return {
       tenant: tenant ? `${tenant.firstName} ${tenant.lastName}` : "Select a tenant",
       room: tenantRoom?.roomNumber || "N/A",
-      amount: formatCurrency(amount),
+      amount: formatCurrency(Number(amount)),
       type,
       date: new Date().toLocaleDateString(),
     };
@@ -264,7 +264,7 @@ export default function NewPaymentPage() {
                   )}
                   {selectedTenant && paymentType === "RENT" && (
                     <p className="text-xs text-muted-foreground">
-                      Suggested: {formatCurrency(selectedTenant.monthlyRent)} (monthly rent)
+                      Suggested: {formatCurrency(selectedTenant.monthlyRent ?? 0)} (monthly rent)
                     </p>
                   )}
                 </div>
@@ -426,12 +426,12 @@ export default function NewPaymentPage() {
                 <div className="space-y-2 pt-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Monthly Rent:</span>
-                    <span>{formatCurrency(selectedTenant.monthlyRent)}</span>
+                    <span>{formatCurrency(selectedTenant.monthlyRent ?? 0)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Balance:</span>
-                    <span className={selectedTenant.balance > 0 ? "text-red-600" : "text-green-600"}>
-                      {formatCurrency(selectedTenant.balance)}
+                    <span className={selectedTenant.balance && selectedTenant.balance > 0 ? "text-red-600" : "text-green-600"}>
+                      {formatCurrency(selectedTenant.balance ?? 0)}
                     </span>
                   </div>
                 </div>

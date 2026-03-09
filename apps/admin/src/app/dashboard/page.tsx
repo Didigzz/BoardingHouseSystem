@@ -219,7 +219,7 @@ export default function DashboardPage() {
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "8px",
                     }}
-                    formatter={(value: number) => [formatCurrency(value), "Revenue"]}
+                    formatter={(value: number | undefined) => [formatCurrency(value ?? 0), "Revenue"] as [string, string]}
                   />
                   <Area
                     type="monotone"
@@ -263,7 +263,7 @@ export default function DashboardPage() {
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "8px",
                     }}
-                    formatter={(value: number) => [formatNumber(value), "Users"]}
+                    formatter={(value: number | undefined) => [formatNumber(value ?? 0), "Users"] as [string, string]}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -313,7 +313,7 @@ export default function DashboardPage() {
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "8px",
                     }}
-                    formatter={(value: number) => [formatNumber(value), "Bookings"]}
+                    formatter={(value: number | undefined) => [formatNumber(value ?? 0), "Bookings"] as [string, string]}
                   />
                   <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                 </BarChart>

@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -54,9 +54,9 @@ const commonAmenities = [
 
 const roomSchema = z.object({
   roomNumber: z.string().min(1, "Room number is required"),
-  floor: z.coerce.number().min(1, "Floor must be at least 1"),
-  capacity: z.coerce.number().min(1, "Capacity must be at least 1"),
-  monthlyRate: z.coerce.number().min(0, "Monthly rate must be a positive number"),
+  floor: z.preprocess((val) => (val === "" || val === undefined ? 1 : Number(val)), z.number().min(1, "Floor must be at least 1")),
+  capacity: z.preprocess((val) => (val === "" || val === undefined ? 1 : Number(val)), z.number().min(1, "Capacity must be at least 1")),
+  monthlyRate: z.preprocess((val) => (val === "" || val === undefined ? 0 : Number(val)), z.number().min(0, "Monthly rate must be a positive number")),
   description: z.string().optional(),
   status: z.enum(["AVAILABLE", "OCCUPIED", "MAINTENANCE"]),
 });
@@ -79,14 +79,14 @@ export default function NewRoomPage() {
     watch,
     formState: { errors },
   } = useForm<RoomFormData>({
-    resolver: zodResolver(roomSchema),
+    resolver: zodResolver(roomSchema) as unknown as Resolver<RoomFormData>,
     defaultValues: {
       roomNumber: "",
       floor: 1,
       capacity: 1,
       monthlyRate: 0,
       description: "",
-      status: "AVAILABLE",
+      status: "AVAILABLE" as const,
     },
   });
 

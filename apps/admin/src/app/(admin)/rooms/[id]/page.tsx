@@ -99,7 +99,7 @@ export default function RoomDetailPage({
 
   const statusInfo = statusConfig[room.status];
   const StatusIcon = statusInfo.icon;
-  const occupancyRate = Math.round((room.currentTenants / room.capacity) * 100);
+  const occupancyRate = Math.round(((room.currentTenants?.length || 0) / room.capacity) * 100);
 
   const handleDelete = () => {
     // In production, this would be an API call
@@ -187,7 +187,7 @@ export default function RoomDetailPage({
               <CardHeader className="pb-2">
                 <CardDescription>Occupancy</CardDescription>
                 <CardTitle className="text-2xl">
-                  {room.currentTenants} / {room.capacity}
+                  {room.currentTenants?.length || 0} / {room.capacity}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -206,7 +206,7 @@ export default function RoomDetailPage({
               <CardHeader className="pb-2">
                 <CardDescription>Available Slots</CardDescription>
                 <CardTitle className="text-2xl">
-                  {room.capacity - room.currentTenants}
+                  {room.capacity - (room.currentTenants?.length || 0)}
                 </CardTitle>
               </CardHeader>
             </Card>
@@ -255,7 +255,7 @@ export default function RoomDetailPage({
                           </div>
                           <div className="text-right">
                             <p className="font-medium">
-                              {formatCurrency(tenant.monthlyRent)}
+                              {formatCurrency(tenant.monthlyRent ?? 0)}
                             </p>
                             <p className="text-sm text-muted-foreground">
                               Since {formatDate(tenant.moveInDate)}
@@ -371,7 +371,7 @@ export default function RoomDetailPage({
                       <div>
                         <p className="font-medium">Room Created</p>
                         <p className="text-sm text-muted-foreground">
-                          {formatDate(room.createdAt)}
+                          {formatDate(room.createdAt || new Date())}
                         </p>
                       </div>
                     </div>
@@ -382,7 +382,7 @@ export default function RoomDetailPage({
                       <div>
                         <p className="font-medium">Last Updated</p>
                         <p className="text-sm text-muted-foreground">
-                          {formatDate(room.updatedAt)}
+                          {formatDate(room.updatedAt || new Date())}
                         </p>
                       </div>
                     </div>
@@ -436,7 +436,7 @@ export default function RoomDetailPage({
               <CardTitle>Amenities</CardTitle>
             </CardHeader>
             <CardContent>
-              {room.amenities.length > 0 ? (
+              {room.amenities && room.amenities.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {room.amenities.map((amenity) => (
                     <Badge key={amenity} variant="secondary">

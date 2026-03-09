@@ -14,7 +14,6 @@ import {
   Settings,
 } from "lucide-react";
 import { Button } from "@bhms/ui";
-import { Badge } from "@bhms/ui";
 import {
   Card,
   CardContent,
@@ -22,7 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@bhms/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bhms/ui";
+import { Tabs, TabsList, TabsTrigger } from "@bhms/ui";
 import { mockNotifications } from "@/lib/mock-data";
 import { formatDateTime, cn } from "@/lib/utils";
 import type { Notification } from "@/types";

@@ -24,6 +24,7 @@ import {
   Loader2,
   AlertTriangle,
 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@bhms/ui";
 import { Input } from "@bhms/ui";
 import { Label } from "@bhms/ui";
@@ -355,10 +356,11 @@ export default function NewPropertyPage() {
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
                   {images.map((image, index) => (
                     <div key={index} className="relative aspect-video rounded-lg overflow-hidden border">
-                      <img
+                      <Image
                         src={image}
                         alt={`Property image ${index + 1}`}
-                        className="object-cover w-full h-full"
+                        fill
+                        className="object-cover"
                       />
                       <button
                         type="button"

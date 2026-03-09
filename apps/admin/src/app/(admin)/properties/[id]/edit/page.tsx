@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -56,9 +56,9 @@ const propertySchema = z.object({
   contactEmail: z.string().email("Invalid email").optional().or(z.literal("")),
   contactPhone: z.string().optional(),
   managerName: z.string().optional(),
-  parkingSpaces: z.coerce.number().min(0).optional(),
+  parkingSpaces: z.preprocess((val) => (val === "" || val === undefined ? 0 : Number(val)), z.number().min(0).optional()),
   parkingType: z.enum(["free", "paid", "none"]).optional(),
-  parkingRate: z.coerce.number().min(0).optional(),
+  parkingRate: z.preprocess((val) => (val === "" || val === undefined ? 0 : Number(val)), z.number().min(0).optional()),
 });
 
 type PropertyFormData = z.infer<typeof propertySchema>;
@@ -73,11 +73,15 @@ export default function EditPropertyPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [location, setLocation] = useState<GeoLocation | undefined>(property?.location);
-  const [images, setImages] = useState<PropertyImage[]>(property?.images || []);
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(
-    property?.amenities?.map((a) => a.id) || []
+  const [images, setImages] = useState<PropertyImage[]>(
+    property?.images?.map((url, i) => ({ id: `img-${i}`, url, alt: '', order: i, isPrimary: i === 0 })) || []
   );
-  const [rules, setRules] = useState<PropertyRule[]>(property?.rules || []);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>(
+    property?.amenities || []
+  );
+  const [rules, setRules] = useState<PropertyRule[]>(
+    (property?.rules as PropertyRule[]) || []
+  );
   const [nearbyLandmarks, setNearbyLandmarks] = useState<string[]>(
     property?.nearbyLandmarks || []
   );
@@ -91,7 +95,7 @@ export default function EditPropertyPage() {
     watch,
     formState: { errors },
   } = useForm<PropertyFormData>({
-    resolver: zodResolver(propertySchema),
+    resolver: zodResolver(propertySchema) as unknown as Resolver<PropertyFormData>,
     defaultValues: {
       name: property?.name || "",
       address: property?.address || "",
@@ -118,7 +122,7 @@ export default function EditPropertyPage() {
       ...data,
       location,
       images,
-      amenities: propertyAmenities.filter((a) => selectedAmenities.includes(a.id)),
+      amenities: selectedAmenities.map((name) => ({ id: name, name, icon: 'sparkles' })),
       rules,
       nearbyLandmarks,
       publicTransport,
@@ -148,21 +152,23 @@ export default function EditPropertyPage() {
   };
 
   const addRule = () => {
-    setRules((prev) => [
-      ...prev,
-      {
-        id: `rule-${Date.now()}`,
-        title: "",
-        description: "",
-        category: "general",
-      },
-    ]);
+    const newRule: PropertyRule = {
+      id: `rule-${Date.now()}`,
+      title: "",
+      description: "",
+      icon: "",
+      category: "general",
+    };
+    setRules((prev) => [...prev, newRule]);
   };
 
   const updateRule = (index: number, field: keyof PropertyRule, value: string) => {
     setRules((prev) => {
       const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
+      const rule = updated[index];
+      if (rule) {
+        updated[index] = { ...rule, [field]: value } as PropertyRule;
+      }
       return updated;
     });
   };
@@ -524,24 +530,21 @@ export default function EditPropertyPage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {propertyAmenities.map((amenity) => (
+                {propertyAmenities.map((amenityName) => (
                   <div
-                    key={amenity.id}
+                    key={amenityName}
                     className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors ${
-                      selectedAmenities.includes(amenity.id)
+                      selectedAmenities.includes(amenityName)
                         ? "border-primary bg-primary/5"
                         : "hover:bg-muted/50"
                     }`}
-                    onClick={() => toggleAmenity(amenity.id)}
+                    onClick={() => toggleAmenity(amenityName)}
                   >
                     <Switch
-                      checked={selectedAmenities.includes(amenity.id)}
-                      onCheckedChange={() => toggleAmenity(amenity.id)}
+                      checked={selectedAmenities.includes(amenityName)}
+                      onCheckedChange={() => toggleAmenity(amenityName)}
                     />
-                    <span className="text-sm font-medium">{amenity.name}</span>
-                    <Badge variant="outline" className="ml-auto text-xs">
-                      {amenity.category}
-                    </Badge>
+                    <span className="text-sm font-medium">{amenityName}</span>
                   </div>
                 ))}
               </div>

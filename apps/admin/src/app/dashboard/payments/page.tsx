@@ -365,7 +365,7 @@ export default function PaymentsPage() {
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px",
                   }}
-                  formatter={(value: number) => [formatCurrency(value), "Revenue"]}
+                  formatter={(value: number | undefined) => [formatCurrency(value ?? 0), "Revenue"] as [string, string]}
                 />
                 <Area
                   type="monotone"

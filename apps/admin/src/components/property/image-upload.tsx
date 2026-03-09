@@ -72,7 +72,7 @@ export function ImageUpload({ value, onChange, maxImages = 10 }: ImageUploadProp
     const newImages = value.filter((img) => img.id !== id);
     // If we removed the primary image, set the first image as primary
     if (newImages.length > 0 && !newImages.some((img) => img.isPrimary)) {
-      newImages[0].isPrimary = true;
+      newImages[0]!.isPrimary = true;
     }
     onChange(newImages);
   };
@@ -95,7 +95,9 @@ export function ImageUpload({ value, onChange, maxImages = 10 }: ImageUploadProp
 
     const newImages = [...value];
     const [draggedImage] = newImages.splice(draggedIndex, 1);
-    newImages.splice(index, 0, draggedImage);
+    if (draggedImage) {
+      newImages.splice(index, 0, draggedImage);
+    }
 
     // Update order
     newImages.forEach((img, i) => {

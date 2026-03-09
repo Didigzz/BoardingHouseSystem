@@ -4,7 +4,7 @@ import * as React from "react";
 import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -44,7 +44,7 @@ const maintenanceSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
   category: z.enum(["PLUMBING", "ELECTRICAL", "HVAC", "APPLIANCE", "STRUCTURAL", "OTHER"]),
-  estimatedCost: z.coerce.number().min(0).optional(),
+  estimatedCost: z.preprocess((val) => (val === "" || val === undefined ? 0 : Number(val)), z.number().min(0).optional()),
   assignedTo: z.string().optional(),
 });
 
@@ -89,13 +89,13 @@ function NewMaintenanceContent() {
     watch,
     formState: { errors },
   } = useForm<MaintenanceFormData>({
-    resolver: zodResolver(maintenanceSchema),
+    resolver: zodResolver(maintenanceSchema) as unknown as Resolver<MaintenanceFormData>,
     defaultValues: {
       roomId: roomIdParam || "",
       title: "",
       description: "",
-      priority: "MEDIUM",
-      category: "OTHER",
+      priority: "MEDIUM" as const,
+      category: "OTHER" as const,
       estimatedCost: 0,
       assignedTo: "",
     },
@@ -376,7 +376,7 @@ function NewMaintenanceContent() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Occupants</span>
-                  <span>{selectedRoom.currentTenants} / {selectedRoom.capacity}</span>
+                  <span>{selectedRoom.currentTenants?.length || 0} / {selectedRoom.capacity}</span>
                 </div>
               </CardContent>
             </Card>

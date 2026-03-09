@@ -1,6 +1,27 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "NODE_ENV",
+    "NEXTAUTH_URL",
+    "NEXTAUTH_SECRET",
+    "DATABASE_URL",
+    "API_URL",
+    "REDIS_URL",
+    "BOARDER_URL",
+    "LANDLORD_URL",
+    "ADMIN_URL",
+    "PUBLIC_URL",
+    "NEXT_PUBLIC_API_URL",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "GCP_BUCKET",
+    "GCP_PROJECT_ID",
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASS"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -14,8 +35,18 @@
       "dependsOn": ["^build"],
       "cache": false
     },
+    "lint:fix": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^typecheck"],
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx"]
     },
     "clean": {
       "cache": false
@@ -28,6 +59,9 @@
       "persistent": true
     },
     "db:seed": {
+      "cache": false
+    },
+    "db:migrate": {
       "cache": false
     },
     "db:generate": {

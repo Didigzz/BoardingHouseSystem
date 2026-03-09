@@ -60,6 +60,11 @@ import {
   getTenantsByProperty,
   getPaymentsByProperty,
   getExpensesByProperty,
+  type MockPayment,
+  type MockExpense,
+  type MockRoom,
+  type MockTenant,
+  type MockRevenueData,
 } from "@/lib/mock-data";
 import { formatCurrency, cn } from "@/lib/utils";
 import { useToast } from "@bhms/ui";
@@ -95,16 +100,16 @@ export default function ReportsPage() {
 
   // Calculate metrics
   const totalRevenue = payments
-    .filter((p) => p.status === "PAID")
-    .reduce((sum, p) => sum + p.amount, 0);
-  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+    .filter((p: MockPayment) => p.status === "PAID")
+    .reduce((sum: number, p: MockPayment) => sum + p.amount, 0);
+  const totalExpenses = expenses.reduce((sum: number, e: MockExpense) => sum + e.amount, 0);
   const netIncome = totalRevenue - totalExpenses;
 
   const totalRooms = rooms.length;
-  const occupiedRooms = rooms.filter((r) => r.status === "OCCUPIED").length;
+  const occupiedRooms = rooms.filter((r: MockRoom) => r.status === "OCCUPIED").length;
   const occupancyRate = totalRooms > 0 ? Math.round((occupiedRooms / totalRooms) * 100) : 0;
 
-  const activeTenants = tenants.filter((t) => t.isActive).length;
+  const activeTenants = tenants.filter((t: MockTenant) => t.isActive).length;
 
   // Occupancy trend data
   const occupancyTrendData = [
@@ -118,20 +123,20 @@ export default function ReportsPage() {
 
   // Room status distribution
   const roomStatusData = [
-    { name: "Occupied", value: rooms.filter((r) => r.status === "OCCUPIED").length },
-    { name: "Available", value: rooms.filter((r) => r.status === "AVAILABLE").length },
-    { name: "Maintenance", value: rooms.filter((r) => r.status === "MAINTENANCE").length },
-  ].filter((d) => d.value > 0);
+    { name: "Occupied", value: rooms.filter((r: MockRoom) => r.status === "OCCUPIED").length },
+    { name: "Available", value: rooms.filter((r: MockRoom) => r.status === "AVAILABLE").length },
+    { name: "Maintenance", value: rooms.filter((r: MockRoom) => r.status === "MAINTENANCE").length },
+  ].filter((d: { name: string; value: number }) => d.value > 0);
 
   // Payment status distribution
   const paymentStatusData = [
-    { name: "Paid", value: payments.filter((p) => p.status === "PAID").length },
-    { name: "Pending", value: payments.filter((p) => p.status === "PENDING").length },
-    { name: "Overdue", value: payments.filter((p) => p.status === "OVERDUE").length },
-  ].filter((d) => d.value > 0);
+    { name: "Paid", value: payments.filter((p: MockPayment) => p.status === "PAID").length },
+    { name: "Pending", value: payments.filter((p: MockPayment) => p.status === "PENDING").length },
+    { name: "Overdue", value: payments.filter((p: MockPayment) => p.status === "OVERDUE").length },
+  ].filter((d: { name: string; value: number }) => d.value > 0);
 
   // Collection efficiency - use deterministic values for rendering
-  const collectionData = revenueData.map((d, i) => ({
+  const collectionData = revenueData.map((d: MockRevenueData, i: number) => ({
     ...d,
     collected: d.revenue * (0.85 + (i * 0.02)),
     target: d.revenue * 1.1,

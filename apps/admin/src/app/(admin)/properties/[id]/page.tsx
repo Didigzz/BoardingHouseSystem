@@ -53,7 +53,7 @@ import {
   cn,
   getStatusColor,
 } from "@/lib/utils";
-import type { Property, PropertyAmenity } from "@/types";
+import type { Property, PropertyAmenity, PropertyRule } from "@/types";
 
 // Lazy load map component
 const MapView = React.lazy(() => import("@/components/map/map-view"));
@@ -109,8 +109,8 @@ function ImageGallery({ images }: { images: Property["images"] }) {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={selectedImage.url}
-            alt={selectedImage.alt}
+            src={selectedImage?.url}
+            alt={selectedImage?.alt}
             className="h-full w-full object-cover transition-transform group-hover:scale-105"
           />
         </div>
@@ -198,8 +198,8 @@ function ImageGallery({ images }: { images: Property["images"] }) {
           </Button>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={selectedImage.url}
-            alt={selectedImage.alt}
+            src={selectedImage?.url || ''}
+            alt={selectedImage?.alt || ''}
             className="max-h-[90vh] max-w-[90vw] object-contain"
             onClick={(e) => e.stopPropagation()}
           />
@@ -256,7 +256,7 @@ export default function PropertyDetailPage() {
     );
   }
 
-  const occupancyRate = calculateOccupancyRate(property.occupiedRooms, property.totalRooms);
+  const occupancyRate = calculateOccupancyRate(property.occupiedRooms ?? 0, property.totalRooms ?? 0);
   const availableRooms = rooms.filter((r) => r.status === "AVAILABLE").length;
   const occupiedRooms = rooms.filter((r) => r.status === "OCCUPIED").length;
   const maintenanceRooms = rooms.filter((r) => r.status === "MAINTENANCE").length;
@@ -280,7 +280,7 @@ export default function PropertyDetailPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className={getStatusColor(property.status)}>
+          <Badge variant="secondary" className={cn(getStatusColor(property.status))}>
             {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
           </Badge>
           <Button asChild>
@@ -299,7 +299,7 @@ export default function PropertyDetailPage() {
           {/* Image Gallery */}
           <Card>
             <CardContent className="p-4">
-              <ImageGallery images={property.images} />
+              <ImageGallery images={property.images?.map((url, i) => ({ id: `img-${i}`, url, alt: '', order: i, isPrimary: i === 0 })) || []} />
             </CardContent>
           </Card>
 
@@ -374,8 +374,8 @@ export default function PropertyDetailPage() {
                 <CardContent>
                   {property.amenities && property.amenities.length > 0 ? (
                     <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-                      {property.amenities.map((amenity) => (
-                        <AmenityBadge key={amenity.id} amenity={amenity} />
+                      {property.amenities.map((name) => (
+                        <AmenityBadge key={name} amenity={{ id: name, name, icon: 'sparkles' }} />
                       ))}
                     </div>
                   ) : (
@@ -401,7 +401,7 @@ export default function PropertyDetailPage() {
                           <h4 className="font-semibold">{rule.title}</h4>
                           <p className="text-sm text-muted-foreground">{rule.description}</p>
                           <Badge variant="outline" className="mt-1 text-xs">
-                            {rule.category}
+                            {(rule as PropertyRule).category || 'general'}
                           </Badge>
                         </div>
                       ))}
@@ -499,7 +499,7 @@ export default function PropertyDetailPage() {
                   <TrendingUp className="h-4 w-4 text-green-600" />
                   <span>Monthly Revenue</span>
                 </div>
-                <span className="font-bold">{formatCurrency(property.monthlyRevenue)}</span>
+                <span className="font-bold">{formatCurrency(property.monthlyRevenue ?? 0)}</span>
               </div>
             </CardContent>
           </Card>
@@ -585,11 +585,11 @@ export default function PropertyDetailPage() {
             <CardContent className="pt-6 space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <span>Created: {formatDate(property.createdAt)}</span>
+                <span>Created: {formatDate(property.createdAt || new Date())}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
-                <span>Last updated: {formatDate(property.updatedAt)}</span>
+                <span>Last updated: {formatDate(property.updatedAt || new Date())}</span>
               </div>
             </CardContent>
           </Card>

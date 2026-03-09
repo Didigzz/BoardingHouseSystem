@@ -51,7 +51,7 @@ import {
 } from "@bhms/ui";
 import { Label } from "@bhms/ui";
 import { useProperty } from "@/lib/property-context";
-import { getExpensesByProperty, mockExpenses } from "@/lib/mock-data";
+import { getExpensesByProperty, mockExpenses, type MockExpense } from "@/lib/mock-data";
 import { formatCurrency, formatDate, cn } from "@/lib/utils";
 import { useToast } from "@bhms/ui";
 
@@ -86,7 +86,7 @@ export default function ExpensesPage() {
     ? getExpensesByProperty(currentProperty.id)
     : mockExpenses;
 
-  const filteredExpenses = expenses.filter((expense) => {
+  const filteredExpenses = expenses.filter((expense: MockExpense) => {
     const matchesSearch =
       expense.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       expense.vendor?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -95,7 +95,7 @@ export default function ExpensesPage() {
     return matchesSearch && matchesCategory;
   });
 
-  const totalExpenses = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+  const totalExpenses = filteredExpenses.reduce((sum: number, e: MockExpense) => sum + e.amount, 0);
 
   const handleAddExpense = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -235,7 +235,7 @@ export default function ExpensesPage() {
             <CardTitle className="text-2xl">
               {formatCurrency(
                 expenses
-                  .filter((e) => {
+                  .filter((e: MockExpense) => {
                     const date = new Date(e.date);
                     const now = new Date();
                     return (
@@ -243,7 +243,7 @@ export default function ExpensesPage() {
                       date.getFullYear() === now.getFullYear()
                     );
                   })
-                  .reduce((sum, e) => sum + e.amount, 0)
+                  .reduce((sum: number, e: MockExpense) => sum + e.amount, 0)
               )}
             </CardTitle>
           </CardHeader>
@@ -252,7 +252,7 @@ export default function ExpensesPage() {
           <CardHeader className="pb-2">
             <CardDescription>Largest Expense</CardDescription>
             <CardTitle className="text-2xl">
-              {formatCurrency(Math.max(...expenses.map((e) => e.amount), 0))}
+              {formatCurrency(Math.max(...expenses.map((e: MockExpense) => e.amount), 0))}
             </CardTitle>
           </CardHeader>
         </Card>
@@ -297,7 +297,7 @@ export default function ExpensesPage() {
       <Card>
         <CardContent className="p-0">
           <div className="divide-y">
-            {filteredExpenses.map((expense) => (
+            {filteredExpenses.map((expense: MockExpense) => (
               <div
                 key={expense.id}
                 className="flex items-center justify-between p-4 hover:bg-muted/50"

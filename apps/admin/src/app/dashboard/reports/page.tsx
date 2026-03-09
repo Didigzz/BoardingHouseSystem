@@ -271,10 +271,10 @@ export default function ReportsPage() {
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
                         }}
-                        formatter={(value: number, name: string) => [
-                          name === "revenue" ? formatCurrency(value) : value,
+                        formatter={(value: number | undefined, name: string | undefined) => [
+                          name === "revenue" ? formatCurrency(value ?? 0) : value ?? 0,
                           name === "revenue" ? "Revenue" : "Bookings",
-                        ]}
+                        ] as [string | number, string]}
                       />
                       <Area
                         type="monotone"
@@ -317,7 +317,7 @@ export default function ReportsPage() {
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
                         }}
-                        formatter={(value: number) => [`${value}%`, "Share"]}
+                        formatter={(value: number | undefined) => [`${value ?? 0}%`, "Share"] as [string, string]}
                       />
                     </PieChart>
                   </ResponsiveContainer>
@@ -411,7 +411,7 @@ export default function ReportsPage() {
                         outerRadius={100}
                         dataKey="value"
                         label={({ name, percent }) =>
-                          `${name} ${(percent * 100).toFixed(0)}%`
+                          `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
                         }
                       >
                         {bookingStatusData.map((entry, index) => (
@@ -424,7 +424,7 @@ export default function ReportsPage() {
                           border: "1px solid hsl(var(--border))",
                           borderRadius: "8px",
                         }}
-                        formatter={(value: number) => [formatNumber(value), "Bookings"]}
+                        formatter={(value: number | undefined) => [formatNumber(value ?? 0), "Bookings"] as [string, string]}
                       />
                     </PieChart>
                   </ResponsiveContainer>

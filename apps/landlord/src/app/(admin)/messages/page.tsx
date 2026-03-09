@@ -9,9 +9,6 @@ import {
   MoreVertical,
   Phone,
   Video,
-  User,
-  Building2,
-  Clock,
   Check,
   CheckCheck,
 } from "lucide-react";
@@ -21,7 +18,6 @@ import { Badge } from "@bhms/ui";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@bhms/ui";

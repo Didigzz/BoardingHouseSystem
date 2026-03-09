@@ -2,13 +2,8 @@
 
 import {
   Building2,
-  CreditCard,
   DoorOpen,
-  TrendingUp,
-  Users,
   CalendarCheck,
-  AlertCircle,
-  Clock,
   MessageSquare,
   Eye,
   Wallet,
@@ -21,9 +16,6 @@ import {
   StatsCard,
   RevenueChart,
   OccupancyChart,
-  RecentPayments,
-  MaintenanceOverview,
-  UpcomingLeases,
 } from "@/components/dashboard";
 import { Skeleton, Button, Badge, Card, CardContent, CardHeader, CardTitle, CardDescription } from "@bhms/ui";
 

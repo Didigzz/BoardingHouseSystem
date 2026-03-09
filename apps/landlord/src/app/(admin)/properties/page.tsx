@@ -33,7 +33,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useProperty } from "@/lib/property-context";
 import { mockProperties } from "@/lib/mock-data";
 import { formatCurrency, cn, getStatusColor, calculateOccupancyRate } from "@/lib/utils";
 import type { Property } from "@/types";
@@ -141,7 +140,6 @@ function PropertyCard({ property }: { property: Property }) {
 }
 
 export default function PropertiesPage() {
-  const { currentProperty, setCurrentProperty } = useProperty();
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const filteredProperties = mockProperties.filter((property) =>

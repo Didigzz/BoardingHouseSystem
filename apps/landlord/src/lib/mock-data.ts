@@ -767,12 +767,13 @@ export function getDashboardStats(propertyId?: string): DashboardStats {
 
 // ============ CHART DATA ============
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getRevenueData(propertyId?: string): RevenueData[] {
   const months = [
     "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"
   ];
-  
-  return months.map((month, index) => ({
+
+  return months.map((month) => ({
     month,
     revenue: 100000 + Math.random() * 80000,
     expenses: 30000 + Math.random() * 25000,
@@ -780,6 +781,7 @@ export function getRevenueData(propertyId?: string): RevenueData[] {
   }));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getOccupancyData(propertyId?: string): OccupancyData[] {
   const months = [
     "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"

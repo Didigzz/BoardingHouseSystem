@@ -2,13 +2,11 @@
 
 import * as React from "react";
 import {
-  Settings,
   Building2,
   Bell,
   Shield,
   Palette,
   Globe,
-  Database,
   Mail,
   Key,
 } from "lucide-react";

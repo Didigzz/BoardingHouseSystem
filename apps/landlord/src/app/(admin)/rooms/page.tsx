@@ -32,7 +32,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bhms/ui";
+import { Tabs, TabsList, TabsTrigger } from "@bhms/ui";
 import { useProperty } from "@/lib/property-context";
 import { getRoomsByProperty, mockRooms } from "@/lib/mock-data";
 import { formatCurrency, cn, getStatusColor } from "@/lib/utils";

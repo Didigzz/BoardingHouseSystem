@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useProperty } from "@/lib/property-context";
-import { cn, getInitials } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { mockNotifications } from "@/lib/mock-data";
 
 export function Header() {

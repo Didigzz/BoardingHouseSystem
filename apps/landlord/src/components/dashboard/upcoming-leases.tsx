@@ -11,7 +11,7 @@ import {
 import { Badge } from "@bhms/ui";
 import { AlertTriangle, Clock } from "lucide-react";
 import { mockTenants } from "@/lib/mock-data";
-import { formatDate, formatCurrency } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 interface UpcomingLeasesProps {
   propertyId?: string;

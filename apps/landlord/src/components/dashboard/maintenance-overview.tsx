@@ -10,7 +10,7 @@ import {
 } from "@bhms/ui";
 import { Badge } from "@bhms/ui";
 import { mockMaintenanceRequests } from "@/lib/mock-data";
-import { cn, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 interface MaintenanceOverviewProps {
   propertyId?: string;

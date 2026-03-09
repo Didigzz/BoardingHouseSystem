@@ -10,7 +10,6 @@ import {
   Search,
   Plus,
   Eye,
-  Edit,
   Building2,
   Users,
   DollarSign,
@@ -25,9 +24,6 @@ import { Badge } from "@bhms/ui";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@bhms/ui";
 import {
   Select,
@@ -36,7 +32,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@bhms/ui";
-import { Label } from "@bhms/ui";
 import { cn } from "@/lib/utils";
 import { MALAYBALAY_BOUNDS } from "@/components/map/map-picker";
 
@@ -409,7 +404,7 @@ export default function MapViewPage() {
       setEditingPropertyId(null);
       setPendingLat(null);
       setPendingLng(null);
-    } catch (error) {
+    } catch {
       setToast({
         message: "Failed to save location. Please try again.",
         type: "error",

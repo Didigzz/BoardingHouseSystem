@@ -14,7 +14,6 @@ import {
 import {
   Search,
   History,
-  Filter,
   Download,
   User,
   FileEdit,

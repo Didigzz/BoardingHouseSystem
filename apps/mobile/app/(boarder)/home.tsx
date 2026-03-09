@@ -23,14 +23,33 @@ export default function BoarderHomeScreen() {
   const { user } = useAuthStore();
   const [refreshing, setRefreshing] = useState(false);
 
-  const { data: boarder, isLoading, refetch } = trpc.boarder.getCurrent.useQuery(undefined, {
-    enabled: !!user,
-    retry: false,
-  });
+  // Mock data - replace with tRPC query when API is ready
+  const [isLoading, setIsLoading] = useState(false);
+
+  const mockBoarder = {
+    firstName: user?.name?.split(' ')[0] || 'Boarder',
+    moveInDate: '2024-01-15',
+    room: {
+      roomNumber: '101',
+      floor: 1,
+      monthlyRate: { toNumber: () => 5000 },
+      status: 'OCCUPIED',
+      amenities: ['Aircon', 'WiFi', 'Table', 'Chair'],
+    },
+    payments: [
+      {
+        amount: { toNumber: () => 5000 },
+        dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'PENDING',
+      },
+    ],
+  };
+
+  const boarder = mockBoarder;
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await refetch();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setRefreshing(false);
   };
 

@@ -14,10 +14,7 @@ interface LandlordCtx<TInput = unknown> {
   input: TInput;
 }
 
-type GetAllInput = z.infer<typeof propertyFilterSchema> & {
-  page?: number;
-  limit?: number;
-};
+type GetAllInput = z.infer<typeof getAllInputSchema>;
 
 type GetByIdInput = z.infer<typeof getPropertyByIdSchema>;
 type GetMyPropertiesInput = void;
@@ -64,7 +61,7 @@ export const createPropertyRouter = (
             description?: { contains: string; mode: "insensitive" };
             address?: { contains: string; mode: "insensitive" };
           }>;
-          price?: {
+          monthlyRent?: {
             gte?: number;
             lte?: number;
           };
@@ -83,9 +80,9 @@ export const createPropertyRouter = (
         }
 
         if (priceMin !== undefined || priceMax !== undefined) {
-          where.price = {};
-          if (priceMin !== undefined) where.price.gte = priceMin;
-          if (priceMax !== undefined) where.price.lte = priceMax;
+          where.monthlyRent = {};
+          if (priceMin !== undefined) where.monthlyRent.gte = priceMin;
+          if (priceMax !== undefined) where.monthlyRent.lte = priceMax;
         }
 
         if (city) {
@@ -164,7 +161,7 @@ export const createPropertyRouter = (
       }),
 
     // Get landlord's own properties
-    getMyProperties: landlordProc.query(async ({ ctx }: LandlordCtx) => {
+    getMyProperties: landlordProc.query(async ({ ctx }: LandlordCtx<void>) => {
       const landlordProfile = await ctx.db.landlordProfile.findUnique({
         where: { userId: ctx.session.user.id },
       });
@@ -190,7 +187,7 @@ export const createPropertyRouter = (
     // Create a new property
     create: landlordProc
       .input(createPropertySchema)
-      .mutation(async ({ ctx, input }: LandlordCtx) => {
+      .mutation(async ({ ctx, input }: LandlordCtx<CreatePropertyInput>) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -213,7 +210,7 @@ export const createPropertyRouter = (
     // Update a property
     update: landlordProc
       .input(updatePropertySchema)
-      .mutation(async ({ ctx, input }: LandlordCtx) => {
+      .mutation(async ({ ctx, input }: LandlordCtx<UpdatePropertyInput>) => {
         const { id, ...data } = input;
 
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
@@ -248,7 +245,7 @@ export const createPropertyRouter = (
     // Delete a property
     delete: landlordProc
       .input(deletePropertySchema)
-      .mutation(async ({ ctx, input }: LandlordCtx) => {
+      .mutation(async ({ ctx, input }: LandlordCtx<DeletePropertyInput>) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });

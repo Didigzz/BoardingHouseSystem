@@ -12,8 +12,6 @@ packages/
 â”œâ”€â”€ config/           # Shared configurations
 â”œâ”€â”€ database/         # Prisma database client
 â”œâ”€â”€ eslint-config/    # ESLint configurations
-â”œâ”€â”€ layouts/          # âš ï¸ DEPRECATED - consolidated into @havenspace/shared
-â”œâ”€â”€ providers/        # âš ï¸ DEPRECATED - consolidated into @havenspace/shared
 â”œâ”€â”€ shared/           # Shared business logic, utilities, layouts, providers
 â”œâ”€â”€ types/            # TypeScript type definitions
 â”œâ”€â”€ typescript-config/# TypeScript configurations
@@ -61,31 +59,6 @@ packages/
 - Formatters, validators, and general utilities
 - Used by: All apps
 
-## Package Consolidation (March 2026)
-
-The following packages have been **consolidated** into `@havenspace/shared`:
-
-- `@havenspace/layouts` â†’ Use `@havenspace/shared/layouts` instead
-- `@havenspace/providers` â†’ Use `@havenspace/shared/providers` instead
-
-### Migration
-
-```json
-// package.json - Before
-{
-  "dependencies": {
-    "@havenspace/layouts": "workspace:*",
-    "@havenspace/providers": "workspace:*"
-  }
-}
-
-// package.json - After
-{
-  "dependencies": {
-    "@havenspace/shared": "workspace:*"
-  }
-}
-```
 
 ```typescript
 // Imports - Before

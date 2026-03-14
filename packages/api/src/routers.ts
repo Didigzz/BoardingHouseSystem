@@ -1,4 +1,4 @@
-import { createTRPCRouter } from './trpc';
+import { createTRPCRouter, defaultAuthMiddleware } from './trpc';
 import type { AnyRouter } from '@trpc/server';
 import {
   createBoarderRouter,
@@ -11,6 +11,7 @@ import {
   createPropertyRouter,
   createBookingRouter,
 } from './routers/index';
+import type { MiddlewareFn } from './types/index';
 
 /**
  * Factory function to create the app router with platform-specific procedures
@@ -19,19 +20,21 @@ import {
  * @param adminProcedure - Admin-only procedure (optional, defaults to protectedProcedure)
  * @param landlordProcedure - Landlord-only procedure (optional, defaults to protectedProcedure)
  * @param boarderProcedure - Boarder-only procedure (optional, defaults to protectedProcedure)
+ * @param authMiddleware - Auth middleware for user router (optional, defaults to defaultAuthMiddleware)
  */
 export const createAppRouter = (
   protectedProcedure: any,
   adminProcedure?: any,
   landlordProcedure?: any,
-  boarderProcedure?: any
+  boarderProcedure?: any,
+  authMiddleware?: MiddlewareFn
 ): AnyRouter => {
   return createTRPCRouter({
     boarder: createBoarderRouter(protectedProcedure),
     payment: createPaymentRouter(protectedProcedure),
     room: createRoomRouter(protectedProcedure),
     utility: createUtilityRouter(protectedProcedure),
-    user: createUserRouter(protectedProcedure),
+    user: createUserRouter(protectedProcedure, authMiddleware || defaultAuthMiddleware),
     dashboard: createDashboardRouter(protectedProcedure),
     admin: createAdminRouter(protectedProcedure, adminProcedure || protectedProcedure),
     property: createPropertyRouter(protectedProcedure, landlordProcedure),

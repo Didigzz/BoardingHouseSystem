@@ -133,7 +133,7 @@ export const createUtilityRouter = (protectedProcedure: any) => {
           orderBy: { readingDate: "asc" },
         });
 
-        return readings.map((reading) => ({
+        return readings.map((reading: any) => ({
           id: reading.id,
           room: reading.room.roomNumber,
           type: reading.type,

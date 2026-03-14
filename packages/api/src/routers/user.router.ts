@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure, createSensitiveProcedure } from "../trpc";
 import {
   loginSchema,
   registerSchema,
@@ -8,7 +8,8 @@ import {
 } from "@havenspace/validation";
 import bcrypt from "bcryptjs";
 import { TRPCError } from "@trpc/server";
-import type { TRPCContext, HavenSession } from "../types";
+import { generateToken } from "../lib/jwt";
+import { createAuthError } from "../lib/errors";
 
 // Type helpers
 type UserCreateInput = z.infer<typeof registerSchema>;
@@ -16,42 +17,51 @@ type LoginInput = z.infer<typeof loginSchema>;
 type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 
 interface AuthenticatedCtx {
-  ctx: TRPCContext & { session: HavenSession };
+  ctx: {
+    db: any;
+    session: {
+      user: {
+        id: string;
+        email?: string | null;
+        role: string;
+      };
+    };
+    headers: Headers;
+  };
+  input?: any;
 }
 
-export const createUserRouter = (protectedProcedure: any) => {
+export const createUserRouter = (protectedProcedure: any, authMiddleware: any) => {
+  // Sensitive procedure for password changes with strict rate limiting
+  const sensitiveProcedure = createSensitiveProcedure(authMiddleware);
+  
   return createTRPCRouter({
     login: publicProcedure
       .input(loginSchema)
-      .mutation(async ({ ctx, input }: { ctx: TRPCContext; input: LoginInput }) => {
+      .mutation(async ({ ctx, input }: { ctx: any; input: LoginInput }) => {
         const user = await ctx.db.user.findUnique({
           where: { email: input.email },
         });
 
         if (!user) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Invalid email or password",
-          });
+          throw createAuthError();
         }
 
         const isValid = await bcrypt.compare(input.password, user.password);
 
         if (!isValid) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Invalid email or password",
-          });
+          throw createAuthError();
         }
 
         // Return user data without password
         const { password, ...userWithoutPassword } = user;
 
-        // Generate a simple token (in production, use JWT)
-        const token = Buffer.from(JSON.stringify({
+        // Generate secure JWT token
+        const token = generateToken({
           userId: user.id,
-          email: user.email
-        })).toString('base64');
+          email: user.email,
+          role: user.role
+        });
 
         return {
           user: userWithoutPassword,
@@ -61,7 +71,7 @@ export const createUserRouter = (protectedProcedure: any) => {
 
     register: publicProcedure
       .input(registerSchema)
-      .mutation(async ({ ctx, input }: { ctx: TRPCContext; input: UserCreateInput }) => {
+      .mutation(async ({ ctx, input }: { ctx: any; input: UserCreateInput }) => {
         const existingUser = await ctx.db.user.findUnique({
           where: { email: input.email },
         });
@@ -84,11 +94,12 @@ export const createUserRouter = (protectedProcedure: any) => {
           },
         });
 
-        // Generate token for newly registered user
-        const token = Buffer.from(JSON.stringify({
+        // Generate secure JWT token for newly registered user
+        const token = generateToken({
           userId: user.id,
-          email: user.email
-        })).toString('base64');
+          email: user.email,
+          role: user.role
+        });
 
         return {
           user: { id: user.id, email: user.email, name: user.name, role: user.role },
@@ -96,7 +107,7 @@ export const createUserRouter = (protectedProcedure: any) => {
         };
       }),
 
-    getProfile: protectedProcedure.query(async ({ ctx }: AuthenticatedCtx) => {
+    getProfile: protectedProcedure.query(async ({ ctx }: { ctx: any }) => {
       return ctx.db.user.findUnique({
         where: { id: ctx.session.user.id },
         select: {
@@ -117,16 +128,16 @@ export const createUserRouter = (protectedProcedure: any) => {
           image: z.string().optional(),
         })
       )
-      .mutation(async ({ ctx, input }: AuthenticatedCtx) => {
+      .mutation(async ({ ctx, input }: { ctx: any; input: any }) => {
         return ctx.db.user.update({
           where: { id: ctx.session.user.id },
           data: input,
         });
       }),
 
-    changePassword: protectedProcedure
+    changePassword: sensitiveProcedure
       .input(changePasswordSchema)
-      .mutation(async ({ ctx, input }: { ctx: TRPCContext & { session: HavenSession }; input: ChangePasswordInput }) => {
+      .mutation(async ({ ctx, input }: { ctx: any; input: ChangePasswordInput }) => {
         const user = await ctx.db.user.findUnique({
           where: { id: ctx.session.user.id },
         });
@@ -138,10 +149,7 @@ export const createUserRouter = (protectedProcedure: any) => {
         const isValid = await bcrypt.compare(input.currentPassword, user.password);
 
         if (!isValid) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Current password is incorrect",
-          });
+          throw createAuthError();
         }
 
         const hashedPassword = await bcrypt.hash(input.newPassword, 12);

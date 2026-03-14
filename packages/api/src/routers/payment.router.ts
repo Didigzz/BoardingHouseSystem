@@ -47,7 +47,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
   return createTRPCRouter({
     getAll: protectedProcedure
       .input(getAllPaymentsSchema.optional())
-      .query(async ({ ctx, input }: AuthenticatedCtx) => {
+      .query(async ({ ctx, input }: AuthenticatedCtx<GetAllInput | undefined>) => {
         return ctx.db.payment.findMany({
           where: {
             status: input?.status,
@@ -74,7 +74,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
 
     getById: protectedProcedure
       .input(getPaymentByIdSchema)
-      .query(async ({ ctx, input }: AuthenticatedCtx) => {
+      .query(async ({ ctx, input }: AuthenticatedCtx<GetByIdInput>) => {
         return ctx.db.payment.findUnique({
           where: { id: input.id },
           include: {
@@ -87,7 +87,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
 
     create: protectedProcedure
       .input(createPaymentSchema)
-      .mutation(async ({ ctx, input }: AuthenticatedCtx) => {
+      .mutation(async ({ ctx, input }: AuthenticatedCtx<CreatePaymentInput>) => {
         return ctx.db.payment.create({
           data: input,
         });
@@ -95,7 +95,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
 
     update: protectedProcedure
       .input(updatePaymentSchema)
-      .mutation(async ({ ctx, input }: AuthenticatedCtx) => {
+      .mutation(async ({ ctx, input }: AuthenticatedCtx<UpdatePaymentInput>) => {
         const { id, ...data } = input;
         return ctx.db.payment.update({
           where: { id },
@@ -105,7 +105,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
 
     markAsPaid: protectedProcedure
       .input(markPaymentPaidSchema)
-      .mutation(async ({ ctx, input }: AuthenticatedCtx) => {
+      .mutation(async ({ ctx, input }: AuthenticatedCtx<MarkAsPaidInput>) => {
         const receiptNumber = `RCP-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}`;
 
         return ctx.db.payment.update({
@@ -120,13 +120,13 @@ export const createPaymentRouter = (protectedProcedure: any) => {
 
     delete: protectedProcedure
       .input(deletePaymentSchema)
-      .mutation(async ({ ctx, input }: AuthenticatedCtx) => {
+      .mutation(async ({ ctx, input }: AuthenticatedCtx<DeletePaymentInput>) => {
         return ctx.db.payment.delete({
           where: { id: input.id },
         });
       }),
 
-    getStats: protectedProcedure.query(async ({ ctx }: AuthenticatedCtx) => {
+    getStats: protectedProcedure.query(async ({ ctx }: AuthenticatedCtx<void>) => {
       const [totalPending, totalPaid, totalOverdue] = await Promise.all([
         ctx.db.payment.aggregate({
           where: { status: "PENDING" },
@@ -163,7 +163,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
 
     getMonthlyRevenue: protectedProcedure
       .input(getMonthlyRevenueSchema)
-      .query(async ({ ctx, input }: AuthenticatedCtx) => {
+      .query(async ({ ctx, input }: AuthenticatedCtx<GetMonthlyRevenueInput | undefined>) => {
         const year = input?.year ?? new Date().getFullYear();
         const payments = await ctx.db.payment.findMany({
           where: {
@@ -184,7 +184,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
           revenue: 0,
         })) as Array<{ month: string; revenue: number }>;
 
-        payments.forEach((payment) => {
+        payments.forEach((payment: any) => {
           if (payment.paidDate) {
             const month = payment.paidDate.getMonth();
             const monthData = monthlyData[month];

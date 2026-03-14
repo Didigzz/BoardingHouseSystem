@@ -72,7 +72,7 @@ export const createBookingRouter = (
     // Create a new booking (boarder)
     create: boarderProc
       .input(createBookingSchema)
-      .mutation(async ({ ctx, input }: BoarderCtx) => {
+      .mutation(async ({ ctx, input }: BoarderCtx<CreateBookingInput>) => {
         // Get boarder profile
         const boarder = await ctx.db.boarder.findUnique({
           where: { userId: ctx.session.user.id },
@@ -124,9 +124,9 @@ export const createBookingRouter = (
           data: {
             boarderId: boarder.id,
             propertyId: input.propertyId,
-            checkInDate: input.checkInDate,
-            checkOutDate: input.checkOutDate,
-            totalPrice: property.price,
+            startDate: input.checkInDate,
+            endDate: input.checkOutDate,
+            monthlyRent: property.monthlyRent,
             status: "PENDING",
           },
         });
@@ -135,7 +135,7 @@ export const createBookingRouter = (
     // Get boarder's bookings
     getMyBookings: boarderProc
       .input(getMyBookingsSchema)
-      .query(async ({ ctx, input }: BoarderCtx) => {
+      .query(async ({ ctx, input }: BoarderCtx<GetMyBookingsInput>) => {
         const boarder = await ctx.db.boarder.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -178,7 +178,7 @@ export const createBookingRouter = (
     // Get landlord's bookings (for their properties)
     getLandlordBookings: landlordProc
       .input(getLandlordBookingsSchema)
-      .query(async ({ ctx, input }: LandlordCtx) => {
+      .query(async ({ ctx, input }: LandlordCtx<GetLandlordBookingsInput>) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -224,7 +224,7 @@ export const createBookingRouter = (
     // Confirm a booking (landlord)
     confirm: landlordProc
       .input(confirmBookingSchema)
-      .mutation(async ({ ctx, input }: LandlordCtx) => {
+      .mutation(async ({ ctx, input }: LandlordCtx<ConfirmBookingInput>) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -273,7 +273,7 @@ export const createBookingRouter = (
     // Reject a booking (landlord)
     reject: landlordProc
       .input(rejectBookingSchema)
-      .mutation(async ({ ctx, input }: LandlordCtx) => {
+      .mutation(async ({ ctx, input }: LandlordCtx<RejectBookingInput>) => {
         const landlordProfile = await ctx.db.landlordProfile.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -310,7 +310,7 @@ export const createBookingRouter = (
     // Cancel a booking (boarder - only for pending/confirmed)
     cancel: boarderProc
       .input(cancelBookingSchema)
-      .mutation(async ({ ctx, input }: BoarderCtx) => {
+      .mutation(async ({ ctx, input }: BoarderCtx<CancelBookingInput>) => {
         const boarder = await ctx.db.boarder.findUnique({
           where: { userId: ctx.session.user.id },
         });
@@ -337,18 +337,70 @@ export const createBookingRouter = (
           });
         }
 
-        // If confirmed, increment available rooms
-        if (booking.status === "CONFIRMED") {
-          await ctx.db.property.update({
-            where: { id: booking.propertyId },
-            data: { availableRooms: { increment: 1 } },
+        // Use transaction to ensure data consistency
+        return ctx.db.$transaction(async (tx: any) => {
+          // If confirmed, increment available rooms
+          if (booking.status === "CONFIRMED") {
+            await tx.property.update({
+              where: { id: booking.propertyId },
+              data: { availableRooms: { increment: 1 } },
+            });
+          }
+
+          return tx.booking.update({
+            where: { id: input.bookingId },
+            data: { status: "CANCELLED" },
+          });
+        });
+      }),
+
+    // Get booking details with property information
+    getById: boarderProc
+      .input(z.object({ bookingId: z.string() }))
+      .query(async ({ ctx, input }: BoarderCtx<{ bookingId: string }>) => {
+        const boarder = await ctx.db.boarder.findUnique({
+          where: { userId: ctx.session.user.id },
+        });
+
+        if (!boarder) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Boarder profile not found",
           });
         }
 
-        return ctx.db.booking.update({
-          where: { id: input.bookingId },
-          data: { status: "CANCELLED" },
+        const booking = await ctx.db.booking.findFirst({
+          where: {
+            id: input.bookingId,
+            boarderId: boarder.id,
+          },
+          include: {
+            property: {
+              include: {
+                landlord: {
+                  select: {
+                    user: {
+                      select: {
+                        name: true,
+                        phone: true,
+                        email: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         });
+
+        if (!booking) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Booking not found",
+          });
+        }
+
+        return booking;
       }),
   });
 };

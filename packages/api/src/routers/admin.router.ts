@@ -133,10 +133,10 @@ export const createAdminRouter = (
           landlordProfile: {
             select: {
               businessName: true,
-              businessAddress: true,
-              businessPhone: true,
-              identificationDocument: true,
-              businessPermit: true,
+              businessType: true,
+              yearsExperience: true,
+              description: true,
+              applicationNotes: true,
             },
           },
         },

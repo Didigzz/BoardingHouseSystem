@@ -22,7 +22,7 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      background: #0D0D0D;
+      background: transparent;
     }
 
     body {
@@ -45,6 +45,8 @@
       flex-direction: column;
       justify-content: center;
       padding: clamp(2rem, 5vw, 4rem);
+      z-index: 10;
+      background: transparent !important;
     }
 
     .slide.active {
@@ -80,7 +82,14 @@
       --card-border: rgba(255, 255, 255, 0.1);
     }
 
-    .slide {
+    /* Background wrapper - holds grid and orb behind all slides */
+    .background-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
       background: radial-gradient(ellipse at top left, var(--bg-gradient) 0%, var(--bg-primary) 70%);
     }
 
@@ -103,7 +112,7 @@
       66% { transform: translate(20px, -20px) scale(0.95); }
     }
 
-    /* Grid pattern */
+    /* Grid pattern - transparent overlay */
     .grid-overlay {
       position: absolute;
       top: 0;
@@ -111,10 +120,11 @@
       right: 0;
       bottom: 0;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
       background-size: 80px 80px;
       pointer-events: none;
+      z-index: 1;
     }
 
     /* Content container */
@@ -665,9 +675,11 @@
   </style>
 </head>
 <body>
-  <!-- Background elements (shared across slides) -->
-  <div class="gradient-orb"></div>
-  <div class="grid-overlay"></div>
+  <!-- Background container (shared across all slides) -->
+  <div class="background-container">
+    <div class="gradient-orb"></div>
+    <div class="grid-overlay"></div>
+  </div>
 
   <!-- Navigation -->
   <div class="nav-dots" id="navDots"></div>
@@ -753,7 +765,7 @@
       </div>
     </div>
 
-    <div class="slide-number">2 / 12</div>
+    <div class="slide-number">2 / 13</div>
     <div class="accent-dots">
       <div class="dot"></div>
       <div class="dot"></div>
@@ -767,11 +779,13 @@
       <h2 class="slide-title reveal">Client Identification (Student)</h2>
 
       <div class="grid-2">
-        <div class="card reveal reveal-delay-1">
-          <div class="card-icon">🏢</div>
-          <h3 class="card-title">Client Name</h3>
-          <p class="card-text"><span class="highlight">Qwenzyy</span></p>
-          <p class="card-text" style="margin-top: 0.5rem;">BSIT Student</p>
+        <div class="card reveal reveal-delay-1" style="display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;">
+          <div style="flex: 1; text-align: left;">
+            <h3 class="card-title" style="text-align: left; margin: 0;">Client Name</h3>
+            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;"><span class="highlight">Jovanne Diel Jabay</span></p>
+            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;">BSIT Student</p>
+          </div>
+          <img src="assets/image 1.png" alt="Jovanne Diel Jabay" style="width: 140px; height: 140px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(0, 212, 255, 0.5); flex-shrink: 0;" />
         </div>
 
         <div class="card reveal reveal-delay-2">
@@ -789,7 +803,7 @@
 
       <div class="quote-block reveal reveal-delay-4">
         <p class="quote-text">"I struggled to find boarding houses near the university. It was hard to know which ones had vacancies and were within my budget."</p>
-        <p class="quote-author">— Qwenzyy, BSIT Student</p>
+        <p class="quote-author">— Jovanne Diel Jabay, BSIT Student</p>
       </div>
     </div>
 
@@ -807,11 +821,13 @@
       <h2 class="slide-title reveal">Client Identification (Landlord)</h2>
 
       <div class="grid-2">
-        <div class="card reveal reveal-delay-1">
-          <div class="card-icon">🏢</div>
-          <h3 class="card-title">Client Name</h3>
-          <p class="card-text"><span class="highlight">Paul John</span></p>
-          <p class="card-text" style="margin-top: 0.5rem;">Owner, Onda Boarding House</p>
+        <div class="card reveal reveal-delay-1" style="display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;">
+          <div style="flex: 1; text-align: left;">
+            <h3 class="card-title" style="text-align: left; margin: 0;">Client Name</h3>
+            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;"><span class="highlight">John Paul Digal</span></p>
+            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;">Owner, Onda Boarding House</p>
+          </div>
+          <img src="assets/image 2.png" alt="John Paul Digal" style="width: 140px; height: 140px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(0, 212, 255, 0.5); flex-shrink: 0;" />
         </div>
 
         <div class="card reveal reveal-delay-2">
@@ -829,7 +845,7 @@
 
       <div class="quote-block reveal reveal-delay-4">
         <p class="quote-text">"Managing my boarding house manually is challenging. I struggle to keep track of vacancies, payments, and tenant information efficiently."</p>
-        <p class="quote-author">— Paul John, Onda Boarding House Owner</p>
+        <p class="quote-author">— John Paul Digal, Onda Boarding House Owner</p>
       </div>
     </div>
 
@@ -899,8 +915,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 5: PROBLEM IDENTIFICATION === -->
-  <div class="slide" data-slide="5">
+  <!-- === SLIDE 6: PROBLEM IDENTIFICATION === -->
+  <div class="slide" data-slide="6">
     <div class="content">
       <h2 class="slide-title reveal">Problem Identification</h2>
 
@@ -943,8 +959,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 6: WHY IT IS A PROBLEM === -->
-  <div class="slide" data-slide="6">
+  <!-- === SLIDE 7: WHY IT IS A PROBLEM === -->
+  <div class="slide" data-slide="7">
     <div class="content">
       <h2 class="slide-title reveal">Why It Is a Problem</h2>
 
@@ -1006,8 +1022,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 7: PROPOSED SOLUTION === -->
-  <div class="slide" data-slide="7">
+  <!-- === SLIDE 8: PROPOSED SOLUTION === -->
+  <div class="slide" data-slide="8">
     <div class="content">
       <h2 class="slide-title reveal">Proposed System Solution</h2>
 
@@ -1059,8 +1075,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 8: SYSTEM FEATURES === -->
-  <div class="slide" data-slide="8">
+  <!-- === SLIDE 9: SYSTEM FEATURES === -->
+  <div class="slide" data-slide="9">
     <div class="content">
       <h2 class="slide-title reveal">System Features</h2>
 
@@ -1127,8 +1143,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 9: DEVELOPMENT PLAN === -->
-  <div class="slide" data-slide="9">
+  <!-- === SLIDE 10: DEVELOPMENT PLAN === -->
+  <div class="slide" data-slide="10">
     <div class="content">
       <h2 class="slide-title reveal">Development Plan</h2>
 
@@ -1186,8 +1202,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 10: TECHNOLOGIES === -->
-  <div class="slide" data-slide="10">
+  <!-- === SLIDE 11: TECHNOLOGIES === -->
+  <div class="slide" data-slide="11">
     <div class="content">
       <h2 class="slide-title reveal">Technologies to be Used</h2>
 
@@ -1247,8 +1263,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 11: EXPECTED BENEFITS === -->
-  <div class="slide" data-slide="11">
+  <!-- === SLIDE 12: EXPECTED BENEFITS === -->
+  <div class="slide" data-slide="12">
     <div class="content">
       <h2 class="slide-title reveal">Expected Benefits</h2>
 
@@ -1315,8 +1331,8 @@
     </div>
   </div>
 
-  <!-- === SLIDE 12: CONCLUSION === -->
-  <div class="slide" data-slide="12">
+  <!-- === SLIDE 13: CONCLUSION === -->
+  <div class="slide" data-slide="13">
     <div class="content" style="text-align: center;">
       <div class="header reveal" style="justify-content: center;">
         <div class="logo-mark">H</div>

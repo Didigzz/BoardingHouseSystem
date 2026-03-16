@@ -37,7 +37,7 @@ import {
   TabsTrigger,
   Separator,
   Skeleton,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,

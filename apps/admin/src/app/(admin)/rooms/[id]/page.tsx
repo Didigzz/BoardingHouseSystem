@@ -16,16 +16,16 @@ import {
   Clock,
   AlertCircle,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/shared/ui";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,10 +36,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { mockRooms, mockTenants, mockMaintenanceRequests, mockProperties } from "@/lib/mock-data";
 import { formatCurrency, formatDate, cn, getStatusColor } from "@/lib/utils";
-import { useToast } from "@havenspace/ui";
+import { useToast } from "@havenspace/shared/ui";
 
 const statusConfig = {
   AVAILABLE: {

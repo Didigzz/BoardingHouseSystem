@@ -16,27 +16,27 @@ import {
   AlertTriangle,
   Camera,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { useProperty } from "@/lib/property-context";
 import { mockRooms, getRoomsByProperty } from "@/lib/mock-data";
-import { useToast } from "@havenspace/ui";
+import { useToast } from "@havenspace/shared/ui";
 
 const maintenanceSchema = z.object({
   roomId: z.string().min(1, "Please select a room"),

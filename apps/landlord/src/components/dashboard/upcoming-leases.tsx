@@ -7,8 +7,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import { AlertTriangle, Clock } from "lucide-react";
 import { mockTenants } from "@/lib/mock-data";
 import { formatDate } from "@/lib/utils";

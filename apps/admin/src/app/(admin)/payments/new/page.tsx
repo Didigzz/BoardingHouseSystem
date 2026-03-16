@@ -17,28 +17,28 @@ import {
   Calendar,
   Receipt,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { useProperty } from "@/lib/property-context";
 import { mockTenants, mockRooms, getTenantsByProperty, getRoomsByProperty } from "@/lib/mock-data";
 import { formatCurrency } from "@/lib/utils";
-import { useToast } from "@havenspace/ui";
+import { useToast } from "@havenspace/shared/ui";
 
 const paymentSchema = z.object({
   tenantId: z.string().min(1, "Please select a tenant"),

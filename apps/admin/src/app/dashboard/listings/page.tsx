@@ -41,7 +41,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,

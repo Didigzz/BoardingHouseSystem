@@ -27,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import { useSession, signOut } from "next-auth/react";
 import { getInitials } from "@/lib/utils";
 

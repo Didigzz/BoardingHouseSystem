@@ -16,28 +16,28 @@ import {
   Receipt,
   Filter,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { cn } from "@/lib/utils";
 
 interface Transaction {

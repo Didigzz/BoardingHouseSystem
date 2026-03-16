@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   AreaChart,
   Area,

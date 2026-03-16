@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import { ChevronLeft, ChevronRight, X, Expand } from "lucide-react";
 
 interface ImageGalleryProps {

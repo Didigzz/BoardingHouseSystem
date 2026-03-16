@@ -25,25 +25,25 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
-import { Separator } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Separator } from "@havenspace/shared/ui";
 import { cn } from "@/lib/utils";
 import { MALAYBALAY_BOUNDS } from "@/components/map/map-picker";
 

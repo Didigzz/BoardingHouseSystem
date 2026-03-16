@@ -15,26 +15,26 @@ import {
   Plus,
   X,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { mockRooms, mockProperties } from "@/lib/mock-data";
-import { useToast } from "@havenspace/ui";
+import { useToast } from "@havenspace/shared/ui";
 
 const commonAmenities = [
   "Air Conditioning",

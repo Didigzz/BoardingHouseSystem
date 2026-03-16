@@ -32,7 +32,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { cn, formatCurrency, formatNumber } from "@/lib/utils";
 import {
   AreaChart,

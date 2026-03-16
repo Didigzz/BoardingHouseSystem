@@ -13,15 +13,15 @@ import {
   Trash2,
   Settings,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Tabs, TabsList, TabsTrigger } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Tabs, TabsList, TabsTrigger } from "@havenspace/shared/ui";
 import { mockNotifications } from "@/lib/mock-data";
 import { formatDateTime, cn } from "@/lib/utils";
 import type { Notification } from "@/types";

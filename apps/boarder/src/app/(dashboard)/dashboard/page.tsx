@@ -16,9 +16,9 @@ import {
   MapPin,
   Bell,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@havenspace/ui";
-import { Button } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Card, CardContent, CardHeader, CardTitle } from "@havenspace/shared/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import { formatCurrency } from "@/lib/utils";
 
 // Mock data

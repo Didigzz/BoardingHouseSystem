@@ -14,26 +14,26 @@ import {
   Calendar,
   Eye,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { cn } from "@/lib/utils";
 
 type BookingStatus = "pending" | "confirmed" | "active" | "completed" | "cancelled";

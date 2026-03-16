@@ -34,7 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { getInitials } from "@/lib/utils";

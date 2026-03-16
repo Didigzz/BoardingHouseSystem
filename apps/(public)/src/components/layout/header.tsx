@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@havenspace/ui";
-import { Home, Menu, X, User, MapPin } from "lucide-react";
+import { Button } from "@havenspace/shared/ui";
+import { Home, Menu, X, MapPin } from "lucide-react";
 import { useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -45,7 +45,6 @@ export function Header() {
 
         {/* Desktop Actions */}
         <div className="hidden items-center space-x-4 md:flex">
-          <ThemeToggle />
           <Link href="/login">
             <Button variant="ghost" size="sm">
               Log in
@@ -97,7 +96,6 @@ export function Header() {
               Become a Landlord
             </Link>
             <div className="flex items-center space-x-4 pt-4 border-t">
-              <ThemeToggle />
               <Link href="/login" className="flex-1">
                 <Button variant="outline" className="w-full" size="sm">
                   Log in

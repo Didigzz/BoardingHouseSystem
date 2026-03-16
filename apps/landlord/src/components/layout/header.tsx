@@ -14,8 +14,8 @@ import {
   Building2,
   Check,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,

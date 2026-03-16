@@ -12,7 +12,6 @@
   "dependencies": {
     "@havenspace/database": "workspace:*",
     "@havenspace/shared": "workspace:*",
-    "@havenspace/ui": "workspace:*",
     "@havenspace/validation": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -44,7 +43,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@havenspace/eslint-config": "workspace:*",
+    "@havenspace/config": "workspace:*",
     "@types/node": "^20.10.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

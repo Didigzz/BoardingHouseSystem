@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Bell, Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Button, Input } from "@havenspace/ui";
+import { Button, Input } from "@havenspace/shared/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,

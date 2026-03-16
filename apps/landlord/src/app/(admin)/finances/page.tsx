@@ -10,14 +10,14 @@ import {
   PiggyBank,
   Download,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   AreaChart,
   Area,

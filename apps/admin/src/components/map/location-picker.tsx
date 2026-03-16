@@ -3,15 +3,15 @@
 import * as React from "react";
 import { useEffect, useState, useCallback } from "react";
 import { MapPin, Search, Crosshair, Loader2 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import type { GeoLocation } from "@/types";
 
 interface LocationPickerProps {

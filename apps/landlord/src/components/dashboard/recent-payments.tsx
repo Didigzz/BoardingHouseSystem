@@ -7,8 +7,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import { mockPayments } from "@/lib/mock-data";
 import { formatCurrency, getStatusColor } from "@/lib/utils";
 

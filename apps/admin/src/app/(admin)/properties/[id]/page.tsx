@@ -34,16 +34,16 @@ import {
   ChevronRight,
   X,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/shared/ui";
 import { Separator } from "@/components/ui/separator";
 import { mockProperties, getRoomsByProperty, getTenantsByProperty } from "@/lib/mock-data";
 import {

@@ -4,6 +4,9 @@ export * from './entities';
 // Export all features
 export * from './features';
 
+// Export UI components (primitives and composite)
+export * from './ui';
+
 // Export components (layouts, providers)
 export * from './components';
 

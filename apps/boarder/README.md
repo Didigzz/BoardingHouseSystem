@@ -127,7 +127,7 @@ apps/boarder/
 
 - `@havenspace/database` - Prisma client and types
 - `@havenspace/shared` - Shared utilities
-- `@havenspace/ui` - Shared UI components
+- `@havenspace/shared/ui` - Shared UI components
 - `@havenspace/validation` - Zod validation schemas
 
 ## ðŸ” Authentication

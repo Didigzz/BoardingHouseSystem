@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@havenspace/ui";
+import { Card, CardContent, CardHeader, CardTitle } from "@havenspace/shared/ui";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import {
   Home,
   Users,

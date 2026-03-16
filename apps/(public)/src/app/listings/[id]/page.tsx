@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Button, Badge } from "@havenspace/ui";
+import { Button, Badge } from "@havenspace/shared/ui";
 import {
   MapPin,
   Phone,

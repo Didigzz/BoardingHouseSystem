@@ -170,7 +170,7 @@ const { data: properties } = api.property.list.useQuery({
 
 All applications share a consistent design system:
 
-- **UI Components**: Shared via `@havenspace/ui` package
+- **UI Components**: Shared via `@havenspace/shared/ui` package
 - **Styling**: Tailwind CSS with shared configuration
 - **Icons**: Lucide React icons
 - **Themes**: Light/dark mode support

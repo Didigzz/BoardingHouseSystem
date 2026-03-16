@@ -3,7 +3,7 @@
  */
 
 /**
- * Format currency amount
+ * Format currency amount (Philippine Peso)
  */
 export function formatCurrency(
   amount: number | string,
@@ -11,14 +11,14 @@ export function formatCurrency(
   locale: string = 'en-PH'
 ): string {
   const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
-  
-  if (isNaN(numAmount)) return '₱0.00';
+
+  if (isNaN(numAmount)) return '₱0';
 
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency === 'PHP' ? 'PHP' : currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(numAmount);
 }
 
@@ -29,13 +29,13 @@ export function formatDate(
   date: Date | string,
   options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
-    month: 'short',
+    month: 'long',
     day: 'numeric',
   },
   locale: string = 'en-US'
 ): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   if (isNaN(dateObj.getTime())) return 'Invalid Date';
 
   return new Intl.DateTimeFormat(locale, options).format(dateObj);

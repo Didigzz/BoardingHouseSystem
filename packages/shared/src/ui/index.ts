@@ -33,5 +33,14 @@ export * from './components/primitives/use-toast';
 // Export composite components
 export * from './components/composite';
 
+// Export app switcher
+export * from './components/app-switcher';
+
 // Export utils
 export * from './utils';
+
+// Export hooks
+export * from './hooks';
+
+// Export theme
+export * from './theme';

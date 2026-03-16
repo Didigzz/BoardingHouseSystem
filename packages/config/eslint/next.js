@@ -1,10 +1,24 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-  extends: ["@vercel/style-guide/eslint/next"].map(require.resolve),
-  parserOptions: {
-    project: true,
-  },
+  extends: [
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier",
+  ],
   rules: {
-    "import/no-default-export": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+    ],
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      { prefer: "type-imports", fixStyle: "separate-type-imports" },
+    ],
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      { checksVoidReturn: { attributes: false } },
+    ],
+    "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
   },
+  ignorePatterns: ["node_modules/", ".next/", "dist/"],
 };

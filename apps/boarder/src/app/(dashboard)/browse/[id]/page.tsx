@@ -32,12 +32,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Button } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
-import { Separator } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
+import { Separator } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
 import {
   Dialog,
   DialogContent,
@@ -45,8 +45,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@havenspace/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/shared/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatCurrency, formatDate, getInitials } from "@/lib/utils";
 

@@ -14,23 +14,23 @@ import {
   DoorOpen,
   DollarSign,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/shared/ui";
 import {
   AreaChart,
   Area,
@@ -67,7 +67,7 @@ import {
   type MockRevenueData,
 } from "@/lib/mock-data";
 import { formatCurrency, cn } from "@/lib/utils";
-import { useToast } from "@havenspace/ui";
+import { useToast } from "@havenspace/shared/ui";
 
 const COLORS = [
   "hsl(var(--chart-1))",

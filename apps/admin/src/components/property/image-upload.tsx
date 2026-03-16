@@ -11,14 +11,14 @@ import {
   GripVertical,
   Loader2,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import { cn } from "@/lib/utils";
 import type { PropertyImage } from "@/types";
 

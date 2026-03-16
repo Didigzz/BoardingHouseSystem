@@ -13,7 +13,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from "@havenspace/ui";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from "@havenspace/shared/ui";
 import { cn, formatNumber, formatCurrency, getRelativeTime } from "@/lib/utils";
 import {
   AreaChart,

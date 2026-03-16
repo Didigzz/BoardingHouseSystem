@@ -15,16 +15,16 @@ import {
   Filter,
   Download,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +39,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Dialog,
   DialogContent,
@@ -48,12 +48,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
 import { useProperty } from "@/lib/property-context";
 import { getExpensesByProperty, mockExpenses, type MockExpense } from "@/lib/mock-data";
 import { formatCurrency, formatDate, cn } from "@/lib/utils";
-import { useToast } from "@havenspace/ui";
+import { useToast } from "@havenspace/shared/ui";
 
 const categoryColors: Record<string, string> = {
   UTILITIES: "bg-blue-100 text-blue-800",

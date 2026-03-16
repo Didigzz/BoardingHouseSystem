@@ -17,21 +17,21 @@ import {
   Calendar,
   MapPin,
 } from "lucide-react";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/ui";
-import { Separator } from "@havenspace/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@havenspace/ui";
-import { useToast } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/shared/ui";
+import { Separator } from "@havenspace/shared/ui";
+import { Avatar, AvatarFallback, AvatarImage } from "@havenspace/shared/ui";
+import { useToast } from "@havenspace/shared/ui";
 
 const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),

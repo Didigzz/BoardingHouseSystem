@@ -26,18 +26,18 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@havenspace/ui";
-import { Button } from "@havenspace/ui";
-import { Input } from "@havenspace/ui";
-import { Badge } from "@havenspace/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Button } from "@havenspace/shared/ui";
+import { Input } from "@havenspace/shared/ui";
+import { Badge } from "@havenspace/shared/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@havenspace/shared/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@havenspace/ui";
+} from "@havenspace/shared/ui";
 import {
   Dialog,
   DialogContent,
@@ -45,10 +45,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@havenspace/ui";
-import { Label } from "@havenspace/ui";
-import { Separator } from "@havenspace/ui";
-import { Progress } from "@havenspace/ui";
+} from "@havenspace/shared/ui";
+import { Label } from "@havenspace/shared/ui";
+import { Separator } from "@havenspace/shared/ui";
+import { Progress } from "@havenspace/shared/ui";
 import { formatCurrency, formatDate, formatDateTime } from "@/lib/utils";
 
 // Mock payment data

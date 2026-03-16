@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import { Search, List, X, MapPin, Navigation, AlertTriangle, Filter } from "lucide-react";
 import { mockBoardingHouses } from "@/lib/mock-data";
 import { BoardingHouse } from "@/lib/types";

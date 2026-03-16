@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@havenspace/ui";
+import { Button } from "@havenspace/shared/ui";
 import {
   Search,
   MapPin,
@@ -11,8 +11,8 @@ import {
   ArrowRight,
   Building2,
 } from "lucide-react";
-import { SearchFilters } from "@/components/listings";
-import { ListingCard } from "@/components/listings";
+import { SearchFilters } from "@havenspace/shared/features";
+import { ListingCard } from "@havenspace/shared/features";
 import { getFeaturedListings, getRecentListings } from "@/lib/mock-data";
 
 export default function HomePage() {

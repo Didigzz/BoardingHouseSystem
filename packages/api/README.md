@@ -44,14 +44,14 @@ bun --filter @havenspace/api start
 ### Calling API from Client
 
 ```typescript
-import { api } from '@havenspace/api-client';
+import { api } from "@havenspace/api-client";
 
 // Query
-const rooms = await api.room.getAll.useQuery({ propertyId: '123' });
+const rooms = await api.room.getAll.useQuery({ propertyId: "123" });
 
 // Mutation
 await api.room.create.useMutation({
-  roomNumber: '101',
+  roomNumber: "101",
   floor: 1,
   capacity: 2,
   monthlyRate: 5000,
@@ -61,6 +61,7 @@ await api.room.create.useMutation({
 ## Domain Modules
 
 ### Room Module
+
 - **Entities**: Room
 - **Value Objects**: RoomStatus
 - **Events**: RoomCreated, RoomUpdated, RoomDeleted, RoomStatusChanged
@@ -68,17 +69,20 @@ await api.room.create.useMutation({
 - **Repositories**: RoomRepository
 
 ### Boarder Module
+
 - **Entities**: Boarder
 - **Events**: BoarderCreated, BoarderUpdated, BoarderDeleted
 - **Services**: BoarderService
 
 ### Payment Module
+
 - **Entities**: Payment
 - **Value Objects**: PaymentStatus, PaymentType
 - **Events**: PaymentCreated, PaymentPaid, PaymentOverdue
 - **Services**: PaymentService
 
 ### User Module
+
 - **Entities**: User
 - **Value Objects**: UserRole
 - **Events**: UserRegistered, UserUpdated
@@ -125,4 +129,3 @@ interface Context {
 - `@havenspace/validation` - Zod schemas
 - `@havenspace/shared` - Shared types and utilities
 - `@havenspace/auth` - Authentication configuration
-

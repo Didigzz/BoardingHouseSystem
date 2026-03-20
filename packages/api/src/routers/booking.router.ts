@@ -14,6 +14,8 @@ interface LandlordCtx<TInput = unknown> {
   input: TInput;
 }
 
+type Procedure = ReturnType<typeof createTRPCRouter>;
+
 type CreateBookingInput = z.infer<typeof createBookingSchema>;
 type GetMyBookingsInput = z.infer<typeof getMyBookingsSchema>;
 type GetLandlordBookingsInput = z.infer<typeof getLandlordBookingsSchema>;
@@ -61,9 +63,9 @@ const cancelBookingSchema = z.object({
  * Booking router for managing property bookings
  */
 export const createBookingRouter = (
-  protectedProcedure: any,
-  boarderProcedure?: any,
-  landlordProcedure?: any
+  protectedProcedure: Procedure,
+  boarderProcedure?: Procedure,
+  landlordProcedure?: Procedure
 ) => {
   const boarderProc = boarderProcedure || protectedProcedure;
   const landlordProc = landlordProcedure || protectedProcedure;
@@ -338,7 +340,7 @@ export const createBookingRouter = (
         }
 
         // Use transaction to ensure data consistency
-        return ctx.db.$transaction(async (tx: any) => {
+        return ctx.db.$transaction(async (tx) => {
           // If confirmed, increment available rooms
           if (booking.status === "CONFIRMED") {
             await tx.property.update({

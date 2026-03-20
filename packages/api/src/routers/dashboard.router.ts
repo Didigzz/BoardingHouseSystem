@@ -7,6 +7,8 @@ interface AuthenticatedCtx<TInput = unknown> {
   input: TInput;
 }
 
+type Procedure = ReturnType<typeof createTRPCRouter>;
+
 // Type definitions for response types
 interface DashboardStats {
   rooms: {
@@ -34,7 +36,7 @@ interface Activity {
   date: Date;
 }
 
-export const createDashboardRouter = (protectedProcedure: any) => {
+export const createDashboardRouter = (protectedProcedure: Procedure) => {
   return createTRPCRouter({
     getStats: protectedProcedure.query(async ({ ctx }: AuthenticatedCtx): Promise<DashboardStats> => {
       const [
@@ -112,14 +114,14 @@ export const createDashboardRouter = (protectedProcedure: any) => {
       ]);
 
       const activities: Activity[] = [
-        ...recentPayments.map((p: any) => ({
+        ...recentPayments.map((p) => ({
           id: p.id,
           type: "payment" as const,
           title: `Payment ${p.status.toLowerCase()}`,
           description: `${p.boarder.firstName} ${p.boarder.lastName} - ₱${p.amount.toNumber().toLocaleString()}`,
           date: p.createdAt,
         })),
-        ...recentBoarders.map((b: any) => ({
+        ...recentBoarders.map((b) => ({
           id: b.id,
           type: "boarder" as const,
           title: "New boarder",

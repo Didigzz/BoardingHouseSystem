@@ -22,7 +22,7 @@ export class BoarderModule {
     getBoarderStats: GetBoarderStatsHandler;
   };
 
-  private constructor(db: any) {
+  private constructor(db: unknown) {
     this.repository = new PrismaBoarderRepository(db);
     this.service = new BoarderService(this.repository);
     this.handlers = {
@@ -36,7 +36,7 @@ export class BoarderModule {
     };
   }
 
-  static initialize(db: any): BoarderModule {
+  static initialize(db: unknown): BoarderModule {
     if (!BoarderModule.instance) {
       BoarderModule.instance = new BoarderModule(db);
     }

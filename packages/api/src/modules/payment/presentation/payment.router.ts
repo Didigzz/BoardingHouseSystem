@@ -7,8 +7,23 @@ import { GetPaymentHandler } from '../application/handlers/get-payment.handler';
 import { ListPaymentsHandler } from '../application/handlers/list-payments.handler';
 import { GetPaymentStatsHandler } from '../application/handlers/get-payment-stats.handler';
 import { GetMonthlyRevenueHandler } from '../application/handlers/get-monthly-revenue.handler';
+import type { PrismaClientType } from '@havenspace/database';
 
-type ProtectedProcedure = any;
+type ProtectedProcedure = unknown;
+
+interface PaymentDTO {
+  id: string;
+  boarderId: string;
+  amount: number;
+  type: string;
+  status: string;
+  dueDate: Date;
+  paidDate: Date | null;
+  receiptNumber: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
   return {
@@ -24,7 +39,7 @@ export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
           })
           .optional()
       )
-      .handler(async ({ context, input }: { context: any; input?: any }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input?: unknown }) => {
         // Initialize dependencies
         const paymentRepository = new PrismaPaymentRepository(context.db);
         const listPaymentsHandler = new ListPaymentsHandler(paymentRepository);
@@ -33,7 +48,7 @@ export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
         const payments = await listPaymentsHandler.handle(input);
 
         // Convert to DTO format
-        return payments.map((payment: any) => ({
+        return payments.map((payment): PaymentDTO => ({
           id: payment.id,
           boarderId: payment.boarderId,
           amount: payment.amount,
@@ -50,7 +65,7 @@ export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
 
     getById: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .handler(async ({ context, input }: { context: any; input: { id: string } }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: { id: string } }) => {
         // Initialize dependencies
         const paymentRepository = new PrismaPaymentRepository(context.db);
         const getPaymentHandler = new GetPaymentHandler(paymentRepository);
@@ -88,7 +103,7 @@ export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
           description: z.string().optional(),
         })
       )
-      .handler(async ({ context, input }: { context: any; input: any }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: unknown }) => {
         // Initialize dependencies
         const paymentRepository = new PrismaPaymentRepository(context.db);
         const paymentService = new PaymentService(paymentRepository);
@@ -115,7 +130,7 @@ export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
 
     markAsPaid: protectedProcedure
       .input(z.object({ id: z.string(), paidDate: z.date().optional() }))
-      .handler(async ({ context, input }: { context: any; input: { id: string; paidDate?: Date } }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: { id: string; paidDate?: Date } }) => {
         // Initialize dependencies
         const paymentRepository = new PrismaPaymentRepository(context.db);
         const paymentService = new PaymentService(paymentRepository);
@@ -140,7 +155,7 @@ export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
         };
       }),
 
-    getStats: protectedProcedure.handler(async ({ context }: { context: any }) => {
+    getStats: protectedProcedure.handler(async ({ context }: { context: { db: PrismaClientType } }) => {
       // Initialize dependencies
       const paymentRepository = new PrismaPaymentRepository(context.db);
       const getPaymentStatsHandler = new GetPaymentStatsHandler(paymentRepository);
@@ -153,7 +168,7 @@ export const createPaymentRouter = (protectedProcedure: ProtectedProcedure) => {
 
     getMonthlyRevenue: protectedProcedure
       .input(z.object({ year: z.number().optional() }))
-      .handler(async ({ context, input }: { context: any; input?: { year?: number } }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input?: { year?: number } }) => {
         // Initialize dependencies
         const paymentRepository = new PrismaPaymentRepository(context.db);
         const getMonthlyRevenueHandler = new GetMonthlyRevenueHandler(paymentRepository);

@@ -276,8 +276,10 @@
     }
 
     .card-icon {
-      font-size: clamp(1.5rem, 3vw, 2rem);
+      width: clamp(1.5rem, 3vw, 2rem);
+      height: clamp(1.5rem, 3vw, 2rem);
       margin-bottom: clamp(0.75rem, 1.5vw, 1rem);
+      color: var(--accent-blue);
     }
 
     .card-title {
@@ -681,33 +683,120 @@
     <div class="grid-overlay"></div>
   </div>
 
+  <!-- SVG Icons (hidden) -->
+  <svg style="display: none;">
+    <symbol id="icon-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+    </symbol>
+    <symbol id="icon-location" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+      <circle cx="12" cy="10" r="3"></circle>
+    </symbol>
+    <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+    </symbol>
+    <symbol id="icon-document" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+    </symbol>
+    <symbol id="icon-walking" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+      <path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08v0c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.18 3.84l-2.15 2.15a2.17 2.17 0 0 0 0 3.08v0c.82.82 2.13.85 3 .07l2.07-1.9"></path>
+    </symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </symbol>
+    <symbol id="icon-money" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+      <line x1="1" y1="10" x2="23" y2="10"></line>
+    </symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </symbol>
+    <symbol id="icon-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </symbol>
+    <symbol id="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </symbol>
+    <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <circle cx="12" cy="12" r="6"></circle>
+      <circle cx="12" cy="12" r="2"></circle>
+    </symbol>
+    <symbol id="icon-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+      <path d="M9 22v-4h6v4"></path>
+      <path d="M8 6h.01"></path>
+      <path d="M16 6h.01"></path>
+      <path d="M12 6h.01"></path>
+      <path d="M12 10h.01"></path>
+      <path d="M12 14h.01"></path>
+      <path d="M16 10h.01"></path>
+      <path d="M16 14h.01"></path>
+      <path d="M8 10h.01"></path>
+      <path d="M8 14h.01"></path>
+    </symbol>
+    <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </symbol>
+    <symbol id="icon-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </symbol>
+    <symbol id="icon-email" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+      <polyline points="22,6 12,13 2,6"></polyline>
+    </symbol>
+  </svg>
+
   <!-- Navigation -->
   <div class="nav-dots" id="navDots"></div>
   <div class="progress-bar" id="progressBar"></div>
 
   <!-- Edit Mode -->
   <div class="edit-mode-indicator" id="editIndicator">
-    <span>✏️ Edit Mode</span>
+    <svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem;"><use href="#icon-edit"></use></svg><span>Edit Mode</span>
     <span style="opacity: 0.7;">Press E to toggle</span>
   </div>
-  <div class="save-notification" id="saveNotification">✓ Saved to browser</div>
+  <div class="save-notification" id="saveNotification"><svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem;"><use href="#icon-check"></use></svg> Saved to browser</div>
 
   <!-- === SLIDE 1: TITLE === -->
   <div class="slide active title-slide" data-slide="1">
     <div class="content">
       <div class="header reveal">
-        <div class="logo-mark">H</div>
-        <span class="logo-text">Haven Space</span>
+        <img src="https://university-portal-assets.vercel.app/images/branding/logo-brand.png" onerror="this.onerror=null; this.src='assets/logo-brand.png';" alt="Haven Space Logo" style="height: clamp(60px, 10vw, 80px); width: auto;" />
       </div>
 
-      <h1 class="main-title reveal reveal-delay-1">Haven Space:<br>Boarding House Management System</h1>
+      <h1 class="main-title reveal reveal-delay-1">HAVEN SPACE:<br>Boarding House Management Platform</h1>
 
       <div class="tagline reveal reveal-delay-2">
-        📋 Final Project Proposal
+        <svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem; vertical-align: middle;"><use href="#icon-clipboard"></use></svg> Final Project Proposal
       </div>
 
       <p class="description reveal reveal-delay-3">
-        A comprehensive multi-tenant platform for managing boarding house operations, connecting landlords with boarders through modern web interfaces.
+        A comprehensive multi-tenant platform for managing boarding house operations, connecting landlords with boarders through modern web & mobile interfaces.
       </p>
     </div>
 
@@ -782,28 +871,28 @@
         <div class="card reveal reveal-delay-1" style="display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;">
           <div style="flex: 1; text-align: left;">
             <h3 class="card-title" style="text-align: left; margin: 0;">Client Name</h3>
-            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;"><span class="highlight">Jovanne Diel Jabay</span></p>
-            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;">BSIT Student</p>
+            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;"><span class="highlight" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">Jely Bojo</span></p>
+            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;">1st Year BSIT Student</p>
           </div>
-          <img src="https://university-portal-assets.vercel.app/images/student-client.png" alt="Jovanne Diel Jabay" style="width: 140px; height: 140px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(0, 212, 255, 0.5); flex-shrink: 0;" onerror="this.onerror=null; this.src='assets/student-client.png';" />
+          <img src="https://university-portal-assets.vercel.app/images/people/student_client.jpg" alt="Jely Bojo" style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(0, 212, 255, 0.5); flex-shrink: 0;" onerror="this.onerror=null; this.src='assets/student_client.jpg';" />
         </div>
 
         <div class="card reveal reveal-delay-2">
-          <div class="card-icon">📍</div>
+          <svg class="card-icon"><use href="#icon-location"></use></svg>
           <h3 class="card-title">Organization Type</h3>
           <p class="card-text">Educational Institution - Bukidnon State University</p>
         </div>
 
         <div class="card reveal reveal-delay-3" style="grid-column: span 2;">
-          <div class="card-icon">📖</div>
+          <svg class="card-icon"><use href="#icon-book"></use></svg>
           <h3 class="card-title">Background</h3>
-          <p class="card-text">The client is a BSIT student at Bukidnon State University. As a student, they face the common challenge of finding suitable boarding houses near the campus. The university serves numerous students who struggle to find affordable and convenient boarding accommodations.</p>
+          <p class="card-text">The client is a BSIT student at Bukidnon State University. Finding boarding houses near the university was extremely challenging and exhausting. The process required physically walking from one location to another in the heat, making it time-consuming and draining. Key factors for comfortable accommodation include price, location, rules, wifi, house policies, and basic etiquette. Comparing different options was difficult due to incomplete details and inaccurate information in online listings.</p>
         </div>
       </div>
 
       <div class="quote-block reveal reveal-delay-4">
-        <p class="quote-text">"I struggled to find boarding houses near the university. It was hard to know which ones had vacancies and were within my budget."</p>
-        <p class="quote-author">— Jovanne Diel Jabay, BSIT Student</p>
+        <p class="quote-text">"Our experience in looking for a boarding house near the university was really challenging jud. Kapoy kaayo siya kay maglakaw-lakaw mi from one boarding house to another nya init pajud kayo. Time consuming kaayo and draining sad physically."</p>
+        <p class="quote-author">— Jely Bojo, 1st Year BSIT Student</p>
       </div>
     </div>
 
@@ -816,46 +905,84 @@
   </div>
 
   <!-- === SLIDE 4: CLIENT 2 - BOARDING HOUSE OWNER === -->
-  <div class="slide" data-slide="4">
-    <div class="content">
-      <h2 class="slide-title reveal">Client Identification (Landlord)</h2>
 
-      <div class="grid-2">
-        <div class="card reveal reveal-delay-1" style="display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;">
-          <div style="flex: 1; text-align: left;">
-            <h3 class="card-title" style="text-align: left; margin: 0;">Client Name</h3>
-            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;"><span class="highlight">John Paul Digal</span></p>
-            <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;">Owner, Digal Boarding House</p>
+    <div class="slide" data-slide="4">
+
+      <div class="content">
+
+        <h2 class="slide-title reveal">Client Identification (Landlord)</h2>
+
+  
+
+        <div class="grid-2">
+
+          <div class="card reveal reveal-delay-1" style="display: flex; align-items: center; gap: 1.5rem; justify-content: space-between;">
+
+            <div style="flex: 1; text-align: left;">
+
+              <h3 class="card-title" style="text-align: left; margin: 0;">Client Name</h3>
+
+              <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;"><span class="highlight" style="font-size: clamp(1.25rem, 2.5vw, 1.75rem);">Yhang Amandoron Onda</span></p>
+
+              <p class="card-text" style="text-align: left; margin: 0.25rem 0 0 0;">Boarding House Owner & Manager</p>
+
+            </div>
+
+            <img src="https://university-portal-assets.vercel.app/images/people/image-landlord.jpg" alt="Yhang Amandoron Onda" style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(0, 212, 255, 0.5); flex-shrink: 0;" onerror="this.onerror=null; this.src='assets/image-landlord.jpg';" />
+
           </div>
-          <img src="https://university-portal-assets.vercel.app/images/landlord-client.png" alt="John Paul Digal" style="width: 140px; height: 140px; object-fit: cover; border-radius: 50%; border: 3px solid rgba(0, 212, 255, 0.5); flex-shrink: 0;" onerror="this.onerror=null; this.src='assets/landlord-client.png';" />
+
+  
+
+          <div class="card reveal reveal-delay-2">
+
+            <svg class="card-icon"><use href="#icon-location"></use></svg>
+
+            <h3 class="card-title">Organization Type</h3>
+
+            <p class="card-text">Boarding House Management</p>
+
+          </div>
+
+  
+
+          <div class="card reveal reveal-delay-3" style="grid-column: span 2;">
+
+            <svg class="card-icon"><use href="#icon-book"></use></svg>
+
+            <h3 class="card-title">Background</h3>
+
+            <p class="card-text">Manages a boarding house with established rules and regulations, including cleanliness assignments, task management for boarders (trash collection, CR/ hallway/ kitchen cleaning), and penalty systems for violations. Handles monthly rent collection manually starting from entry date, issues receipts, uses group chats for payment reminders and announcements, and conducts regular meetings with assigned officers to record discussions.</p>
+
+          </div>
+
         </div>
 
-        <div class="card reveal reveal-delay-2">
-          <div class="card-icon">📍</div>
-          <h3 class="card-title">Organization Type</h3>
-          <p class="card-text">Boarding House - Small Business Owner</p>
+  
+
+        <div class="quote-block reveal reveal-delay-4">
+
+          <p class="quote-text">"Before, it was all handwriting... For our payment, we know that every month you pay upon entry... Having a group chat makes it easier to communicate and ensures boarders don't miss any reminders."</p>
+
+          <p class="quote-author">— Ate, Boarding House Landlady</p>
+
         </div>
 
-        <div class="card reveal reveal-delay-3" style="grid-column: span 2;">
-          <div class="card-icon">📖</div>
-          <h3 class="card-title">Background</h3>
-          <p class="card-text">The client is the owner of Digal Boarding House, a small boarding establishment catering to students and young professionals. As a boarding house operator, they manage multiple rooms and handle tenant relations, bookings, and payments manually.</p>
-        </div>
       </div>
 
-      <div class="quote-block reveal reveal-delay-4">
-        <p class="quote-text">"Managing my boarding house manually is challenging. I struggle to keep track of vacancies, payments, and tenant information efficiently."</p>
-        <p class="quote-author">— John Paul Digal, Digal Boarding House Owner</p>
-      </div>
-    </div>
+      <div class="slide-number">4 / 13</div>
 
-    <div class="slide-number">4 / 13</div>
-    <div class="accent-dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
+      <div class="accent-dots">
+
+        <div class="dot"></div>
+
+        <div class="dot"></div>
+
+        <div class="dot"></div>
+
+      </div>
+
     </div>
-  </div>
 
   <!-- === SLIDE 5: CURRENT PROCESS === -->
   <div class="slide" data-slide="5">
@@ -864,37 +991,37 @@
 
       <div class="grid-3">
         <div class="card reveal reveal-delay-1">
-          <div class="card-icon">📝</div>
+          <svg class="card-icon"><use href="#icon-document"></use></svg>
           <h3 class="card-title">Manual Listings</h3>
           <p class="card-text">Landlords submit property information via paper forms or SMS messages</p>
         </div>
 
         <div class="card reveal reveal-delay-2">
-          <div class="card-icon">🚶</div>
+          <svg class="card-icon"><use href="#icon-walking"></use></svg>
           <h3 class="card-title">Finding Physical Boarding Houses</h3>
           <p class="card-text">Students walk around the area looking for boarding houses one by one, checking for vacancy signs</p>
         </div>
 
         <div class="card reveal reveal-delay-3">
-          <div class="card-icon">📞</div>
+          <svg class="card-icon"><use href="#icon-phone"></use></svg>
           <h3 class="card-title">Phone-Based Booking</h3>
           <p class="card-text">Students call the office to inquire about availability and schedule viewings</p>
         </div>
 
         <div class="card reveal reveal-delay-4">
-          <div class="card-icon">💵</div>
+          <svg class="card-icon"><use href="#icon-money"></use></svg>
           <h3 class="card-title">Cash Payments</h3>
           <p class="card-text">Payments processed in-person with manual receipt writing</p>
         </div>
 
         <div class="card reveal reveal-delay-4">
-          <div class="card-icon">📋</div>
+          <svg class="card-icon"><use href="#icon-clipboard"></use></svg>
           <h3 class="card-title">Paper Contracts</h3>
           <p class="card-text">Rental agreements stored in filing cabinets, prone to damage and loss</p>
         </div>
 
         <div class="card reveal reveal-delay-4">
-          <div class="card-icon">🔍</div>
+          <svg class="card-icon"><use href="#icon-search"></use></svg>
           <h3 class="card-title">No Verification</h3>
           <p class="card-text">No systematic background checking or landlord accreditation process</p>
         </div>
@@ -902,7 +1029,7 @@
 
       <div class="card reveal reveal-delay-4" style="margin-top: clamp(1.5rem, 3vw, 2.5rem); background: rgba(255, 100, 100, 0.1); border-color: rgba(255, 100, 100, 0.3);">
         <p class="card-text" style="text-align: center; color: #FF6B6B;">
-          ⚠️ <span class="highlight">Result:</span> Slow processing, lost records, and poor communication between all parties
+          <svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem; vertical-align: middle;"><use href="#icon-warning"></use></svg> <span class="highlight">Result:</span> Slow processing, lost records, and poor communication between all parties
         </p>
       </div>
     </div>
@@ -922,25 +1049,25 @@
 
       <div class="grid-2">
         <div class="card reveal reveal-delay-1">
-          <div class="card-icon">🏠</div>
+          <svg class="card-icon"><use href="#icon-house"></use></svg>
           <h3 class="card-title">Fragmented Market</h3>
           <p class="card-text">Boarding house listings scattered across multiple platforms with no centralized marketplace for students to browse</p>
         </div>
 
         <div class="card reveal reveal-delay-2">
-          <div class="card-icon">📋</div>
+          <svg class="card-icon"><use href="#icon-clipboard"></use></svg>
           <h3 class="card-title">No Standard Process</h3>
           <p class="card-text">Booking processes vary wildly between landlords, creating confusion and inefficiency for students and staff</p>
         </div>
 
         <div class="card reveal reveal-delay-3">
-          <div class="card-icon">🔒</div>
+          <svg class="card-icon"><use href="#icon-lock"></use></svg>
           <h3 class="card-title">Payment Concerns</h3>
           <p class="card-text">No secure payment system creates trust issues and financial risk for both landlords and tenants</p>
         </div>
 
         <div class="card reveal reveal-delay-4">
-          <div class="card-icon">💬</div>
+          <svg class="card-icon"><use href="#icon-chat"></use></svg>
           <h3 class="card-title">Poor Communication</h3>
           <p class="card-text">Landlord-tenant communication relies on disconnected channels (SMS, phone, social media)</p>
         </div>
@@ -1082,7 +1209,7 @@
 
       <div class="grid-2">
         <div class="card reveal reveal-delay-1">
-          <div class="card-icon">👤</div>
+          <svg class="card-icon"><use href="#icon-user"></use></svg>
           <h3 class="card-title highlight">User Features (Boarders & Landlords)</h3>
           <ul class="bullet-list" style="margin-top: 0.75rem;">
             <li>User registration and login with role selection</li>
@@ -1097,7 +1224,7 @@
         </div>
 
         <div class="card reveal reveal-delay-2">
-          <div class="card-icon">⚙️</div>
+          <svg class="card-icon"><use href="#icon-settings"></use></svg>
           <h3 class="card-title highlight">Admin Features</h3>
           <ul class="bullet-list" style="margin-top: 0.75rem;">
             <li>User management (approve, suspend, verify)</li>
@@ -1285,7 +1412,7 @@
 
       <div class="grid-3" style="margin-top: clamp(2rem, 4vw, 3rem);">
         <div class="card reveal reveal-delay-2">
-          <div class="card-icon">🎯</div>
+          <svg class="card-icon"><use href="#icon-target"></use></svg>
           <h3 class="card-title highlight">For Students</h3>
           <ul class="bullet-list" style="margin-top: 0.75rem; font-size: clamp(0.8rem, 1.5vw, 0.9rem);">
             <li>Faster accommodation search</li>
@@ -1296,7 +1423,7 @@
         </div>
 
         <div class="card reveal reveal-delay-3">
-          <div class="card-icon">🏢</div>
+          <svg class="card-icon"><use href="#icon-building"></use></svg>
           <h3 class="card-title highlight">For Administration</h3>
           <ul class="bullet-list" style="margin-top: 0.75rem; font-size: clamp(0.8rem, 1.5vw, 0.9rem);">
             <li>Centralized data management</li>
@@ -1307,7 +1434,7 @@
         </div>
 
         <div class="card reveal reveal-delay-4">
-          <div class="card-icon">🏠</div>
+          <svg class="card-icon"><use href="#icon-house"></use></svg>
           <h3 class="card-title highlight">For Landlords</h3>
           <ul class="bullet-list" style="margin-top: 0.75rem; font-size: clamp(0.8rem, 1.5vw, 0.9rem);">
             <li>Wider tenant reach</li>
@@ -1335,8 +1462,7 @@
   <div class="slide" data-slide="13">
     <div class="content" style="text-align: center;">
       <div class="header reveal" style="justify-content: center;">
-        <div class="logo-mark">H</div>
-        <span class="logo-text">Haven Space</span>
+        <img src="https://university-portal-assets.vercel.app/images/branding/logo-brand.png" onerror="this.onerror=null; this.src='assets/logo-brand.png';" alt="Haven Space Logo" style="height: clamp(60px, 10vw, 80px); width: auto;" />
       </div>
 
       <h2 class="slide-title reveal reveal-delay-1" style="margin-top: clamp(1rem, 2vw, 2rem);">Conclusion</h2>
@@ -1351,17 +1477,17 @@
 
       <div class="grid-3" style="margin-top: clamp(2rem, 4vw, 3rem);">
         <div class="card reveal reveal-delay-3">
-          <div class="card-value" style="font-size: clamp(1.25rem, 3vw, 1.5rem);">✓ Clear Problem</div>
+          <div class="card-value" style="font-size: clamp(1.25rem, 3vw, 1.5rem);"><svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem; vertical-align: middle;"><use href="#icon-check"></use></svg> Clear Problem</div>
           <p class="card-text">Manual processes identified</p>
         </div>
 
         <div class="card reveal reveal-delay-3">
-          <div class="card-value" style="font-size: clamp(1.25rem, 3vw, 1.5rem);">✓ Logical Solution</div>
+          <div class="card-value" style="font-size: clamp(1.25rem, 3vw, 1.5rem);"><svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem; vertical-align: middle;"><use href="#icon-check"></use></svg> Logical Solution</div>
           <p class="card-text">Web-based platform proposed</p>
         </div>
 
         <div class="card reveal reveal-delay-3">
-          <div class="card-value" style="font-size: clamp(1.25rem, 3vw, 1.5rem);">✓ Practical Plan</div>
+          <div class="card-value" style="font-size: clamp(1.25rem, 3vw, 1.5rem);"><svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem; vertical-align: middle;"><use href="#icon-check"></use></svg> Practical Plan</div>
           <p class="card-text">12-week Agile development</p>
         </div>
       </div>
@@ -1369,7 +1495,7 @@
       <div class="cta-box reveal reveal-delay-4" style="margin-top: clamp(2rem, 4vw, 3rem);">
         <h3 class="cta-title">Thank You</h3>
         <p class="cta-text">We are ready to answer your questions</p>
-        <div class="cta-contact" style="margin-top: 1rem;">📧 havenspace.team@email.com</div>
+        <div class="cta-contact" style="margin-top: 1rem;"><svg style="width: 1.2em; height: 1.2em; margin-right: 0.5rem; vertical-align: middle;"><use href="#icon-email"></use></svg> havenspace.team@email.com</div>
       </div>
 
       <p class="reveal reveal-delay-4" style="margin-top: clamp(2rem, 4vw, 3rem); color: var(--text-secondary);">

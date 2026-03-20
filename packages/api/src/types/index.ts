@@ -9,9 +9,7 @@
  */
 
 import { TRPCError } from "@trpc/server";
-
-// Import Prisma types conditionally - using any to avoid compilation errors
-type PrismaClient = any;
+import type { PrismaClientType } from "@havenspace/database";
 
 /**
  * User role and status types
@@ -38,7 +36,7 @@ export interface HavenSession {
  * TRPC context type - available in all procedures
  */
 export interface TRPCContext {
-  db: PrismaClient;
+  db: PrismaClientType;
   session: HavenSession | null;
   headers: Headers;
   csrfSecret?: string | null; // CSRF secret from server-side session

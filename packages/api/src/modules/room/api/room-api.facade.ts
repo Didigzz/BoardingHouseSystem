@@ -15,12 +15,12 @@ export class RoomApiFacade implements IRoomApi {
     return RoomApiFacade.instance;
   }
 
-  async createRoom(data: any): Promise<Room> {
+  async createRoom(data: Partial<Room>): Promise<Room> {
     const module = RoomModule.getInstance();
     return module.getHandlers().createRoom.handle(data);
   }
 
-  async updateRoom(id: string, data: any): Promise<Room> {
+  async updateRoom(id: string, data: Partial<Room>): Promise<Room> {
     const module = RoomModule.getInstance();
     return module.getHandlers().updateRoom.handle({ id, ...data });
   }
@@ -35,7 +35,7 @@ export class RoomApiFacade implements IRoomApi {
     return module.getHandlers().getRoom.handle({ id });
   }
 
-  async listRooms(filters?: any): Promise<Room[]> {
+  async listRooms(filters?: unknown): Promise<Room[]> {
     const module = RoomModule.getInstance();
     return module.getHandlers().listRooms.handle(filters);
   }

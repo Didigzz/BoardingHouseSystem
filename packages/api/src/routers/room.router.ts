@@ -13,6 +13,8 @@ interface AuthenticatedCtx<TInput = unknown> {
   input: TInput;
 }
 
+type Procedure = ReturnType<typeof createTRPCRouter>;
+
 type GetAllInput = z.infer<typeof getAllRoomsSchema>;
 type GetByIdInput = z.infer<typeof getRoomByIdSchema>;
 type CreateRoomInput = z.infer<typeof createRoomSchema>;
@@ -32,7 +34,7 @@ const deleteRoomSchema = z.object({
   id: z.string(),
 });
 
-export const createRoomRouter = (protectedProcedure: any) => {
+export const createRoomRouter = (protectedProcedure: Procedure) => {
   return createTRPCRouter({
     getAll: protectedProcedure
       .input(getAllRoomsSchema.optional())

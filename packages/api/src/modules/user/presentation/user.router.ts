@@ -7,14 +7,20 @@ import {
 import { PrismaUserRepository } from "../infrastructure/persistence/prisma-user.repository";
 import { UserService } from "../domain/services/user.service";
 import { User } from "../domain/entities/user.entity";
+import type { PrismaClientType } from "@havenspace/database";
 
-type ProtectedProcedure = any;
+type ProtectedProcedure = unknown;
+
+interface UserContext {
+  db: PrismaClientType;
+  session: { user: { id: string } };
+}
 
 export const createUserRouter = (protectedProcedure: ProtectedProcedure) => {
   return {
     register: publicProcedure
       .input(registerSchema)
-      .handler(async ({ context, input }: { context: any; input: any }) => {
+      .handler(async ({ context, input }: { context: unknown; input: unknown }) => {
         const repository = new PrismaUserRepository(context.db);
         const service = new UserService(repository);
 
@@ -33,9 +39,10 @@ export const createUserRouter = (protectedProcedure: ProtectedProcedure) => {
         return { id: savedUser.id, email: savedUser.email, name: savedUser.name };
       }),
 
-    getProfile: protectedProcedure.handler(async ({ context }: { context: any }) => {
-      return context.db.user.findUnique({
-        where: { id: context.session.user.id },
+    getProfile: protectedProcedure.handler(async ({ context }: { context: unknown }) => {
+      const ctx = context as UserContext;
+      return ctx.db.user.findUnique({
+        where: { id: ctx.session.user.id },
         select: {
           id: true,
           email: true,
@@ -54,23 +61,27 @@ export const createUserRouter = (protectedProcedure: ProtectedProcedure) => {
           image: z.string().optional(),
         })
       )
-      .handler(async ({ context, input }: { context: any; input: any }) => {
-        return context.db.user.update({
-          where: { id: context.session.user.id },
-          data: input,
+      .handler(async ({ context, input }: { context: unknown; input: unknown }) => {
+        const ctx = context as UserContext;
+        const inp = input as { name?: string; image?: string };
+        return ctx.db.user.update({
+          where: { id: ctx.session.user.id },
+          data: inp,
         });
       }),
 
     changePassword: protectedProcedure
       .input(changePasswordSchema)
-      .handler(async ({ context, input }: { context: any; input: any }) => {
-        const repository = new PrismaUserRepository(context.db);
+      .handler(async ({ context, input }: { context: unknown; input: unknown }) => {
+        const ctx = context as UserContext;
+        const inp = input as { currentPassword: string; newPassword: string };
+        const repository = new PrismaUserRepository(ctx.db);
         const service = new UserService(repository);
 
         await service.updatePassword(
-          context.session.user.id,
-          input.currentPassword,
-          input.newPassword
+          ctx.session.user.id,
+          inp.currentPassword,
+          inp.newPassword
         );
 
         return { success: true };

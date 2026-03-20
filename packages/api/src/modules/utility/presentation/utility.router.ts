@@ -11,8 +11,9 @@ import { GetUtilityReadingHandler } from "../application/handlers/get-utility-re
 import { ListUtilityReadingsHandler } from "../application/handlers/list-utility-readings.handler";
 import { GetLatestReadingHandler } from "../application/handlers/get-latest-reading.handler";
 import { GetConsumptionSummaryHandler } from "../application/handlers/get-consumption-summary.handler";
+import type { PrismaClientType } from "@havenspace/database";
 
-type ProtectedProcedure = any;
+type ProtectedProcedure = unknown;
 
 export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
   return {
@@ -27,7 +28,7 @@ export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
           })
           .optional()
       )
-      .handler(async ({ context, input }: { context: any; input?: any }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input?: unknown }) => {
         const repository = new PrismaUtilityRepository(context.db);
         const handler = new ListUtilityReadingsHandler(repository);
         return handler.handle(input);
@@ -35,7 +36,7 @@ export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
 
     getById: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .handler(async ({ context, input }: { context: any; input: { id: string } }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: { id: string } }) => {
         const repository = new PrismaUtilityRepository(context.db);
         const handler = new GetUtilityReadingHandler(repository);
         return handler.handle(input);
@@ -43,7 +44,7 @@ export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
 
     create: protectedProcedure
       .input(createUtilityReadingSchema)
-      .handler(async ({ context, input }: { context: any; input: any }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: unknown }) => {
         const repository = new PrismaUtilityRepository(context.db);
         const service = new UtilityService(repository);
         const handler = new CreateUtilityReadingHandler(repository, service);
@@ -52,8 +53,8 @@ export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
 
     update: protectedProcedure
       .input(updateUtilityReadingSchema)
-      .handler(async ({ context, input }: { context: any; input: any }) => {
-        const { id, ...data } = input;
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: unknown }) => {
+        const { id, ...data } = input as { id: string } & Record<string, unknown>;
         return context.db.utilityReading.update({
           where: { id },
           data,
@@ -62,7 +63,7 @@ export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
 
     delete: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .handler(async ({ context, input }: { context: any; input: { id: string } }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: { id: string } }) => {
         return context.db.utilityReading.delete({
           where: { id: input.id },
         });
@@ -70,7 +71,7 @@ export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
 
     getLatestByRoom: protectedProcedure
       .input(z.object({ roomId: z.string(), type: UtilityTypeEnum }))
-      .handler(async ({ context, input }: { context: any; input: any }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: unknown }) => {
         const repository = new PrismaUtilityRepository(context.db);
         const handler = new GetLatestReadingHandler(repository);
         return handler.handle(input);
@@ -84,7 +85,7 @@ export const createUtilityRouter = (protectedProcedure: ProtectedProcedure) => {
           months: z.number().default(6),
         })
       )
-      .handler(async ({ context, input }: { context: any; input: any }) => {
+      .handler(async ({ context, input }: { context: { db: PrismaClientType }; input: unknown }) => {
         const repository = new PrismaUtilityRepository(context.db);
         const service = new UtilityService(repository);
         const handler = new GetConsumptionSummaryHandler(service);

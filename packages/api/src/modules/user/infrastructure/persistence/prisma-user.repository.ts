@@ -2,7 +2,7 @@ import { IUserRepository } from "../../domain/repositories/user.repository.inter
 import { User } from "../../domain/entities/user.entity";
 
 export class PrismaUserRepository implements IUserRepository {
-  constructor(private readonly db: any) {}
+  constructor(private readonly db: unknown) {}
 
   async findById(id: string): Promise<User | null> {
     const data = await this.db.user.findUnique({

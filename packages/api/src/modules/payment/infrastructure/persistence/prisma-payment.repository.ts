@@ -2,7 +2,21 @@ import { Payment } from '../../domain/entities/payment.entity';
 import { PaymentStatus } from '../../domain/value-objects/payment-status.vo';
 import { PaymentType } from '../../domain/value-objects/payment-type.vo';
 import { IPaymentRepository, PaymentFilters, PaymentStats, MonthlyRevenue } from '../../domain/repositories/payment.repository.interface';
-import { PrismaClientType } from '@havenspace/database';
+import type { PrismaClientType } from '@havenspace/database';
+
+interface PaymentData {
+  id: string;
+  boarderId: string;
+  amount: { toNumber: () => number };
+  type: string;
+  status: string;
+  dueDate: Date;
+  paidDate: Date | null;
+  receiptNumber: string | null;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export class PrismaPaymentRepository implements IPaymentRepository {
   constructor(private prisma: PrismaClientType) {}
@@ -22,8 +36,8 @@ export class PrismaPaymentRepository implements IPaymentRepository {
   async findAll(filters?: PaymentFilters): Promise<Payment[]> {
     const paymentsData = await this.prisma.payment.findMany({
       where: {
-        status: filters?.status ? filters.status.toString() as any : undefined,
-        type: filters?.type ? filters.type.toString() as any : undefined,
+        status: filters?.status ? filters.status.toString() : undefined,
+        type: filters?.type ? filters.type.toString() : undefined,
         boarderId: filters?.boarderId,
         dueDate: {
           gte: filters?.startDate,
@@ -43,7 +57,7 @@ export class PrismaPaymentRepository implements IPaymentRepository {
       orderBy: { dueDate: 'desc' },
     });
 
-    return paymentsData.map((payment: any) => this.mapToDomain(payment));
+    return paymentsData.map((payment) => this.mapToDomain(payment));
   }
 
   async save(payment: Payment): Promise<Payment> {
@@ -52,8 +66,8 @@ export class PrismaPaymentRepository implements IPaymentRepository {
       update: {
         boarderId: payment.boarderId,
         amount: payment.amount,
-        type: payment.type.toString() as any,
-        status: payment.status.toString() as any,
+        type: payment.type.toString(),
+        status: payment.status.toString(),
         dueDate: payment.dueDate,
         paidDate: payment.paidDate,
         receiptNumber: payment.receiptNumber,
@@ -64,8 +78,8 @@ export class PrismaPaymentRepository implements IPaymentRepository {
         id: payment.id,
         boarderId: payment.boarderId,
         amount: payment.amount,
-        type: payment.type.toString() as any,
-        status: payment.status.toString() as any,
+        type: payment.type.toString(),
+        status: payment.status.toString(),
         dueDate: payment.dueDate,
         paidDate: payment.paidDate,
         receiptNumber: payment.receiptNumber,
@@ -139,7 +153,7 @@ export class PrismaPaymentRepository implements IPaymentRepository {
       revenue: 0,
     }));
 
-    payments.forEach((payment: any) => {
+    payments.forEach((payment: { paidDate: Date; amount: { toNumber: () => number } }) => {
       if (payment.paidDate) {
         const month = payment.paidDate.getMonth();
         monthlyData[month]!.revenue += payment.amount.toNumber();
@@ -149,7 +163,7 @@ export class PrismaPaymentRepository implements IPaymentRepository {
     return monthlyData;
   }
 
-  private mapToDomain(data: any): Payment {
+  private mapToDomain(data: PaymentData): Payment {
     return new Payment({
       id: data.id,
       boarderId: data.boarderId,

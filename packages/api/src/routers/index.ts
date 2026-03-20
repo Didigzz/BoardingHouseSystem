@@ -11,12 +11,16 @@ import { createBookingRouter } from "./booking.router";
 import { createAuditLogRouter } from "./audit-log.router";
 import type { AnyRouter } from "@trpc/server";
 import type { MiddlewareFn } from "../types/index";
+// tRPC procedure type
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Procedure = any;
 
 export const createAppRouter = (
-    protectedProcedure: any,
-    adminProcedure?: any,
-    landlordProcedure?: any,
-    boarderProcedure?: any,
+    protectedProcedure: Procedure,
+    adminProcedure?: Procedure,
+    landlordProcedure?: Procedure,
+    boarderProcedure?: Procedure,
     authMiddleware?: MiddlewareFn
 ): AnyRouter => {
     return createTRPCRouter({

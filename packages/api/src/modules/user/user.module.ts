@@ -6,12 +6,12 @@ export class UserModule {
   private repository: PrismaUserRepository;
   private service: UserService;
 
-  private constructor(db: any) {
+  private constructor(db: unknown) {
     this.repository = new PrismaUserRepository(db);
     this.service = new UserService(this.repository);
   }
 
-  static initialize(db: any): UserModule {
+  static initialize(db: unknown): UserModule {
     if (!UserModule.instance) {
       UserModule.instance = new UserModule(db);
     }

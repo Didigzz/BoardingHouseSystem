@@ -18,7 +18,7 @@ export class UtilityModule {
     getConsumptionSummary: GetConsumptionSummaryHandler;
   };
 
-  private constructor(db: any) {
+  private constructor(db: unknown) {
     this.repository = new PrismaUtilityRepository(db);
     this.service = new UtilityService(this.repository);
     this.handlers = {
@@ -30,7 +30,7 @@ export class UtilityModule {
     };
   }
 
-  static initialize(db: any): UtilityModule {
+  static initialize(db: unknown): UtilityModule {
     if (!UtilityModule.instance) {
       UtilityModule.instance = new UtilityModule(db);
     }

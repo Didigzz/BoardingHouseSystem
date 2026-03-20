@@ -1,7 +1,20 @@
 import { Room } from '../../domain/entities/room.entity';
 import { RoomStatus } from '../../domain/value-objects/room-status.vo';
 import { IRoomRepository, RoomFilters, RoomStats } from '../../domain/repositories/room.repository.interface';
-import { PrismaClientType } from '@havenspace/database';
+import type { PrismaClientType } from '@havenspace/database';
+
+interface RoomData {
+  id: string;
+  roomNumber: string;
+  floor: number;
+  capacity: number;
+  monthlyRate: number;
+  description: string | null;
+  amenities: string[];
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export class PrismaRoomRepository implements IRoomRepository {
   constructor(private prisma: PrismaClientType) {}
@@ -21,7 +34,7 @@ export class PrismaRoomRepository implements IRoomRepository {
   async findAll(filters?: RoomFilters): Promise<Room[]> {
     const roomsData = await this.prisma.room.findMany({
       where: {
-        status: filters?.status ? filters.status.toString() as any : undefined,
+        status: filters?.status ? filters.status.toString() : undefined,
         roomNumber: filters?.search
           ? { contains: filters.search, mode: 'insensitive' }
           : undefined,
@@ -39,7 +52,7 @@ export class PrismaRoomRepository implements IRoomRepository {
       orderBy: { roomNumber: 'asc' },
     });
 
-    return roomsData.map((room: any) => this.mapToDomain(room));
+    return roomsData.map((room) => this.mapToDomain(room));
   }
 
   async save(room: Room): Promise<Room> {
@@ -52,7 +65,7 @@ export class PrismaRoomRepository implements IRoomRepository {
         monthlyRate: room.monthlyRate,
         description: room.description,
         amenities: room.amenities,
-        status: room.status.toString() as any,
+        status: room.status.toString(),
         updatedAt: room.updatedAt,
       },
       create: {
@@ -63,7 +76,7 @@ export class PrismaRoomRepository implements IRoomRepository {
         monthlyRate: room.monthlyRate,
         description: room.description,
         amenities: room.amenities,
-        status: room.status.toString() as any,
+        status: room.status.toString(),
         createdAt: room.createdAt,
         updatedAt: room.updatedAt,
       },
@@ -103,7 +116,7 @@ export class PrismaRoomRepository implements IRoomRepository {
     return room !== null;
   }
 
-  private mapToDomain(data: any): Room {
+  private mapToDomain(data: RoomData): Room {
     return new Room({
       id: data.id,
       roomNumber: data.roomNumber,

@@ -66,7 +66,7 @@ const rateLimitStore = new Map<string, RateLimitData>();
 export function createRateLimitMiddleware(options: RateLimitOptions) {
   const { windowMs, maxRequests, message = "Too many requests, please try again later." } = options;
 
-  return async (opts: { next: () => Promise<any>; ctx: any; path: string; type: string }) => {
+  return async (opts: { next: () => Promise<unknown>; ctx: { session?: { user?: { id?: string; email?: string } } | null }; path: string; type: string }) => {
     const { next, ctx, path } = opts;
     
     // Skip rate limiting in development

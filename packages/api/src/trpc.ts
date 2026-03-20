@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import { db } from "@havenspace/database";
 import { createRateLimitMiddleware, rateLimits } from "./middleware/rate-limit";
 import { verifyCSRFToken } from "./lib/csrf";
-import type { TRPCContext, HavenSession, UserStatus } from "./types/index";
+import type { TRPCContext, HavenSession } from "./types/index";
 
 export const createTRPCContext = async (opts: {
   headers: Headers;
@@ -45,21 +45,13 @@ const authRateLimitMiddleware = createRateLimitMiddleware(rateLimits.auth);
 const writeRateLimitMiddleware = createRateLimitMiddleware(rateLimits.write);
 const sensitiveRateLimitMiddleware = createRateLimitMiddleware(rateLimits.sensitive);
 
-const timingMiddleware = t.middleware(async ({ next, path }) => {
-  const start = Date.now();
-
+const timingMiddleware = t.middleware(async ({ next }) => {
   if (process.env.NODE_ENV === "development") {
     const waitMs = Math.floor(Math.random() * 400) + 100;
     await new Promise((resolve) => setTimeout(resolve, waitMs));
   }
 
-  const result = await next();
-
-  const end = Date.now();
-  // eslint-disable-next-line no-console
-  console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
-
-  return result;
+  return next();
 });
 
 /**
@@ -167,7 +159,7 @@ export const createStatusMiddleware = (
       ? requiredStatus
       : [requiredStatus];
 
-    if (!Array.prototype.includes.call(allowedStatuses, ctx.session.user.status)) {
+    if (!allowedStatuses.includes(ctx.session.user.status as string)) {
       throw new TRPCError({
         code: "FORBIDDEN",
         message: `This action requires one of these statuses: ${allowedStatuses.join(", ")}`,
@@ -335,7 +327,7 @@ export const sensitiveProcedure = t.procedure
   .use(defaultAuthMiddleware);
 
 // Legacy exports for backward compatibility
-export const createProtectedProcedure = (authMiddleware?: any) => {
+export const createProtectedProcedure = (authMiddleware?: unknown) => {
   return t.procedure
     .use(rateLimitMiddleware)
     .use(writeRateLimitMiddleware)
@@ -344,7 +336,7 @@ export const createProtectedProcedure = (authMiddleware?: any) => {
     .use(authMiddleware || defaultAuthMiddleware);
 };
 
-export const createAuthProcedure = (authMiddleware?: any) => {
+export const createAuthProcedure = (authMiddleware?: unknown) => {
   return t.procedure
     .use(authRateLimitMiddleware)
     .use(timingMiddleware)
@@ -352,7 +344,7 @@ export const createAuthProcedure = (authMiddleware?: any) => {
     .use(authMiddleware || defaultAuthMiddleware);
 };
 
-export const createSensitiveProcedure = (authMiddleware?: any) => {
+export const createSensitiveProcedure = (authMiddleware?: unknown) => {
   return t.procedure
     .use(sensitiveRateLimitMiddleware)
     .use(writeRateLimitMiddleware)

@@ -9,20 +9,23 @@ import bcrypt from "bcryptjs";
 import { TRPCError } from "@trpc/server";
 import { generateToken } from "../lib/jwt";
 import { createAuthError } from "../lib/errors";
+import type { TRPCContext, ProtectedTRPCContext } from "../types/index";
 
 // Type helpers
 type LoginInput = z.infer<typeof loginSchema>;
 type RegisterInput = z.infer<typeof registerSchema>;
 type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 
-export const createUserRouter = (protectedProcedure: any, authMiddleware: any) => {
+type Procedure = ReturnType<typeof createTRPCRouter>;
+
+export const createUserRouter = (protectedProcedure: Procedure, authMiddleware: unknown) => {
   // Sensitive procedure for password changes with strict rate limiting
   const sensitiveProcedure = createSensitiveProcedure(authMiddleware);
-  
+
   return createTRPCRouter({
     login: publicProcedure
       .input(loginSchema)
-      .mutation(async ({ ctx, input }: { ctx: any; input: LoginInput }) => {
+      .mutation(async ({ ctx, input }: { ctx: TRPCContext; input: LoginInput }) => {
         const user = await ctx.db.user.findUnique({
           where: { email: input.email },
         });
@@ -56,7 +59,7 @@ export const createUserRouter = (protectedProcedure: any, authMiddleware: any) =
 
     register: publicProcedure
       .input(registerSchema)
-      .mutation(async ({ ctx, input }: { ctx: any; input: RegisterInput }) => {
+      .mutation(async ({ ctx, input }: { ctx: TRPCContext; input: RegisterInput }) => {
         const existingUser = await ctx.db.user.findUnique({
           where: { email: input.email },
         });
@@ -92,7 +95,7 @@ export const createUserRouter = (protectedProcedure: any, authMiddleware: any) =
         };
       }),
 
-    getProfile: protectedProcedure.query(async ({ ctx }: { ctx: any }) => {
+    getProfile: protectedProcedure.query(async ({ ctx }: { ctx: ProtectedTRPCContext }) => {
       return ctx.db.user.findUnique({
         where: { id: ctx.session.user.id },
         select: {
@@ -113,7 +116,7 @@ export const createUserRouter = (protectedProcedure: any, authMiddleware: any) =
           image: z.string().optional(),
         })
       )
-      .mutation(async ({ ctx, input }: { ctx: any; input: any }) => {
+      .mutation(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: { name?: string; image?: string } }) => {
         return ctx.db.user.update({
           where: { id: ctx.session.user.id },
           data: input,
@@ -122,7 +125,7 @@ export const createUserRouter = (protectedProcedure: any, authMiddleware: any) =
 
     changePassword: sensitiveProcedure
       .input(changePasswordSchema)
-      .mutation(async ({ ctx, input }: { ctx: any; input: ChangePasswordInput }) => {
+      .mutation(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: ChangePasswordInput }) => {
         const user = await ctx.db.user.findUnique({
           where: { id: ctx.session.user.id },
         });

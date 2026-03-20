@@ -15,6 +15,8 @@ interface AuthenticatedCtx<TInput = unknown> {
   input: TInput;
 }
 
+type Procedure = ReturnType<typeof createTRPCRouter>;
+
 type GetAllInput = z.infer<typeof getAllPaymentsSchema>;
 type GetByIdInput = z.infer<typeof getPaymentByIdSchema>;
 type CreatePaymentInput = z.infer<typeof createPaymentSchema>;
@@ -43,7 +45,7 @@ const getMonthlyRevenueSchema = z.object({
   year: z.number().optional(),
 });
 
-export const createPaymentRouter = (protectedProcedure: any) => {
+export const createPaymentRouter = (protectedProcedure: Procedure) => {
   return createTRPCRouter({
     getAll: protectedProcedure
       .input(getAllPaymentsSchema.optional())
@@ -184,7 +186,7 @@ export const createPaymentRouter = (protectedProcedure: any) => {
           revenue: 0,
         })) as Array<{ month: string; revenue: number }>;
 
-        payments.forEach((payment: any) => {
+        payments.forEach((payment: { paidDate: Date; amount: { toNumber: () => number } }) => {
           if (payment.paidDate) {
             const month = payment.paidDate.getMonth();
             const monthData = monthlyData[month];

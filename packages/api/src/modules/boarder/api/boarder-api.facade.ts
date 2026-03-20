@@ -15,12 +15,12 @@ export class BoarderApiFacade implements IBoarderApi {
     return BoarderApiFacade.instance;
   }
 
-  async createBoarder(data: any): Promise<Boarder> {
+  async createBoarder(data: unknown): Promise<Boarder> {
     const module = BoarderModule.getInstance();
     return module.getHandlers().createBoarder.handle(data);
   }
 
-  async updateBoarder(id: string, data: any): Promise<Boarder> {
+  async updateBoarder(id: string, data: unknown): Promise<Boarder> {
     const module = BoarderModule.getInstance();
     return module.getHandlers().updateBoarder.handle({ id, ...data });
   }
@@ -35,7 +35,7 @@ export class BoarderApiFacade implements IBoarderApi {
     return module.getHandlers().getBoarder.handle({ id });
   }
 
-  async listBoarders(filters?: any): Promise<Boarder[]> {
+  async listBoarders(filters?: unknown): Promise<Boarder[]> {
     const module = BoarderModule.getInstance();
     return module.getHandlers().listBoarders.handle(filters);
   }

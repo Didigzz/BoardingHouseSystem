@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import type { LandlordTRPCContext, TRPCContext } from "../types/index";
+// tRPC procedure type
 import {
   createPropertySchema,
   updatePropertySchema,
@@ -13,6 +14,9 @@ interface LandlordCtx<TInput = unknown> {
   ctx: LandlordTRPCContext;
   input: TInput;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Procedure = any;
 
 type GetAllInput = z.infer<typeof getAllInputSchema>;
 
@@ -38,8 +42,8 @@ const deletePropertySchema = z.object({
  * Property router for managing boarding house properties
  */
 export const createPropertyRouter = (
-  protectedProcedure: any,
-  landlordProcedure?: any
+  protectedProcedure: Procedure,
+  landlordProcedure?: Procedure
 ) => {
   // Use protectedProcedure if landlordProcedure is not provided
   const landlordProc = landlordProcedure || protectedProcedure;

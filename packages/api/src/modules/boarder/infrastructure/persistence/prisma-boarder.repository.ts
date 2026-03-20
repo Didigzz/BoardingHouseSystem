@@ -53,7 +53,7 @@ export class PrismaBoarderRepository implements IBoarderRepository {
       orderBy: { lastName: 'asc' },
     });
 
-    return boardersData.map((boarder: any) => this.mapToDomain(boarder));
+    return boardersData.map((boarder: unknown) => this.mapToDomain(boarder));
   }
 
   async save(boarder: Boarder): Promise<Boarder> {
@@ -124,22 +124,39 @@ export class PrismaBoarderRepository implements IBoarderRepository {
     return boarder !== null;
   }
 
-  private mapToDomain(data: any): Boarder {
+  private mapToDomain(data: unknown): Boarder {
+    const d = data as {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone?: string | null;
+      emergencyContact?: string | null;
+      emergencyPhone?: string | null;
+      accessCode: string;
+      moveInDate?: Date | null;
+      moveOutDate?: Date | null;
+      isActive: boolean;
+      roomId?: string | null;
+      createdAt: Date;
+      updatedAt: Date;
+    };
+
     return new Boarder({
-      id: data.id,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      phone: data.phone,
-      emergencyContact: data.emergencyContact,
-      emergencyPhone: data.emergencyPhone,
-      accessCode: data.accessCode,
-      moveInDate: data.moveInDate,
-      moveOutDate: data.moveOutDate,
-      isActive: data.isActive,
-      roomId: data.roomId,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
+      id: d.id,
+      firstName: d.firstName,
+      lastName: d.lastName,
+      email: d.email,
+      phone: d.emergencyContact,
+      emergencyContact: d.emergencyContact,
+      emergencyPhone: d.emergencyPhone,
+      accessCode: d.accessCode,
+      moveInDate: d.moveInDate,
+      moveOutDate: d.moveOutDate,
+      isActive: d.isActive,
+      roomId: d.roomId,
+      createdAt: d.createdAt,
+      updatedAt: d.updatedAt,
     });
   }
 }

@@ -11,18 +11,21 @@ The public-facing marketplace for the Haven Space platform. This application ser
 ## âœ¨ Features
 
 ### Property Discovery
+
 - **Browse Listings**: View all available boarding houses
 - **Advanced Search**: Filter by location, price, amenities, availability
 - **Interactive Map**: See property locations with clustering
 - **Property Details**: Comprehensive listing pages with photo galleries
 
 ### Authentication
+
 - **Login/Register**: Integrated authentication with NextAuth.js
 - **Role-based Registration**: Sign up as Boarder or Landlord
 - **Social Login**: OAuth providers (Google, Facebook, etc.)
 - **Session Management**: Secure session handling
 
 ### Public Information
+
 - **About Pages**: Platform information and how it works
 - **Contact**: Support and inquiry forms
 - **Terms & Privacy**: Legal documentation
@@ -31,13 +34,14 @@ The public-facing marketplace for the Haven Space platform. This application ser
 
 Authentication is **built into this app** using NextAuth.js:
 
-| Page | Route |
-|------|-------|
-| Login | `/login` |
-| Register | `/register` |
+| Page              | Route              |
+| ----------------- | ------------------ |
+| Login             | `/login`           |
+| Register          | `/register`        |
 | Become a Landlord | `/become-landlord` |
 
 After successful authentication, users are redirected to their role-specific dashboard:
+
 - **Boarders** â†’ Boarder Dashboard (port 3004)
 - **Landlords** â†’ Landlord Portal (port 3005)
 - **Admins** â†’ Admin Dashboard (port 3002)
@@ -45,6 +49,7 @@ After successful authentication, users are redirected to their role-specific das
 ## ðŸ—ï¸ Architecture
 
 ### Pages Structure
+
 ```
 src/app/
 â”œâ”€â”€ page.tsx                 # Homepage with featured listings
@@ -66,6 +71,7 @@ src/app/
 ```
 
 ### Components
+
 ```
 src/components/
 â”œâ”€â”€ layout/
@@ -80,6 +86,7 @@ src/components/
 ## ðŸš€ Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - Bun package manager
 - PostgreSQL database (for API connection)
@@ -118,65 +125,72 @@ NEXT_PUBLIC_MAPBOX_TOKEN=your-mapbox-token
 ## ðŸŽ¨ UI Components
 
 ### Layout Components
+
 - **Header**: Navigation with login/register buttons
 - **Footer**: Links and company information
 - **Theme Toggle**: Light/dark mode switcher
 
 ### Listing Components
+
 - **ListingCard**: Property preview with image, price, location
 - **SearchFilters**: Location, price range, amenities filters
 - **MapView**: Interactive map with property markers
 
 ### Form Components
+
 - **RegisterForm**: User registration with role selection
 - **ContactForm**: Inquiry and support forms
 
 ## ðŸ” Search & Filtering
 
 ### Search Parameters
+
 ```typescript
 interface SearchParams {
-  location?: string
-  minPrice?: number
-  maxPrice?: number
-  amenities?: string[]
-  availableRooms?: number
-  sortBy?: 'price' | 'rating' | 'distance'
-  sortOrder?: 'asc' | 'desc'
+  location?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  amenities?: string[];
+  availableRooms?: number;
+  sortBy?: "price" | "rating" | "distance";
+  sortOrder?: "asc" | "desc";
 }
 ```
 
 ### Filter Implementation
+
 ```typescript
 // Example search hook
 const { data: properties, isLoading } = api.property.search.useQuery({
   location: searchParams.location,
   priceRange: {
     min: searchParams.minPrice,
-    max: searchParams.maxPrice
+    max: searchParams.maxPrice,
   },
   amenities: searchParams.amenities,
   limit: 20,
-  offset: page * 20
-})
+  offset: page * 20,
+});
 ```
 
 ## ðŸ—ºï¸ Map Integration
 
 ### Map Features
+
 - Property location markers
 - Clustering for dense areas
 - Popup with property preview
 - Search within map bounds
 
 ### Implementation
+
 ```typescript
 // Map component with property markers
 <MapContainer center={[14.5995, 120.9842]} zoom={11}>
   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
   {properties.map(property => (
-    <Marker 
-      key={property.id} 
+    <Marker
+      key={property.id}
       position={[property.latitude, property.longitude]}
     >
       <Popup>
@@ -214,11 +228,13 @@ const { data: session } = useSession();
 ## ðŸ“± Responsive Design
 
 ### Breakpoints
+
 - **Mobile**: < 768px
 - **Tablet**: 768px - 1024px
 - **Desktop**: > 1024px
 
 ### Mobile Optimizations
+
 - Touch-friendly navigation
 - Optimized image loading
 - Simplified search interface
@@ -227,12 +243,14 @@ const { data: session } = useSession();
 ## ðŸŽ¯ SEO & Performance
 
 ### SEO Features
+
 - Server-side rendering with Next.js
 - Dynamic meta tags for property pages
 - Structured data for property listings
 - Sitemap generation
 
 ### Performance Optimizations
+
 - Image optimization with Next.js Image
 - Lazy loading for property lists
 - Infinite scroll for large datasets
@@ -241,6 +259,7 @@ const { data: session } = useSession();
 ## ðŸ§ª Testing
 
 ### Test Structure
+
 ```
 src/__tests__/
 â”œâ”€â”€ components/
@@ -254,6 +273,7 @@ src/__tests__/
 ```
 
 ### Running Tests
+
 ```bash
 # Unit tests
 bun test
@@ -268,6 +288,7 @@ bun run test:coverage
 ## ðŸš€ Deployment
 
 ### Build
+
 ```bash
 # Build for production
 bun run build
@@ -277,6 +298,7 @@ bun start
 ```
 
 ### Environment Variables (Production)
+
 ```env
 NEXTAUTH_URL=https://yourdomain.com
 NEXTAUTH_SECRET=production-secret
@@ -284,6 +306,7 @@ NEXT_PUBLIC_API_URL=https://api.yourdomain.com
 ```
 
 ### Deployment Platforms
+
 - **Vercel**: Recommended for Next.js apps
 - **Netlify**: Alternative with good Next.js support
 - **Docker**: Container deployment option
@@ -291,40 +314,44 @@ NEXT_PUBLIC_API_URL=https://api.yourdomain.com
 ## ðŸ“Š Analytics
 
 ### Tracking Events
+
 - Property views
 - Search queries
 - Registration conversions
 - Contact form submissions
 
 ### Implementation
+
 ```typescript
 // Example analytics tracking
-import { analytics } from '@/lib/analytics'
+import { analytics } from "@/lib/analytics";
 
 const handlePropertyView = (propertyId: string) => {
-  analytics.track('Property Viewed', {
+  analytics.track("Property Viewed", {
     propertyId,
-    source: 'listing_page'
-  })
-}
+    source: "listing_page",
+  });
+};
 ```
 
 ## ðŸ”§ Configuration
 
 ### Next.js Config
+
 ```javascript
 // next.config.js
 module.exports = {
   images: {
-    domains: ['your-image-domain.com'],
+    domains: ["your-image-domain.com"],
   },
   experimental: {
     appDir: true,
   },
-}
+};
 ```
 
 ### Tailwind Config
+
 ```javascript
 // tailwind.config.ts
 export default {
@@ -354,4 +381,3 @@ export default {
 - [API Documentation](../api/README.md)
 - [Development Guidelines](../../DEVELOPMENT.md)
 - [Architecture Overview](../../flow.md)
-

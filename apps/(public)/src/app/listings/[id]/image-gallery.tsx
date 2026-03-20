@@ -37,10 +37,10 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
     <>
       {/* Gallery Grid */}
       <div className="container py-4">
-        <div className="grid gap-2 md:grid-cols-4 md:grid-rows-2 h-[300px] md:h-[400px]">
+        <div className="grid h-[300px] gap-2 md:h-[400px] md:grid-cols-4 md:grid-rows-2">
           {/* Main Image */}
           <div
-            className="relative col-span-2 row-span-2 overflow-hidden rounded-l-xl cursor-pointer group"
+            className="group relative col-span-2 row-span-2 cursor-pointer overflow-hidden rounded-l-xl"
             onClick={() => setIsFullscreen(true)}
           >
             <Image
@@ -49,11 +49,11 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+            <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
             <Button
               variant="secondary"
               size="sm"
-              className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity gap-2"
+              className="absolute right-4 bottom-4 gap-2 opacity-0 transition-opacity group-hover:opacity-100"
             >
               <Expand className="h-4 w-4" />
               View all photos
@@ -64,7 +64,7 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
           {displayImages.slice(1, 5).map((image, index) => (
             <div
               key={index}
-              className={`relative hidden md:block overflow-hidden cursor-pointer group ${
+              className={`group relative hidden cursor-pointer overflow-hidden md:block ${
                 index === 1 ? "rounded-tr-xl" : ""
               } ${index === 3 ? "rounded-br-xl" : ""}`}
               onClick={() => {
@@ -78,10 +78,10 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+              <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
               {index === 3 && displayImages.length > 5 && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                  <span className="text-white font-semibold text-lg">
+                  <span className="text-lg font-semibold text-white">
                     +{displayImages.length - 5} more
                   </span>
                 </div>
@@ -93,7 +93,7 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
 
       {/* Fullscreen Modal */}
       {isFullscreen && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95">
           {/* Close Button */}
           <Button
             variant="ghost"
@@ -105,7 +105,7 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
           </Button>
 
           {/* Image Counter */}
-          <div className="absolute top-4 left-4 text-white text-sm">
+          <div className="absolute top-4 left-4 text-sm text-white">
             {currentIndex + 1} / {displayImages.length}
           </div>
 
@@ -113,14 +113,14 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20"
+            className="absolute top-1/2 left-4 -translate-y-1/2 text-white hover:bg-white/20"
             onClick={goToPrevious}
           >
             <ChevronLeft className="h-8 w-8" />
           </Button>
 
           {/* Image */}
-          <div className="relative w-full max-w-5xl h-[80vh] mx-4">
+          <div className="relative mx-4 h-[80vh] w-full max-w-5xl">
             <Image
               src={currentImage}
               alt={`${name} - Image ${currentIndex + 1}`}
@@ -133,18 +133,18 @@ export function ImageGallery({ images, name }: ImageGalleryProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:bg-white/20"
+            className="absolute top-1/2 right-4 -translate-y-1/2 text-white hover:bg-white/20"
             onClick={goToNext}
           >
             <ChevronRight className="h-8 w-8" />
           </Button>
 
           {/* Thumbnail Strip */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 overflow-x-auto max-w-[90vw] p-2">
+          <div className="absolute bottom-4 left-1/2 flex max-w-[90vw] -translate-x-1/2 gap-2 overflow-x-auto p-2">
             {displayImages.map((image, index) => (
               <button
                 key={index}
-                className={`relative w-16 h-16 rounded overflow-hidden flex-shrink-0 ${
+                className={`relative h-16 w-16 flex-shrink-0 overflow-hidden rounded ${
                   index === currentIndex
                     ? "ring-2 ring-white"
                     : "opacity-50 hover:opacity-100"

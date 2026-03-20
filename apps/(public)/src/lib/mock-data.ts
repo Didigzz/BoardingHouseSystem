@@ -29,7 +29,8 @@ export const mockBoardingHouses: BoardingHouse[] = [
     landlord: {
       id: "landlord-1",
       name: "Maria Santos",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
       phone: "+63 912 345 6789",
       email: "maria@example.com",
     },
@@ -44,13 +45,19 @@ export const mockBoardingHouses: BoardingHouse[] = [
     address: "Sayre Highway, Brgy. Sumpong",
     city: "Malaybalay City",
     province: "Bukidnon",
-    latitude: 8.1610,
-    longitude: 125.1310,
+    latitude: 8.161,
+    longitude: 125.131,
     images: [
       "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=800",
       "https://images.unsplash.com/photo-1484154218962-a197022b25ba?w=800",
     ],
-    amenities: ["WiFi", "Air Conditioning", "Security", "Furnished", "Bathroom"],
+    amenities: [
+      "WiFi",
+      "Air Conditioning",
+      "Security",
+      "Furnished",
+      "Bathroom",
+    ],
     priceMin: 3500,
     priceMax: 5500,
     totalRooms: 8,
@@ -76,9 +83,7 @@ export const mockBoardingHouses: BoardingHouse[] = [
     province: "Bukidnon",
     latitude: 8.1545,
     longitude: 125.1235,
-    images: [
-      "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800",
-    ],
+    images: ["https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800"],
     amenities: ["WiFi", "Kitchen", "Study Area"],
     priceMin: 1500,
     priceMax: 2500,
@@ -98,8 +103,8 @@ export const mockBoardingHouses: BoardingHouse[] = [
     address: "Brgy. Bangcud, Near Capitol Compound",
     city: "Malaybalay City",
     province: "Bukidnon",
-    latitude: 8.1520,
-    longitude: 125.1340,
+    latitude: 8.152,
+    longitude: 125.134,
     images: [
       "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800",
       "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800",
@@ -123,7 +128,8 @@ export const mockBoardingHouses: BoardingHouse[] = [
     landlord: {
       id: "landlord-4",
       name: "Roberto Tan",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100",
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100",
       phone: "+63 917 890 1234",
       email: "roberto@hilltop.com",
     },
@@ -139,7 +145,7 @@ export const mockBoardingHouses: BoardingHouse[] = [
     city: "Malaybalay City",
     province: "Bukidnon",
     latitude: 8.1635,
-    longitude: 125.1290,
+    longitude: 125.129,
     images: [
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800",
       "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800",
@@ -163,8 +169,8 @@ export const mockBoardingHouses: BoardingHouse[] = [
     address: "Brgy. Dalwangan",
     city: "Malaybalay City",
     province: "Bukidnon",
-    latitude: 8.1700,
-    longitude: 125.1200,
+    latitude: 8.17,
+    longitude: 125.12,
     images: [
       "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800",
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800",

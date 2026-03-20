@@ -66,9 +66,9 @@ export default async function ListingDetailPage({
         <div className="container py-4">
           <Link
             href="/listings"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground inline-flex items-center text-sm transition-colors"
           >
-            <ChevronLeft className="h-4 w-4 mr-1" />
+            <ChevronLeft className="mr-1 h-4 w-4" />
             Back to listings
           </Link>
         </div>
@@ -81,13 +81,13 @@ export default async function ListingDetailPage({
       <div className="container py-8">
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Left Column - Details */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-8 lg:col-span-2">
             {/* Header */}
             <div>
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h1 className="text-3xl font-bold">{listing.name}</h1>
-                  <div className="mt-2 flex items-center gap-2 text-muted-foreground">
+                  <div className="text-muted-foreground mt-2 flex items-center gap-2">
                     <MapPin className="h-4 w-4" />
                     <span>
                       {listing.address}, {listing.city}, {listing.province}
@@ -109,13 +109,15 @@ export default async function ListingDetailPage({
                 {listing.rating && (
                   <div className="flex items-center gap-1">
                     <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                    <span className="font-semibold">{listing.rating.toFixed(1)}</span>
+                    <span className="font-semibold">
+                      {listing.rating.toFixed(1)}
+                    </span>
                     <span className="text-muted-foreground">
                       ({listing.reviewCount} reviews)
                     </span>
                   </div>
                 )}
-                <div className="flex items-center gap-1 text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-1">
                   <Users className="h-5 w-5" />
                   <span>{listing.totalRooms} total rooms</span>
                 </div>
@@ -130,21 +132,21 @@ export default async function ListingDetailPage({
             </div>
 
             {/* Price */}
-            <div className="rounded-lg border bg-card p-6">
+            <div className="bg-card rounded-lg border p-6">
               <h2 className="text-lg font-semibold">Price Range</h2>
               <div className="mt-2">
-                <span className="text-3xl font-bold text-primary">
+                <span className="text-primary text-3xl font-bold">
                   {formatCurrency(listing.priceMin)}
                 </span>
                 {listing.priceMax > listing.priceMin && (
-                  <span className="text-2xl text-muted-foreground">
+                  <span className="text-muted-foreground text-2xl">
                     {" "}
                     - {formatCurrency(listing.priceMax)}
                   </span>
                 )}
                 <span className="text-muted-foreground"> / month</span>
               </div>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-2 text-sm">
                 Prices may vary depending on room type and size
               </p>
             </div>
@@ -152,7 +154,7 @@ export default async function ListingDetailPage({
             {/* Description */}
             <div>
               <h2 className="text-xl font-semibold">About this place</h2>
-              <p className="mt-4 text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground mt-4 leading-relaxed">
                 {listing.description}
               </p>
             </div>
@@ -180,9 +182,9 @@ export default async function ListingDetailPage({
             {/* Location Map Placeholder */}
             <div>
               <h2 className="text-xl font-semibold">Location</h2>
-              <div className="mt-4 aspect-[2/1] rounded-lg border bg-muted flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <MapPin className="h-8 w-8 mx-auto mb-2" />
+              <div className="bg-muted mt-4 flex aspect-[2/1] items-center justify-center rounded-lg border">
+                <div className="text-muted-foreground text-center">
+                  <MapPin className="mx-auto mb-2 h-8 w-8" />
                   <p>Map will be displayed here</p>
                   <p className="text-sm">
                     {listing.address}, {listing.city}
@@ -201,7 +203,7 @@ export default async function ListingDetailPage({
         {/* Similar Listings */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold">Similar Listings</h2>
-          <p className="mt-2 text-muted-foreground">
+          <p className="text-muted-foreground mt-2">
             Other boarding houses you might be interested in
           </p>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

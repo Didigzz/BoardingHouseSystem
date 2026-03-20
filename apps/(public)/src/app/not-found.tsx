@@ -6,9 +6,9 @@ export default function NotFound() {
   return (
     <div className="container flex min-h-[calc(100vh-8rem)] items-center justify-center">
       <div className="text-center">
-        <h1 className="text-9xl font-bold text-muted-foreground/30">404</h1>
+        <h1 className="text-muted-foreground/30 text-9xl font-bold">404</h1>
         <h2 className="mt-4 text-2xl font-bold">Page Not Found</h2>
-        <p className="mt-2 text-muted-foreground max-w-md">
+        <p className="text-muted-foreground mt-2 max-w-md">
           Sorry, we couldn't find the page you're looking for. It might have
           been removed or the URL might be incorrect.
         </p>

@@ -14,7 +14,9 @@ interface ListingsPageProps {
   }>;
 }
 
-export default async function ListingsPage({ searchParams }: ListingsPageProps) {
+export default async function ListingsPage({
+  searchParams,
+}: ListingsPageProps) {
   const params = await searchParams;
 
   return (
@@ -22,14 +24,16 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Browse Boarding Houses</h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           Find your perfect accommodation from our verified listings
         </p>
       </div>
 
       {/* Search and Filters */}
       <div className="mb-8">
-        <Suspense fallback={<div className="h-12 animate-pulse bg-muted rounded" />}>
+        <Suspense
+          fallback={<div className="bg-muted h-12 animate-pulse rounded" />}
+        >
           <SearchFilters />
         </Suspense>
       </div>
@@ -41,7 +45,7 @@ export default async function ListingsPage({ searchParams }: ListingsPageProps) 
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="h-[400px] animate-pulse rounded-lg bg-muted"
+                className="bg-muted h-[400px] animate-pulse rounded-lg"
               />
             ))}
           </div>

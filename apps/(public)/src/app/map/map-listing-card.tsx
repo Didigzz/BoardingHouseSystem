@@ -16,13 +16,15 @@ export function MapListingCard({
 }: MapListingCardProps) {
   return (
     <div
-      className={`p-4 cursor-pointer transition-colors ${
-        isSelected ? "bg-primary/5 border-l-2 border-l-primary" : "hover:bg-muted/50"
+      className={`cursor-pointer p-4 transition-colors ${
+        isSelected
+          ? "bg-primary/5 border-l-primary border-l-2"
+          : "hover:bg-muted/50"
       }`}
       onClick={onClick}
     >
-      <h3 className="font-semibold line-clamp-1">{listing.name}</h3>
-      <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+      <h3 className="line-clamp-1 font-semibold">{listing.name}</h3>
+      <div className="text-muted-foreground mt-1 flex items-center gap-1 text-sm">
         <MapPin className="h-3 w-3" />
         <span className="line-clamp-1">
           {listing.address}, {listing.city}
@@ -30,7 +32,7 @@ export function MapListingCard({
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <div className="font-semibold text-primary">
+        <div className="text-primary font-semibold">
           {formatCurrency(listing.priceMin)}
           {listing.priceMax > listing.priceMin && (
             <span className="text-muted-foreground font-normal">
@@ -38,11 +40,11 @@ export function MapListingCard({
               - {formatCurrency(listing.priceMax)}
             </span>
           )}
-          <span className="text-muted-foreground font-normal text-sm">/mo</span>
+          <span className="text-muted-foreground text-sm font-normal">/mo</span>
         </div>
       </div>
 
-      <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
+      <div className="text-muted-foreground mt-2 flex items-center gap-3 text-sm">
         {listing.rating && (
           <div className="flex items-center gap-1">
             <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
@@ -57,7 +59,7 @@ export function MapListingCard({
 
       <Link
         href={`/listings/${listing.id}`}
-        className="mt-2 block text-sm text-primary hover:underline"
+        className="text-primary mt-2 block text-sm hover:underline"
         onClick={(e) => e.stopPropagation()}
       >
         View details →

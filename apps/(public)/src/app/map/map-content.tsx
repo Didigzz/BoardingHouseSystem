@@ -3,7 +3,15 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@havenspace/shared/ui";
-import { Search, List, X, MapPin, Navigation, AlertTriangle, Filter } from "lucide-react";
+import {
+  Search,
+  List,
+  X,
+  MapPin,
+  Navigation,
+  AlertTriangle,
+  Filter,
+} from "lucide-react";
 import { mockBoardingHouses } from "@/lib/mock-data";
 import { BoardingHouse } from "@/lib/types";
 import { MapListingCard } from "./map-listing-card";
@@ -12,7 +20,7 @@ import { MapListingCard } from "./map-listing-card";
 const MapContainer = dynamic(() => import("./map-view"), {
   ssr: false,
   loading: () => (
-    <div className="flex-1 bg-muted animate-pulse flex items-center justify-center">
+    <div className="bg-muted flex flex-1 animate-pulse items-center justify-center">
       <div className="text-muted-foreground">Loading map...</div>
     </div>
   ),
@@ -113,12 +121,12 @@ export function MapContent() {
   });
 
   return (
-    <div className="flex-1 flex relative">
+    <div className="relative flex flex-1">
       {/* Search Bar & Filters */}
-      <div className="absolute top-4 left-4 right-4 z-[1000] flex flex-col gap-2 md:left-4 md:right-auto md:w-96">
+      <div className="absolute top-4 right-4 left-4 z-[1000] flex flex-col gap-2 md:right-auto md:left-4 md:w-96">
         <div className="flex gap-2">
-          <div className="flex-1 flex items-center gap-2 bg-background rounded-lg border shadow-lg px-3 py-2">
-            <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+          <div className="bg-background flex flex-1 items-center gap-2 rounded-lg border px-3 py-2 shadow-lg">
+            <Search className="text-muted-foreground h-4 w-4 shrink-0" />
             <input
               type="text"
               placeholder="Search boarding houses in Malaybalay..."
@@ -128,7 +136,7 @@ export function MapContent() {
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery("")}>
-                <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                <X className="text-muted-foreground hover:text-foreground h-4 w-4" />
               </button>
             )}
           </div>
@@ -146,7 +154,7 @@ export function MapContent() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAvailableOnly(!showAvailableOnly)}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium shadow-md transition-colors ${
+            className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium shadow-md transition-colors ${
               showAvailableOnly
                 ? "bg-primary text-primary-foreground"
                 : "bg-background text-muted-foreground border"
@@ -157,14 +165,14 @@ export function MapContent() {
           </button>
 
           {locationStatus === "success" && (
-            <span className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-800 shadow-md">
+            <span className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1.5 text-xs font-medium text-green-800 shadow-md">
               <Navigation className="h-3 w-3" />
               Location detected
             </span>
           )}
 
           {locationStatus === "loading" && (
-            <span className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-background text-muted-foreground shadow-md border animate-pulse">
+            <span className="bg-background text-muted-foreground flex animate-pulse items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-medium shadow-md">
               <Navigation className="h-3 w-3" />
               Detecting location...
             </span>
@@ -173,7 +181,7 @@ export function MapContent() {
           {(locationStatus === "denied" || locationStatus === "error") && (
             <button
               onClick={requestLocation}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 shadow-md hover:bg-yellow-200 transition-colors"
+              className="flex items-center gap-1 rounded-full bg-yellow-100 px-3 py-1.5 text-xs font-medium text-yellow-800 shadow-md transition-colors hover:bg-yellow-200"
               title={locationError || "Retry location"}
             >
               <AlertTriangle className="h-3 w-3" />
@@ -184,7 +192,7 @@ export function MapContent() {
 
         {/* Location error banner */}
         {locationError && (
-          <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg px-3 py-2 text-xs text-yellow-800 shadow-md">
+          <div className="flex items-center gap-2 rounded-lg border border-yellow-200 bg-yellow-50 px-3 py-2 text-xs text-yellow-800 shadow-md">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
             <span>{locationError}</span>
             <button
@@ -199,12 +207,13 @@ export function MapContent() {
 
       {/* Listings Sidebar (Mobile: Bottom Sheet, Desktop: Side Panel) */}
       {showList && (
-        <div className="absolute bottom-0 left-0 right-0 md:relative md:w-96 z-[1000] bg-background border-t md:border-t-0 md:border-r max-h-[50vh] md:max-h-none overflow-y-auto">
-          <div className="p-4 border-b flex items-center justify-between sticky top-0 bg-background z-10">
+        <div className="bg-background absolute right-0 bottom-0 left-0 z-[1000] max-h-[50vh] overflow-y-auto border-t md:relative md:max-h-none md:w-96 md:border-t-0 md:border-r">
+          <div className="bg-background sticky top-0 z-10 flex items-center justify-between border-b p-4">
             <div>
               <h3 className="font-semibold">Boarding Houses</h3>
-              <p className="text-sm text-muted-foreground">
-                {filteredListings.length} listing{filteredListings.length !== 1 ? "s" : ""} in Malaybalay City
+              <p className="text-muted-foreground text-sm">
+                {filteredListings.length} listing
+                {filteredListings.length !== 1 ? "s" : ""} in Malaybalay City
               </p>
             </div>
             <Button
@@ -227,10 +236,12 @@ export function MapContent() {
                 />
               ))
             ) : (
-              <div className="p-8 text-center text-muted-foreground">
-                <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <div className="text-muted-foreground p-8 text-center">
+                <MapPin className="mx-auto mb-2 h-8 w-8 opacity-50" />
                 <p className="text-sm">No boarding houses found</p>
-                <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                <p className="mt-1 text-xs">
+                  Try adjusting your search or filters
+                </p>
               </div>
             )}
           </div>
@@ -249,28 +260,30 @@ export function MapContent() {
 
       {/* Selected Listing Preview (Mobile) */}
       {selectedListing && !showList && (
-        <div className="absolute bottom-4 left-4 right-4 z-[1000] md:hidden">
-          <div className="bg-background rounded-lg border shadow-lg p-4">
+        <div className="absolute right-4 bottom-4 left-4 z-[1000] md:hidden">
+          <div className="bg-background rounded-lg border p-4 shadow-lg">
             <div className="flex gap-4">
               <div className="flex-1">
-                <h3 className="font-semibold line-clamp-1">
+                <h3 className="line-clamp-1 font-semibold">
                   {selectedListing.name}
                 </h3>
-                <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
+                <div className="text-muted-foreground mt-1 flex items-center gap-1 text-sm">
                   <MapPin className="h-3 w-3" />
-                  <span className="line-clamp-1">{selectedListing.address}</span>
+                  <span className="line-clamp-1">
+                    {selectedListing.address}
+                  </span>
                 </div>
                 <div className="mt-1 flex items-center gap-2">
-                  <span className="mt-1 font-semibold text-primary">
+                  <span className="text-primary mt-1 font-semibold">
                     ₱{selectedListing.priceMin.toLocaleString()} - ₱
                     {selectedListing.priceMax.toLocaleString()}/mo
                   </span>
                   {selectedListing.availableRooms > 0 ? (
-                    <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                    <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs text-green-600">
                       {selectedListing.availableRooms} available
                     </span>
                   ) : (
-                    <span className="text-xs text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
+                    <span className="rounded-full bg-red-50 px-2 py-0.5 text-xs text-red-600">
                       Full
                     </span>
                   )}

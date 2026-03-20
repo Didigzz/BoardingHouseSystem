@@ -117,10 +117,10 @@ export function createChangeLog<T extends Record<string, unknown>>(
   const updated: Record<string, unknown> = {};
 
   for (const key in newData) {
-    if (Array.prototype.includes.call(sensitiveFields, key)) {
+    if ((sensitiveFields as string[]).indexOf(key as string) !== -1) {
       continue; // Skip sensitive fields
     }
-    
+
     if (JSON.stringify(oldData[key]) !== JSON.stringify(newData[key])) {
       updated[key] = {
         from: oldData[key],

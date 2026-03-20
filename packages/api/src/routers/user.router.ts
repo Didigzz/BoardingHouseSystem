@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure, createSensitiveProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import {
   loginSchema,
   registerSchema,
@@ -16,12 +16,12 @@ type LoginInput = z.infer<typeof loginSchema>;
 type RegisterInput = z.infer<typeof registerSchema>;
 type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 
-type Procedure = ReturnType<typeof createTRPCRouter>;
+interface AuthenticatedCtx<TInput = unknown> {
+  ctx: ProtectedTRPCContext;
+  input: TInput;
+}
 
-export const createUserRouter = (protectedProcedure: Procedure, authMiddleware: unknown) => {
-  // Sensitive procedure for password changes with strict rate limiting
-  const sensitiveProcedure = createSensitiveProcedure(authMiddleware);
-
+export const createUserRouter = (protectedProcedure: ReturnType<typeof createTRPCRouter>) => {
   return createTRPCRouter({
     login: publicProcedure
       .input(loginSchema)
@@ -95,19 +95,20 @@ export const createUserRouter = (protectedProcedure: Procedure, authMiddleware: 
         };
       }),
 
-    getProfile: protectedProcedure.query(async ({ ctx }: { ctx: ProtectedTRPCContext }) => {
-      return ctx.db.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          role: true,
-          image: true,
-          createdAt: true,
-        },
-      });
-    }),
+    getProfile: protectedProcedure
+      .query(async ({ ctx }: { ctx: ProtectedTRPCContext }) => {
+        return ctx.db.user.findUnique({
+          where: { id: ctx.session.user.id },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            image: true,
+            createdAt: true,
+          },
+        });
+      }),
 
     updateProfile: protectedProcedure
       .input(
@@ -123,7 +124,7 @@ export const createUserRouter = (protectedProcedure: Procedure, authMiddleware: 
         });
       }),
 
-    changePassword: sensitiveProcedure
+    changePassword: protectedProcedure
       .input(changePasswordSchema)
       .mutation(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: ChangePasswordInput }) => {
         const user = await ctx.db.user.findUnique({

@@ -21,14 +21,14 @@ export const createAppRouter = (
     adminProcedure?: Procedure,
     landlordProcedure?: Procedure,
     boarderProcedure?: Procedure,
-    authMiddleware?: MiddlewareFn
+    _authMiddleware?: MiddlewareFn
 ): AnyRouter => {
     return createTRPCRouter({
         boarder: createBoarderRouter(protectedProcedure),
         payment: createPaymentRouter(protectedProcedure),
         room: createRoomRouter(protectedProcedure),
         utility: createUtilityRouter(protectedProcedure),
-        user: createUserRouter(protectedProcedure, authMiddleware!),
+        user: createUserRouter(protectedProcedure),
         dashboard: createDashboardRouter(protectedProcedure),
         admin: createAdminRouter(protectedProcedure, adminProcedure || protectedProcedure),
         property: createPropertyRouter(protectedProcedure, landlordProcedure),

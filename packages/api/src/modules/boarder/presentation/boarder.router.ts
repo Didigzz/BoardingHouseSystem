@@ -9,8 +9,14 @@ import { GetBoarderHandler } from '../application/handlers/get-boarder.handler';
 import { ListBoardersHandler } from '../application/handlers/list-boarders.handler';
 import { GetBoarderStatsHandler } from '../application/handlers/get-boarder-stats.handler';
 import type { PrismaClientType } from '@havenspace/database';
+import type { TRPCContext } from '../../../trpc';
 
-type ProtectedProcedure = unknown;
+type ProtectedProcedure = {
+  input: (schema: z.ZodType) => {
+    handler: (fn: (opts: { ctx: TRPCContext; input: unknown }) => Promise<unknown>) => unknown;
+  };
+  handler: (fn: (opts: { ctx: TRPCContext; input: unknown }) => Promise<unknown>) => unknown;
+};
 
 export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
   return {
@@ -24,14 +30,14 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
           })
           .optional()
       )
-      .handler(async ({ context, input }: { context: unknown; input?: unknown }) => {
-        const ctx = context as { db: PrismaClientType };
+      .handler(async ({ ctx, input }: { ctx: TRPCContext; input?: unknown }) => {
+        const context = ctx as { db: PrismaClientType };
         // Initialize dependencies
-        const boarderRepository = new PrismaBoarderRepository(ctx.db);
+        const boarderRepository = new PrismaBoarderRepository(context.db);
         const listBoardersHandler = new ListBoardersHandler(boarderRepository);
 
         // Execute query
-        const boarders = await listBoardersHandler.handle(input);
+        const boarders = await listBoardersHandler.handle(input as { isActive?: boolean; search?: string; roomId?: string } | undefined);
 
         // Convert to DTO format for response
         return boarders.map((boarder: unknown) => {
@@ -75,14 +81,15 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
 
     getById: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .handler(async ({ context, input }: { context: unknown; input: { id: string } }) => {
-        const ctx = context as { db: PrismaClientType };
+      .handler(async ({ ctx, input }: { ctx: TRPCContext; input: unknown }) => {
+        const context = ctx as { db: PrismaClientType };
+        const inp = input as { id: string };
         // Initialize dependencies
-        const boarderRepository = new PrismaBoarderRepository(ctx.db);
+        const boarderRepository = new PrismaBoarderRepository(context.db);
         const getBoarderHandler = new GetBoarderHandler(boarderRepository);
 
         // Execute query
-        const boarder = await getBoarderHandler.handle(input);
+        const boarder = await getBoarderHandler.handle(inp);
 
         if (!boarder) {
           return null;
@@ -121,8 +128,8 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
           roomId: z.string().optional(),
         })
       )
-      .handler(async ({ context, input }: { context: unknown; input: unknown }) => {
-        const ctx = context as { db: PrismaClientType };
+      .handler(async ({ ctx, input }: { ctx: TRPCContext; input: unknown }) => {
+        const context = ctx as { db: PrismaClientType };
         const inp = input as {
           firstName: string;
           lastName: string;
@@ -135,7 +142,7 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
         };
 
         // Initialize dependencies
-        const boarderRepository = new PrismaBoarderRepository(ctx.db);
+        const boarderRepository = new PrismaBoarderRepository(context.db);
         const boarderService = new BoarderService(boarderRepository);
         const createBoarderHandler = new CreateBoarderHandler(boarderRepository, boarderService);
 
@@ -144,13 +151,13 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
 
         // Update room status if assigned
         if (inp.roomId) {
-          const room = await ctx.db.room.findUnique({
+          const room = await context.db.room.findUnique({
             where: { id: inp.roomId },
             include: { _count: { select: { boarders: { where: { isActive: true } } } } },
           });
 
           if (room && room._count.boarders >= room.capacity) {
-            await ctx.db.room.update({
+            await context.db.room.update({
               where: { id: inp.roomId },
               data: { status: 'OCCUPIED' },
             });
@@ -193,15 +200,15 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
           roomId: z.string().optional(),
         })
       )
-      .handler(async ({ context, input }: { context: unknown; input: unknown }) => {
-        const ctx = context as { db: PrismaClientType };
+      .handler(async ({ ctx, input }: { ctx: TRPCContext; input: unknown }) => {
+        const context = ctx as { db: PrismaClientType };
         // Initialize dependencies
-        const boarderRepository = new PrismaBoarderRepository(ctx.db);
+        const boarderRepository = new PrismaBoarderRepository(context.db);
         const boarderService = new BoarderService(boarderRepository);
         const updateBoarderHandler = new UpdateBoarderHandler(boarderRepository, boarderService);
 
         // Execute command
-        const boarder = await updateBoarderHandler.handle(input);
+        const boarder = await updateBoarderHandler.handle(input as { id: string; firstName?: string; lastName?: string; email?: string; phone?: string; emergencyContact?: string; emergencyPhone?: string; moveInDate?: Date; moveOutDate?: Date; isActive?: boolean; roomId?: string });
 
         // Convert to DTO format for response
         return {
@@ -225,14 +232,15 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
 
     delete: protectedProcedure
       .input(z.object({ id: z.string() }))
-      .handler(async ({ context, input }: { context: unknown; input: { id: string } }) => {
-        const ctx = context as { db: PrismaClientType };
+      .handler(async ({ ctx, input }: { ctx: TRPCContext; input: unknown }) => {
+        const context = ctx as { db: PrismaClientType };
+        const inp = input as { id: string };
         // Initialize dependencies
-        const boarderRepository = new PrismaBoarderRepository(ctx.db);
+        const boarderRepository = new PrismaBoarderRepository(context.db);
         const deleteBoarderHandler = new DeleteBoarderHandler(boarderRepository);
 
         // Execute command
-        await deleteBoarderHandler.handle(input);
+        await deleteBoarderHandler.handle(inp);
 
         return { success: true };
       }),
@@ -244,12 +252,12 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
           roomId: z.string().nullable(),
         })
       )
-      .handler(async ({ context, input }: { context: unknown; input: unknown }) => {
-        const ctx = context as { db: PrismaClientType };
+      .handler(async ({ ctx, input }: { ctx: TRPCContext; input: unknown }) => {
+        const context = ctx as { db: PrismaClientType };
         const inp = input as { boarderId: string; roomId: string | null };
 
         // Initialize dependencies
-        const boarderRepository = new PrismaBoarderRepository(ctx.db);
+        const boarderRepository = new PrismaBoarderRepository(context.db);
         const boarderService = new BoarderService(boarderRepository);
         const assignRoomHandler = new AssignRoomHandler(boarderRepository, boarderService);
 
@@ -258,13 +266,13 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
 
         // Update room statuses
         if (inp.roomId) {
-          const room = await ctx.db.room.findUnique({
+          const room = await context.db.room.findUnique({
             where: { id: inp.roomId },
             include: { _count: { select: { boarders: { where: { isActive: true } } } } },
           });
 
           if (room && room._count.boarders >= room.capacity) {
-            await ctx.db.room.update({
+            await context.db.room.update({
               where: { id: inp.roomId },
               data: { status: 'OCCUPIED' },
             });
@@ -291,10 +299,10 @@ export const createBoarderRouter = (protectedProcedure: ProtectedProcedure) => {
         };
       }),
 
-    getStats: protectedProcedure.handler(async ({ context }: { context: unknown }) => {
-      const ctx = context as { db: PrismaClientType };
+    getStats: protectedProcedure.handler(async ({ ctx }: { ctx: TRPCContext }) => {
+      const context = ctx as { db: PrismaClientType };
       // Initialize dependencies
-      const boarderRepository = new PrismaBoarderRepository(ctx.db);
+      const boarderRepository = new PrismaBoarderRepository(context.db);
       const getBoarderStatsHandler = new GetBoarderStatsHandler(boarderRepository);
 
       // Execute query

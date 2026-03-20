@@ -27,6 +27,20 @@ export class GetRecentActivityHandler {
       }),
     ]);
 
-    return this.service.mergeActivities(recentPayments, recentBoarders);
+    return this.service.mergeActivities(
+      recentPayments as unknown as {
+        id: string;
+        status: string;
+        amount: number;
+        boarder: { firstName: string; lastName: string };
+        createdAt: Date;
+      }[],
+      recentBoarders as unknown as {
+        id: string;
+        firstName: string;
+        lastName: string;
+        createdAt: Date;
+      }[]
+    );
   }
 }

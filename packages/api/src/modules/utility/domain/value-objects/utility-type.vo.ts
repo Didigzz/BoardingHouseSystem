@@ -8,7 +8,7 @@ export class UtilityType extends ValueObject<string> {
   }
 
   static create(value: string): UtilityType {
-    if (!Array.prototype.includes.call(UtilityType.VALID_TYPES, value)) {
+    if (!UtilityType.VALID_TYPES.some((type) => type === value)) {
       throw new Error(`Invalid utility type: ${value}`);
     }
     return new UtilityType(value);

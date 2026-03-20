@@ -18,7 +18,7 @@ export function generateToken(payload: JWTPayload): string {
     expiresIn: JWT_EXPIRATION,
     issuer: 'havenspace',
     audience: 'havenspace-users'
-  });
+  } as jwt.SignOptions);
 }
 
 /**

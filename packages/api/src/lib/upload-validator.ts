@@ -104,7 +104,7 @@ export function validateFileType(
     return; // No type restrictions
   }
 
-  if (!Array.prototype.includes.call(allowedMimeTypes, file.type)) {
+  if ((allowedMimeTypes as string[]).indexOf(file.type) === -1) {
     throw new TRPCError({
       code: "BAD_REQUEST",
       message: `File type "${file.type}" is not allowed. Allowed types: ${allowedMimeTypes.join(", ")}`,
@@ -125,7 +125,7 @@ export function validateFileExtension(
 
   const extension = "." + file.name.split(".").pop()?.toLowerCase();
 
-  if (!Array.prototype.includes.call(allowedExtensions, extension)) {
+  if ((allowedExtensions as string[]).indexOf(extension) === -1) {
     throw new TRPCError({
       code: "BAD_REQUEST",
       message: `File extension "${extension}" is not allowed. Allowed extensions: ${allowedExtensions.join(", ")}`,

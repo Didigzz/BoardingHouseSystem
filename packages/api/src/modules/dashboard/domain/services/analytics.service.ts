@@ -1,6 +1,6 @@
 import { DashboardStats } from "../entities/dashboard-stats.entity";
 
-interface PaymentActivity {
+export interface PaymentActivity {
   id: string;
   type: "payment";
   title: string;
@@ -8,7 +8,7 @@ interface PaymentActivity {
   date: Date;
 }
 
-interface BoarderActivity {
+export interface BoarderActivity {
   id: string;
   type: "boarder";
   title: string;
@@ -16,7 +16,7 @@ interface BoarderActivity {
   date: Date;
 }
 
-type Activity = PaymentActivity | BoarderActivity;
+export type Activity = PaymentActivity | BoarderActivity;
 
 interface PaymentRecord {
   id: string;

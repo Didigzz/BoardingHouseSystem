@@ -43,8 +43,14 @@ export class GetDashboardStatsHandler {
       occupiedRooms,
       totalBoarders,
       activeBoarders,
-      pendingPayments,
-      paidPaymentsThisMonth,
+      pendingPayments: {
+        _count: pendingPayments._count,
+        _sum: { amount: pendingPayments._sum.amount?.toNumber() ?? 0 },
+      },
+      paidPaymentsThisMonth: {
+        _count: paidPaymentsThisMonth._count,
+        _sum: { amount: paidPaymentsThisMonth._sum.amount?.toNumber() ?? 0 },
+      },
     });
   }
 }

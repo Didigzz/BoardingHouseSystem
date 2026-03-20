@@ -41,6 +41,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 ### 3. Update Configuration
 
 Edit `nginx/nginx.conf` and replace:
+
 - `yourdomain.com` with your actual domain
 - `www.yourdomain.com` with your actual www domain
 - `api.yourdomain.com` with your API subdomain
@@ -67,26 +68,30 @@ docker-compose -f docker-compose.production.yml restart nginx
 ## Configuration Features
 
 ### Security
+
 - SSL/TLS encryption with modern protocols
 - Security headers (HSTS, X-Frame-Options, etc.)
 - Rate limiting to prevent abuse
 - CORS configuration for API
 
 ### Routing
+
 - Main domain → Public marketplace
 - `/boarder` → Boarder dashboard
-- `/landlord` → Landlord portal  
+- `/landlord` → Landlord portal
 - `/admin` → Admin panel
 - `/api/*` → API endpoints
 - `api.yourdomain.com` → API subdomain
 
 ### Performance
+
 - Gzip compression
 - Static file caching
 - Keep-alive connections
 - Upstream connection pooling
 
 ### Monitoring
+
 - Health check endpoint at `/health`
 - Access and error logs
 - Prometheus metrics integration
@@ -157,6 +162,7 @@ upstream public_upstream {
 ## Monitoring Integration
 
 The nginx configuration is compatible with:
+
 - Prometheus metrics collection
 - Grafana dashboards
 - ELK stack for log analysis

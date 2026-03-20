@@ -30,17 +30,20 @@ import {
   SelectValue,
 } from "@havenspace/shared/ui";
 import { cn } from "@/lib/utils";
-import { MALAYBALAY_BOUNDS } from "@/components/map/map-picker";
+import { MALAYBALAY_BOUNDS } from "@/lib/map-constants";
 
 // Dynamic import for Leaflet-based components (no SSR)
-const MapPicker = dynamic(() => import("@/components/map/map-picker"), {
-  ssr: false,
-  loading: () => (
-    <div className="bg-muted flex h-full w-full animate-pulse items-center justify-center rounded-lg">
-      <div className="text-muted-foreground text-sm">Loading map...</div>
-    </div>
-  ),
-});
+const MapPicker = dynamic(
+  () => import("@/components/map/map-picker").then((mod) => mod.default),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="bg-muted flex h-full w-full animate-pulse items-center justify-center rounded-lg">
+        <div className="text-muted-foreground text-sm">Loading map...</div>
+      </div>
+    ),
+  }
+);
 
 interface Property {
   id: string;

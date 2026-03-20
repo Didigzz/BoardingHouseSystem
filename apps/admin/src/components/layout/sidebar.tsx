@@ -81,7 +81,7 @@ const navigation = [
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session } = useSession() || { data: null };
 
   const isActive = (href: string) => {
     if (href === "/dashboard") {

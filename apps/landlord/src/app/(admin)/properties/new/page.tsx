@@ -45,10 +45,10 @@ import {
 } from "@havenspace/shared/ui";
 import { Separator } from "@havenspace/shared/ui";
 import { cn } from "@/lib/utils";
-import { MALAYBALAY_BOUNDS } from "@/components/map/map-picker";
+import { MALAYBALAY_BOUNDS } from "@/lib/map-constants";
 
 // Dynamic import for map picker (no SSR)
-const MapPicker = dynamic(() => import("@/components/map/map-picker"), {
+const MapPicker = dynamic(() => import("@/components/map/map-picker").then((mod) => mod.default), {
   ssr: false,
   loading: () => (
     <div className="bg-muted flex h-[300px] w-full animate-pulse items-center justify-center rounded-lg border">

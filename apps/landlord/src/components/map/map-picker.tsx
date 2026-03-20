@@ -4,16 +4,8 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "@/styles/leaflet.css";
+import { MALAYBALAY_BOUNDS, MALAYBALAY_CENTER } from "@/lib/map-constants";
 
-// Malaybalay City, Bukidnon - service coverage area
-export const MALAYBALAY_BOUNDS = {
-  north: 8.22,
-  south: 8.1,
-  east: 125.17,
-  west: 125.08,
-};
-
-export const MALAYBALAY_CENTER: [number, number] = [8.1575, 125.1276];
 const DEFAULT_ZOOM = 14;
 
 // Pin marker

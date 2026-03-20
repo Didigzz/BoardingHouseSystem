@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haven Space - System Proposal</title>
+  
+  <!-- Typography: Fraunces (elegant serif) + Satochi (clean sans-serif) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;700&family=Satochi:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ============================================
+       VIEWPORT BASE - MANDATORY RESPONSIVE CSS
+       ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: clamp(14px, 1.5vw, 18px);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Satochi', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      overflow: hidden;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    .slide {
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(2rem, 5vh, 4rem) clamp(2rem, 5vw, 5rem);
+    }
+
+    .slide-content {
+      max-height: calc(100vh - clamp(4rem, 10vh, 8rem));
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    @media (max-height: 700px) {
+      .slide { padding: clamp(1.5rem, 4vh, 3rem) clamp(1.5rem, 4vw, 4rem); }
+      h1 { font-size: clamp(2rem, 5vw, 3rem) !important; }
+      h2 { font-size: clamp(1.5rem, 4vw, 2.25rem) !important; }
+    }
+
+    @media (max-height: 600px) {
+      .slide { padding: clamp(1rem, 3vh, 2rem) clamp(1rem, 3vw, 3rem); }
+    }
+
+    @media (max-height: 500px) {
+      .slide { padding: clamp(0.75rem, 2vh, 1.5rem) clamp(1rem, 2vw, 2rem); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    /* ============================================ */
+
+    /* ============================================
+       THEME VARIABLES - Inspired/Moved Aesthetic
+       ============================================ */
+    :root {
+      /* Color Palette - Deep Ocean meets Golden Dawn */
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #111625;
+      --bg-accent: #1a2238;
+      
+      --text-primary: #f0f4f8;
+      --text-secondary: #b8c5d6;
+      --text-muted: #6b7a8f;
+      
+      --accent-primary: #f59e0b;
+      --accent-secondary: #3b82f6;
+      --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #3b82f6 100%);
+      
+      --success: #10b981;
+      --border-color: rgba(255, 255, 255, 0.1);
+      
+      /* Typography */
+      --font-display: 'Fraunces', serif;
+      --font-body: 'Satochi', sans-serif;
+      
+      /* Spacing */
+      --space-xs: clamp(0.5rem, 1vw, 0.75rem);
+      --space-sm: clamp(0.75rem, 1.5vw, 1rem);
+      --space-md: clamp(1rem, 2vw, 1.5rem);
+      --space-lg: clamp(1.5rem, 3vw, 2.5rem);
+      --space-xl: clamp(2rem, 4vw, 4rem);
+      
+      /* Transitions */
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ============================================
+       BACKGROUND ATMOSPHERE
+       ============================================ */
+    .slide {
+      background: 
+        radial-gradient(ellipse at 20% 80%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(239, 68, 68, 0.05) 0%, transparent 70%),
+        var(--bg-primary);
+      position: relative;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.02) 2px,
+          rgba(255, 255, 255, 0.02) 4px
+        );
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* Floating particles */
+    .particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: clamp(4px, 1vw, 8px);
+      height: clamp(4px, 1vw, 8px);
+      background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float-up var(--duration, 15s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes float-up {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) scale(0);
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100vh) scale(1);
+      }
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--text-primary);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      margin-bottom: var(--space-md);
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4.5vw, 3.25rem);
+      margin-bottom: var(--space-lg);
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      margin-bottom: var(--space-sm);
+      color: var(--text-primary);
+    }
+
+    p {
+      font-size: clamp(1rem, 1.5vw, 1.125rem);
+      color: var(--text-secondary);
+      margin-bottom: var(--space-md);
+      max-width: 65ch;
+    }
+
+    .subtitle {
+      font-size: clamp(1.125rem, 2vw, 1.5rem);
+      color: var(--text-secondary);
+      font-weight: 300;
+      max-width: 70ch;
+    }
+
+    .tagline {
+      font-size: clamp(0.875rem, 1.25vw, 1rem);
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+
+    /* ============================================
+       LOGO STYLING
+       ============================================ */
+    .logo {
+      height: clamp(60px, 10vh, 100px);
+      width: auto;
+      margin-bottom: var(--space-lg);
+      filter: drop-shadow(0 4px 20px rgba(245, 158, 11, 0.3));
+      animation: logo-glow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes logo-glow {
+      from { filter: drop-shadow(0 4px 20px rgba(245, 158, 11, 0.2)); }
+      to { filter: drop-shadow(0 4px 30px rgba(245, 158, 11, 0.5)); }
+    }
+
+    /* ============================================
+       LAYOUT COMPONENTS
+       ============================================ */
+    .slide-header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 40vw, 400px), 1fr));
+      gap: var(--space-lg);
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 30vw, 350px), 1fr));
+      gap: var(--space-md);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(300px, 45vw, 450px), 1fr));
+      gap: var(--space-lg);
+    }
+
+    /* ============================================
+       CARDS & CONTENT BLOCKS
+       ============================================ */
+    .card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: clamp(12px, 2vw, 20px);
+      padding: var(--space-lg);
+      backdrop-filter: blur(10px);
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-gradient);
+      opacity: 0;
+      transition: opacity var(--transition-base);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(245, 158, 11, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      width: clamp(48px, 8vw, 64px);
+      height: clamp(48px, 8vw, 64px);
+      background: var(--accent-gradient);
+      border-radius: clamp(12px, 2vw, 16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-md);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.125rem, 2vw, 1.375rem);
+      color: var(--text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .card-text {
+      font-size: clamp(0.875rem, 1.25vw, 1rem);
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ============================================
+       LISTS
+       ============================================ */
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      font-size: clamp(1rem, 1.5vw, 1.125rem);
+      color: var(--text-secondary);
+    }
+
+    .feature-list li::before {
+      content: '✦';
+      color: var(--accent-primary);
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+      flex-shrink: 0;
+      margin-top: 0.1em;
+    }
+
+    /* ============================================
+       STATS & METRICS
+       ============================================ */
+    .stat-card {
+      text-align: center;
+      padding: var(--space-lg);
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-label {
+      font-size: clamp(0.875rem, 1.25vw, 1rem);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============================================
+       TIMELINE
+       ============================================ */
+    .timeline {
+      position: relative;
+      padding-left: var(--space-lg);
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border-color);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: var(--space-lg);
+      padding-left: var(--space-md);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: calc(-1 * var(--space-lg) + 1px);
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    }
+
+    .timeline-phase {
+      font-size: clamp(0.75rem, 1vw, 0.875rem);
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-xs);
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.125rem, 2vw, 1.375rem);
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .timeline-desc {
+      font-size: clamp(0.875rem, 1.25vw, 1rem);
+      color: var(--text-muted);
+    }
+
+    /* ============================================
+       BADGES
+       ============================================ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-sm);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 100px;
+      font-size: clamp(0.75rem, 1vw, 0.875rem);
+      color: var(--accent-primary);
+      font-weight: 500;
+    }
+
+    .badge-blue {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: rgba(59, 130, 246, 0.3);
+      color: var(--accent-secondary);
+    }
+
+    .badge-green {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--success);
+    }
+
+    /* ============================================
+       NAVIGATION DOTS
+       ============================================ */
+    .nav-dots {
+      position: fixed;
+      right: var(--space-md);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      z-index: 1000;
+    }
+
+    .nav-dot {
+      width: clamp(8px, 1.5vw, 12px);
+      height: clamp(8px, 1.5vw, 12px);
+      border-radius: 50%;
+      background: var(--border-color);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      padding: 0;
+    }
+
+    .nav-dot:hover {
+      background: var(--accent-secondary);
+      transform: scale(1.2);
+    }
+
+    .nav-dot.active {
+      background: var(--accent-primary);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+      transform: scale(1.3);
+    }
+
+    /* ============================================
+       EDIT MODE STYLES
+       ============================================ */
+    /* COMMENTED OUT - Edit mode disabled
+    .edit-toggle {
+      position: fixed;
+      top: var(--space-md);
+      left: var(--space-md);
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      font-size: clamp(0.75rem, 1vw, 0.875rem);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      backdrop-filter: blur(10px);
+    }
+
+    .edit-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--accent-primary);
+    }
+
+    .edit-toggle.active {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    [contenteditable="true"] {
+      outline: 2px dashed var(--accent-primary);
+      outline-offset: 4px;
+      border-radius: 4px;
+      padding: 2px 4px;
+    }
+
+    [contenteditable="true"]:focus {
+      outline-style: solid;
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .edit-hint {
+      position: fixed;
+      bottom: var(--space-md);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1001;
+      padding: var(--space-sm) var(--space-md);
+      background: rgba(245, 158, 11, 0.9);
+      color: var(--bg-primary);
+      border-radius: 100px;
+      font-size: clamp(0.75rem, 1vw, 0.875rem);
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-base);
+    }
+
+    .edit-hint.visible {
+      opacity: 1;
+    }
+    */
+
+    /* ============================================
+       ANIMATIONS
+       ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      animation: slideInLeft 0.8s ease-out forwards;
+    }
+
+    @keyframes slideInLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      animation: slideInRight 0.8s ease-out forwards;
+    }
+
+    @keyframes slideInRight {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.9);
+      animation: scaleIn 0.8s ease-out forwards;
+    }
+
+    @keyframes scaleIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* ============================================
+       PROGRESS BAR
+       ============================================ */
+    .progress-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: var(--accent-gradient);
+      width: 0%;
+      transition: width var(--transition-base);
+      z-index: 1002;
+    }
+
+    /* ============================================
+       TEAM MEMBER STYLES
+       ============================================ */
+    .team-member {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .hex-frame {
+      width: clamp(120px, 18vw, 160px);
+      height: clamp(120px, 18vw, 160px);
+      position: relative;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: var(--accent-gradient);
+      padding: 4px;
+      transition: all var(--transition-base);
+    }
+
+    .hex-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bg-secondary);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      margin: 4px;
+    }
+
+    .hex-frame:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.4);
+    }
+
+    .hex-frame:hover::before {
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .hex-photo {
+      position: absolute;
+      inset: 4px;
+      width: calc(100% - 8px);
+      height: calc(100% - 8px);
+      object-fit: cover;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      margin: 4px;
+    }
+
+    .team-name {
+      font-family: var(--font-display);
+      font-size: clamp(0.875rem, 1.25vw, 1rem);
+      color: var(--text-primary);
+      font-weight: 600;
+      margin: 0;
+      text-align: center;
+    }
+
+    .team-role {
+      font-size: clamp(0.75rem, 1vw, 0.875rem);
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+    }
+
+    .responsibilities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 40vw, 300px), 1fr));
+      gap: var(--space-md);
+    }
+
+    .responsibility-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: var(--space-md);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: clamp(8px, 1.5vw, 12px);
+      transition: all var(--transition-base);
+    }
+
+    .responsibility-item:hover {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .resp-name {
+      font-family: var(--font-display);
+      font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .resp-role {
+      font-size: clamp(0.75rem, 1vw, 0.875rem);
+      color: var(--accent-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+    }
+
+    .resp-desc {
+      font-size: clamp(0.8125rem, 1.125vw, 0.9375rem);
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <!-- Edit Toggle -->
+  <!-- <button class="edit-toggle" id="editToggle" onclick="toggleEditMode()">
+    <span>✎</span>
+    <span>Edit Mode</span>
+  </button> -->
+
+  <!-- Edit Hint -->
+  <!-- <div class="edit-hint" id="editHint">Click any text to edit • Ctrl+S to save</div> -->
+
+  <!-- Navigation Dots -->
+  <div class="nav-dots" id="navDots"></div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- ============================================
+       SLIDE 1: TITLE
+       ============================================ -->
+  <section class="slide" id="slide-1">
+    <div class="particles">
+      <span class="particle" style="--delay: 0s; --duration: 18s; left: 10%;"></span>
+      <span class="particle" style="--delay: 3s; --duration: 22s; left: 20%;"></span>
+      <span class="particle" style="--delay: 6s; --duration: 20s; left: 35%;"></span>
+      <span class="particle" style="--delay: 2s; --duration: 25s; left: 50%;"></span>
+      <span class="particle" style="--delay: 8s; --duration: 19s; left: 65%;"></span>
+      <span class="particle" style="--delay: 4s; --duration: 21s; left: 80%;"></span>
+      <span class="particle" style="--delay: 10s; --duration: 23s; left: 90%;"></span>
+    </div>
+    
+    <div style="text-align: center; max-width: 900px; margin: 0 auto;">
+      <img src="https://university-portal-assets.vercel.app/images/branding/logo-brand.png" alt="Haven Space Logo" class="logo fade-in">
+      
+      <h1 class="reveal reveal-delay-1">
+        Haven Space
+      </h1>
+      
+      <p class="subtitle reveal reveal-delay-2">
+        A comprehensive multi-tenant platform connecting landlords with boarders through modern, seamless web experiences
+      </p>
+      
+      <div class="reveal reveal-delay-3" style="margin-top: var(--space-lg);">
+        <span class="badge">System Proposal</span>
+        <span class="badge badge-blue" style="margin-left: var(--space-sm);">Next.js 16</span>
+        <span class="badge badge-green" style="margin-left: var(--space-sm);">TypeScript</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 2: COMPANY OVERVIEW
+       ============================================ -->
+  <section class="slide" id="slide-2">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="tagline reveal">Who We Are</span>
+        <h2 class="reveal reveal-delay-1">Company Overview</h2>
+      </div>
+      
+      <div class="two-column">
+        <div class="reveal reveal-delay-2">
+          <p style="margin-bottom: var(--space-md);">
+            Haven Space is a next-generation boarding house management platform built to revolutionize how landlords and boarders connect, transact, and coexist.
+          </p>
+          <p>
+            We bridge the gap between traditional property management and modern digital expectations, creating a unified ecosystem where finding, booking, and managing boarding accommodations becomes effortless.
+          </p>
+        </div>
+        
+        <div class="grid-3" style="grid-template-columns: 1fr;">
+          <div class="card stat-card reveal reveal-delay-3">
+            <div class="card-icon">🏠</div>
+            <div class="card-title">Multi-Tenant Architecture</div>
+            <div class="card-text">Purpose-built for scalability with isolated tenant data and shared infrastructure</div>
+          </div>
+          
+          <div class="card stat-card reveal reveal-delay-4">
+            <div class="card-icon">⚡</div>
+            <div class="card-title">Modern Stack</div>
+            <div class="card-text">Next.js 16, tRPC, Prisma, PostgreSQL - enterprise-grade technology</div>
+          </div>
+          
+          <div class="card stat-card reveal reveal-delay-5">
+            <div class="card-icon">🔒</div>
+            <div class="card-title">Secure by Design</div>
+            <div class="card-text">Role-based access control with NextAuth.js and comprehensive audit logging</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 3: PROBLEM STATEMENT
+       ============================================ -->
+  <section class="slide" id="slide-3">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="tagline reveal">The Challenge</span>
+        <h2 class="reveal reveal-delay-1">Problem Statement</h2>
+      </div>
+      
+      <div class="grid-2">
+        <div class="reveal reveal-delay-2">
+          <p style="margin-bottom: var(--space-md);">
+            The boarding house industry remains fragmented and inefficient, relying on outdated processes that create friction for all stakeholders.
+          </p>
+          
+          <ul class="feature-list" style="margin-top: var(--space-lg);">
+            <li>
+              <span><strong>Fragmented Discovery:</strong> Boarders struggle to find verified, quality accommodations across scattered listings</span>
+            </li>
+            <li>
+              <span><strong>Manual Processes:</strong> Landlords manage bookings, payments, and communications through disconnected tools</span>
+            </li>
+            <li>
+              <span><strong>Lack of Transparency:</strong> No standardized system for utilities, payments, or lease agreements</span>
+            </li>
+            <li>
+              <span><strong>Trust Deficit:</strong> Limited verification mechanisms create uncertainty for both parties</span>
+            </li>
+            <li>
+              <span><strong>Scalability Barriers:</strong> Existing solutions cannot support multi-property, multi-tenant operations</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="card reveal reveal-delay-3" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);">
+          <h3 style="color: var(--accent-primary); margin-bottom: var(--space-md);">Market Pain Points</h3>
+          <div class="stat-card" style="padding: var(--space-md); margin-bottom: var(--space-md);">
+            <div class="stat-value" style="font-size: clamp(2rem, 4vw, 3rem);">60%</div>
+            <div class="stat-label">Of boarding searches end in frustration</div>
+          </div>
+          <div class="stat-card" style="padding: var(--space-md); margin-bottom: var(--space-md);">
+            <div class="stat-value" style="font-size: clamp(2rem, 4vw, 3rem);">40hrs</div>
+            <div class="stat-label">Monthly spent on manual admin by landlords</div>
+          </div>
+          <div class="stat-card" style="padding: var(--space-md);">
+            <div class="stat-value" style="font-size: clamp(2rem, 4vw, 3rem);">Zero</div>
+            <div class="stat-label">Unified platforms for boarding management</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 4: TARGET AUDIENCE
+       ============================================ -->
+  <section class="slide" id="slide-4">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="tagline reveal">Who We Serve</span>
+        <h2 class="reveal reveal-delay-1">Target Audience</h2>
+      </div>
+      
+      <div class="grid-3">
+        <div class="card reveal reveal-delay-2">
+          <div class="card-icon">🎓</div>
+          <h3 class="card-title">Boarders</h3>
+          <p class="card-text">
+            Students, young professionals, and individuals seeking quality boarding accommodations. They need transparent pricing, verified listings, seamless booking, and secure payment options.
+          </p>
+          <div style="margin-top: var(--space-md);">
+            <span class="badge">Browse</span>
+            <span class="badge badge-blue" style="margin-left: 4px;">Book</span>
+            <span class="badge badge-green" style="margin-left: 4px;">Pay</span>
+          </div>
+        </div>
+        
+        <div class="card reveal reveal-delay-3">
+          <div class="card-icon">🏢</div>
+          <h3 class="card-title">Landlords</h3>
+          <p class="card-text">
+            Property owners and boarding house managers seeking efficient tenant management, automated payments, occupancy tracking, and earnings oversight with minimal administrative overhead.
+          </p>
+          <div style="margin-top: var(--space-md);">
+            <span class="badge">Listings</span>
+            <span class="badge badge-blue" style="margin-left: 4px;">Bookings</span>
+            <span class="badge badge-green" style="margin-left: 4px;">Earnings</span>
+          </div>
+        </div>
+        
+        <div class="card reveal reveal-delay-4">
+          <div class="card-icon">⚙️</div>
+          <h3 class="card-title">Administrators</h3>
+          <p class="card-text">
+            Platform operators requiring comprehensive oversight, user management, content moderation, dispute resolution, and system-wide analytics for informed decision-making.
+          </p>
+          <div style="margin-top: var(--space-md);">
+            <span class="badge">Oversight</span>
+            <span class="badge badge-blue" style="margin-left: 4px;">Moderation</span>
+            <span class="badge badge-green" style="margin-left: 4px;">Analytics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 5: OUR SOLUTION
+       ============================================ -->
+  <section class="slide" id="slide-5">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="tagline reveal">The Platform</span>
+        <h2 class="reveal reveal-delay-1">Our Solution</h2>
+      </div>
+      
+      <div class="two-column">
+        <div class="reveal reveal-delay-2">
+          <p style="margin-bottom: var(--space-md);">
+            Haven Space delivers a unified, multi-tenant monorepo platform that serves all stakeholders through purpose-built interfaces, connected by a robust, type-safe API infrastructure.
+          </p>
+          
+          <ul class="feature-list" style="margin-top: var(--space-lg);">
+            <li>
+              <span><strong>Public Marketplace:</strong> Discover and explore verified boarding house listings</span>
+            </li>
+            <li>
+              <span><strong>Boarder Dashboard:</strong> Manage bookings, payments, and communications</span>
+            </li>
+            <li>
+              <span><strong>Landlord Portal:</strong> Oversee properties, tenants, and earnings</span>
+            </li>
+            <li>
+              <span><strong>Admin Console:</strong> Platform-wide oversight and user management</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="reveal reveal-delay-3">
+          <div class="card" style="margin-bottom: var(--space-md);">
+            <h3 class="card-title">🏗️ Architecture Highlights</h3>
+            <ul class="feature-list" style="margin-top: var(--space-sm);">
+              <li><span>Next.js 16 with React 18</span></li>
+              <li><span>tRPC v11 for type-safe APIs</span></li>
+              <li><span>Prisma ORM with PostgreSQL</span></li>
+              <li><span>NextAuth.js v5 for authentication</span></li>
+              <li><span>Redis caching layer</span></li>
+              <li><span>Docker containerization</span></li>
+            </ul>
+          </div>
+          
+          <div class="card">
+            <h3 class="card-title">📦 Monorepo Structure</h3>
+            <ul class="feature-list" style="margin-top: var(--space-sm);">
+              <li><span>5 applications (Public, Boarder, Landlord, Admin, Server)</span></li>
+              <li><span>10 shared packages (API, Auth, Database, UI, etc.)</span></li>
+              <li><span>Turborepo build orchestration</span></li>
+              <li><span>Bun package manager</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 6: BENEFITS
+       ============================================ -->
+  <section class="slide" id="slide-6">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="tagline reveal">Value Proposition</span>
+        <h2 class="reveal reveal-delay-1">Benefits</h2>
+      </div>
+      
+      <div class="grid-3">
+        <div class="card reveal reveal-delay-2">
+          <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">✓</div>
+          <h3 class="card-title">For Boarders</h3>
+          <ul class="feature-list" style="margin-top: var(--space-md);">
+            <li><span>Verified, quality listings</span></li>
+            <li><span>Transparent pricing & utilities</span></li>
+            <li><span>Seamless online booking</span></li>
+            <li><span>Secure payment processing</span></li>
+            <li><span>Direct landlord communication</span></li>
+          </ul>
+        </div>
+        
+        <div class="card reveal reveal-delay-3">
+          <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">⚡</div>
+          <h3 class="card-title">For Landlords</h3>
+          <ul class="feature-list" style="margin-top: var(--space-md);">
+            <li><span>Automated booking management</span></li>
+            <li><span>Real-time occupancy tracking</span></li>
+            <li><span>Streamlined payment collection</span></li>
+            <li><span>Utility billing automation</span></li>
+            <li><span>Multi-property oversight</span></li>
+          </ul>
+        </div>
+        
+        <div class="card reveal reveal-delay-4">
+          <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">📊</div>
+          <h3 class="card-title">For Platform</h3>
+          <ul class="feature-list" style="margin-top: var(--space-md);">
+            <li><span>Scalable multi-tenant design</span></li>
+            <li><span>Comprehensive audit logging</span></li>
+            <li><span>Role-based access control</span></li>
+            <li><span>Revenue from commissions</span></li>
+            <li><span>Data-driven insights</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 7: MARKET ANALYSIS
+       ============================================ -->
+  <section class="slide" id="slide-7">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="tagline reveal">Market Opportunity</span>
+        <h2 class="reveal reveal-delay-1">Market Analysis & Feasibility</h2>
+      </div>
+      
+      <div class="grid-2">
+        <div class="reveal reveal-delay-2">
+          <div class="card" style="margin-bottom: var(--space-md);">
+            <h3 class="card-title">📈 Market Drivers</h3>
+            <ul class="feature-list" style="margin-top: var(--space-sm);">
+              <li><span>Growing student enrollment in urban universities</span></li>
+              <li><span>Increasing urbanization and workforce mobility</span></li>
+              <li><span>Rising demand for affordable housing solutions</span></li>
+              <li><span>Digital transformation in real estate sector</span></li>
+              <li><span>Post-pandemic preference for contactless transactions</span></li>
+            </ul>
+          </div>
+          
+          <div class="card">
+            <h3 class="card-title">💰 Revenue Model</h3>
+            <ul class="feature-list" style="margin-top: var(--space-sm);">
+              <li><span>Booking commission (5-10%)</span></li>
+              <li><span>Premium landlord subscriptions</span></li>
+              <li><span>Featured listing promotions</span></li>
+              <li><span>Payment processing fees</span></li>
+              <li><span>Enterprise partnerships</span></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="reveal reveal-delay-3">
+          <div class="card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);">
+            <h3 class="card-title" style="color: var(--success);">✓ Feasibility Assessment</h3>
+            
+            <div style="margin-top: var(--space-lg);">
+              <div style="margin-bottom: var(--space-md);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <span class="card-text">Technical Feasibility</span>
+                  <span class="badge badge-green">High</span>
+                </div>
+                <div style="height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden;">
+                  <div style="width: 90%; height: 100%; background: var(--success);"></div>
+                </div>
+              </div>
+              
+              <div style="margin-bottom: var(--space-md);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <span class="card-text">Market Viability</span>
+                  <span class="badge badge-green">Strong</span>
+                </div>
+                <div style="height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden;">
+                  <div style="width: 85%; height: 100%; background: var(--success);"></div>
+                </div>
+              </div>
+              
+              <div style="margin-bottom: var(--space-md);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <span class="card-text">Operational Readiness</span>
+                  <span class="badge badge-blue">Ready</span>
+                </div>
+                <div style="height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden;">
+                  <div style="width: 80%; height: 100%; background: var(--accent-secondary);"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <span class="card-text">Financial Sustainability</span>
+                  <span class="badge badge-green">Viable</span>
+                </div>
+                <div style="height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden;">
+                  <div style="width: 75%; height: 100%; background: var(--success);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 8: DEVELOPMENT PLAN
+       ============================================ -->
+  <section class="slide" id="slide-8">
+    <div class="slide-content">
+      <div class="slide-header">
+        <span class="tagline reveal">Roadmap</span>
+        <h2 class="reveal reveal-delay-1">Comprehensive Development Plan</h2>
+      </div>
+      
+      <div class="two-column">
+        <div class="reveal reveal-delay-2">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-phase">Phase 1</div>
+              <h3 class="timeline-title">Public Platform</h3>
+              <p class="timeline-desc">Marketplace launch with property discovery, search filters, and basic listings</p>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-phase">Phase 2</div>
+              <h3 class="timeline-title">Boarder Dashboard</h3>
+              <p class="timeline-desc">Authenticated user features: booking, payments, messaging, saved listings</p>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-phase">Phase 3</div>
+              <h3 class="timeline-title">Landlord Portal</h3>
+              <p class="timeline-desc">Multi-tenant management: property CRUD, booking oversight, earnings tracking</p>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-phase">Phase 4</div>
+              <h3 class="timeline-title">Admin Dashboard</h3>
+              <p class="timeline-desc">Platform administration: user management, content moderation, analytics</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="reveal reveal-delay-3">
+          <div class="card" style="margin-bottom: var(--space-md);">
+            <h3 class="card-title">🚀 Current Status</h3>
+            <p class="card-text" style="margin-top: var(--space-sm);">
+              Core infrastructure complete with all four phases architected and ready for iterative deployment.
+            </p>
+            <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-md); flex-wrap: wrap;">
+              <span class="badge badge-green">✓ Monorepo Setup</span>
+              <span class="badge badge-green">✓ Database Schema</span>
+              <span class="badge badge-green">✓ Authentication</span>
+              <span class="badge badge-blue">⚡ API Development</span>
+              <span class="badge">📋 UI Components</span>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3 class="card-title">🔧 Technology Stack</h3>
+            <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-top: var(--space-md);">
+              <div>
+                <h4 style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--space-xs);">Frontend</h4>
+                <ul class="feature-list" style="font-size: 0.875rem;">
+                  <li><span>Next.js 16</span></li>
+                  <li><span>React 18</span></li>
+                  <li><span>TypeScript</span></li>
+                  <li><span>Tailwind CSS</span></li>
+                  <li><span>Radix UI</span></li>
+                </ul>
+              </div>
+              <div>
+                <h4 style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: var(--space-xs);">Backend</h4>
+                <ul class="feature-list" style="font-size: 0.875rem;">
+                  <li><span>tRPC / ORPC</span></li>
+                  <li><span>Prisma ORM</span></li>
+                  <li><span>PostgreSQL</span></li>
+                  <li><span>Redis</span></li>
+                  <li><span>Docker</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 9: TEAM MEMBERS
+       ============================================ -->
+  <section class="slide" id="slide-9">
+    <div class="slide-content">
+      <div class="slide-header" style="text-align: center; margin-bottom: var(--space-lg);">
+        <span class="tagline reveal">Meet The Team</span>
+        <h2 class="reveal reveal-delay-1">Our Team</h2>
+      </div>
+      
+      <div class="two-column">
+        <div class="reveal reveal-delay-2" style="display: flex; justify-content: center; gap: clamp(1rem, 3vw, 2rem); flex-wrap: wrap; align-items: flex-start;">
+          <!-- Alistair Ybañez -->
+          <div class="team-member" style="text-align: center;">
+            <div class="hex-frame">
+              <img src="assets/ppt/ybanez.png" alt="Alistair Ybañez" class="hex-photo">
+            </div>
+            <h4 class="team-name">Alistair Ybañez</h4>
+            <span class="team-role">UI/UX Designer</span>
+          </div>
+          
+          <!-- John Paul B. Digal -->
+          <div class="team-member" style="text-align: center;">
+            <div class="hex-frame">
+              <img src="assets/ppt/digal.png" alt="John Paul B. Digal" class="hex-photo">
+            </div>
+            <h4 class="team-name">John Paul B. Digal</h4>
+            <span class="team-role">Project Leader</span>
+          </div>
+          
+          <!-- John Paul D. Abecia -->
+          <div class="team-member" style="text-align: center;">
+            <div class="hex-frame">
+              <img src="assets/ppt/abecia.png" alt="John Paul D. Abecia" class="hex-photo">
+            </div>
+            <h4 class="team-name">John Paul D. Abecia</h4>
+            <span class="team-role">Lead Developer</span>
+          </div>
+          
+          <!-- Melvis Alfonse T. Palmares -->
+          <div class="team-member" style="text-align: center;">
+            <div class="hex-frame">
+              <img src="assets/ppt/palmares.png" alt="Melvis Alfonse T. Palmares" class="hex-photo">
+            </div>
+            <h4 class="team-name">Melvis Alfonse T. Palmares</h4>
+            <span class="team-role">System Analyst</span>
+          </div>
+        </div>
+        
+        <div class="reveal reveal-delay-3">
+          <div class="card">
+            <h3 class="card-title" style="text-align: center; margin-bottom: var(--space-md);">Team Responsibilities</h3>
+            <div class="responsibilities-grid" style="grid-template-columns: 1fr;">
+              <div class="responsibility-item">
+                <span class="resp-name">John Paul Digal</span>
+                <span class="resp-role">Project Leader</span>
+                <span class="resp-desc">Project coordination, client communication, sprint planning</span>
+              </div>
+              <div class="responsibility-item">
+                <span class="resp-name">Melvis Alfonse Palmares</span>
+                <span class="resp-role">System Analyst</span>
+                <span class="resp-desc">Requirements gathering, problem analysis, documentation</span>
+              </div>
+              <div class="responsibility-item">
+                <span class="resp-name">John Paul Abecia</span>
+                <span class="resp-role">Lead Developer</span>
+                <span class="resp-desc">Backend architecture, database design, API development</span>
+              </div>
+              <div class="responsibility-item">
+                <span class="resp-name">Alistair Ybanez</span>
+                <span class="resp-role">UI/UX Designer</span>
+                <span class="resp-desc">Interface design, user testing, quality assurance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SLIDE 10: CLOSING
+       ============================================ -->
+  <section class="slide" id="slide-10">
+    <div class="particles">
+      <span class="particle" style="--delay: 0s; --duration: 20s; left: 15%;"></span>
+      <span class="particle" style="--delay: 5s; --duration: 18s; left: 40%;"></span>
+      <span class="particle" style="--delay: 10s; --duration: 22s; left: 60%;"></span>
+      <span class="particle" style="--delay: 3s; --duration: 19s; left: 85%;"></span>
+    </div>
+    
+    <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+      <img src="https://university-portal-assets.vercel.app/images/branding/logo-brand.png" alt="Haven Space Logo" class="logo fade-in">
+      
+      <h2 class="reveal reveal-delay-1" style="margin-bottom: var(--space-md);">
+        Ready to Transform Boarding House Management
+      </h2>
+      
+      <p class="subtitle reveal reveal-delay-2" style="margin: 0 auto var(--space-xl);">
+        Haven Space combines cutting-edge technology with deep industry understanding to create the future of boarding accommodation management.
+      </p>
+      
+      <div class="reveal reveal-delay-3">
+        <span class="badge" style="font-size: clamp(1rem, 1.5vw, 1.125rem); padding: var(--space-sm) var(--space-md);">
+          Let's Build Together
+        </span>
+      </div>
+      
+      <div class="reveal reveal-delay-4" style="margin-top: var(--space-xl);">
+        <p style="color: var(--text-muted); font-size: clamp(0.875rem, 1.25vw, 1rem);">
+          Built with Next.js 16 • tRPC • Prisma • PostgreSQL
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       JAVASCRIPT - NAVIGATION & EDIT MODE
+       ============================================ -->
+  <script>
+    // ============================================
+    // STATE MANAGEMENT
+    // ============================================
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const navDots = document.getElementById('navDots');
+    const progressBar = document.getElementById('progressBar');
+    // const editToggle = document.getElementById('editToggle');
+    // const editHint = document.getElementById('editHint');
+    // let isEditMode = false;
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    function init() {
+      createNavDots();
+      updateSlide();
+      // loadSavedContent(); // COMMENTED OUT - Edit mode disabled
+
+      // Keyboard navigation
+      document.addEventListener('keydown', handleKeydown);
+
+      // Scroll/wheel navigation
+      let wheelTimeout;
+      document.addEventListener('wheel', (e) => {
+        clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(() => {
+          if (e.deltaY > 0) nextSlide();
+          else if (e.deltaY < 0) prevSlide();
+        }, 50);
+      });
+
+      // Touch navigation
+      let touchStartY = 0;
+      document.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      });
+
+      document.addEventListener('touchend', (e) => {
+        const touchEndY = e.changedTouches[0].clientY;
+        const diff = touchStartY - touchEndY;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) nextSlide();
+          else prevSlide();
+        }
+      });
+
+      // Click on nav dots
+      navDots.addEventListener('click', (e) => {
+        if (e.target.classList.contains('nav-dot')) {
+          const index = Array.from(navDots.children).indexOf(e.target);
+          goToSlide(index);
+        }
+      });
+
+      // Auto-hide edit hint (COMMENTED OUT - Edit mode disabled)
+      // setTimeout(() => {
+      //   editHint.classList.remove('visible');
+      // }, 5000);
+    }
+
+    // ============================================
+    // NAVIGATION DOTS
+    // ============================================
+    function createNavDots() {
+      slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.className = 'nav-dot' + (index === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        navDots.appendChild(dot);
+      });
+    }
+
+    // ============================================
+    // SLIDE NAVIGATION
+    // ============================================
+    function goToSlide(index) {
+      if (index < 0 || index >= slides.length) return;
+      currentSlide = index;
+      updateSlide();
+    }
+
+    function nextSlide() {
+      goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      goToSlide(currentSlide - 1);
+    }
+
+    function updateSlide() {
+      // Update slides visibility
+      slides.forEach((slide, index) => {
+        slide.style.display = index === currentSlide ? 'flex' : 'none';
+        
+        // Trigger animations
+        if (index === currentSlide) {
+          const reveals = slide.querySelectorAll('.reveal');
+          reveals.forEach((el, i) => {
+            setTimeout(() => el.classList.add('active'), i * 100);
+          });
+        }
+      });
+
+      // Update nav dots
+      navDots.querySelectorAll('.nav-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+
+      // Update progress bar
+      const progress = ((currentSlide + 1) / slides.length) * 100;
+      progressBar.style.width = progress + '%';
+
+      // Update URL hash
+      history.replaceState(null, null, `#slide-${currentSlide + 1}`);
+    }
+
+    // ============================================
+    // KEYBOARD HANDLER
+    // ============================================
+    function handleKeydown(e) {
+      // Edit mode toggle (E key) - COMMENTED OUT - Edit mode disabled
+      // if (e.key === 'e' || e.key === 'E') {
+      //   if (!isInputFocused()) {
+      //     toggleEditMode();
+      //   }
+      //   return;
+      // }
+
+      // Save shortcut (Ctrl+S) - COMMENTED OUT - Edit mode disabled
+      // if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      //   e.preventDefault();
+      //   saveContent();
+      //   return;
+      // }
+
+      // Don't navigate when editing text
+      if (isInputFocused()) return;
+
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'ArrowRight':
+        case ' ':
+        case 'PageDown':
+          nextSlide();
+          break;
+        case 'ArrowUp':
+        case 'ArrowLeft':
+        case 'PageUp':
+          prevSlide();
+          break;
+        case 'Home':
+          goToSlide(0);
+          break;
+        case 'End':
+          goToSlide(slides.length - 1);
+          break;
+      }
+    }
+
+    function isInputFocused() {
+      const active = document.activeElement;
+      return active.isContentEditable ||
+             active.tagName === 'INPUT' ||
+             active.tagName === 'TEXTAREA';
+    }
+
+    // ============================================
+    // EDIT MODE - COMMENTED OUT - Edit mode disabled
+    // ============================================
+    /*
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+
+      editToggle.classList.toggle('active', isEditMode);
+      editHint.classList.toggle('visible', isEditMode);
+
+      const editableElements = document.querySelectorAll('h1, h2, h3, h4, p, .subtitle, .tagline, .card-title, .card-text, .stat-value, .stat-label, .timeline-title, .timeline-desc, .feature-list li span, .team-name, .team-role, .resp-name, .resp-desc');
+
+      editableElements.forEach(el => {
+        el.contentEditable = isEditMode;
+      });
+
+      if (isEditMode) {
+        editToggle.innerHTML = '<span>✓</span><span>Editing</span>';
+      } else {
+        editToggle.innerHTML = '<span>✎</span><span>Edit Mode</span>';
+        saveContent();
+      }
+    }
+
+    function saveContent() {
+      const content = {};
+      const editableElements = document.querySelectorAll('[data-save-key]');
+
+      editableElements.forEach(el => {
+        content[el.dataset.saveKey] = el.innerHTML;
+      });
+
+      // Also save all editable content by generating unique keys
+      const allEditable = document.querySelectorAll('h1, h2, h3, h4, p, .subtitle, .tagline');
+      allEditable.forEach((el, index) => {
+        if (el.contentEditable === 'true') {
+          content[`slide-${currentSlide}-element-${index}`] = el.innerHTML;
+        }
+      });
+
+      localStorage.setItem('haven-space-proposal-content', JSON.stringify(content));
+
+      // Show save confirmation
+      const originalText = editToggle.innerHTML;
+      editToggle.innerHTML = '<span>✓</span><span>Saved!</span>';
+      setTimeout(() => {
+        editToggle.innerHTML = isEditMode ? '<span>✓</span><span>Editing</span>' : originalText;
+      }, 1500);
+    }
+
+    function loadSavedContent() {
+      const saved = localStorage.getItem('haven-space-proposal-content');
+      if (!saved) return;
+
+      try {
+        const content = JSON.parse(saved);
+        Object.keys(content).forEach(key => {
+          const el = document.querySelector(`[data-save-key="${key}"]`);
+          if (el) {
+            el.innerHTML = content[key];
+          }
+        });
+      } catch (e) {
+        console.error('Failed to load saved content:', e);
+      }
+    }
+    */
+
+    // ============================================
+    // START
+    // ============================================
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

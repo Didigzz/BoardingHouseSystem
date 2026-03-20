@@ -1,4 +1,4 @@
-import { AggregateRoot } from '../../../../shared/kernel/domain/aggregate-root';
+import { AggregateRoot } from "../../../../shared/kernel/domain/aggregate-root";
 
 export interface BoarderProps {
   id: string;
@@ -129,7 +129,11 @@ export class Boarder extends AggregateRoot<BoarderProps> {
   /**
    * Update boarder personal information
    */
-  updatePersonalInfo(details: Partial<Omit<BoarderProps, 'id' | 'accessCode' | 'createdAt' | 'isActive'>>): void {
+  updatePersonalInfo(
+    details: Partial<
+      Omit<BoarderProps, "id" | "accessCode" | "createdAt" | "isActive">
+    >
+  ): void {
     this.props = {
       ...this.props,
       ...details,
@@ -141,14 +145,18 @@ export class Boarder extends AggregateRoot<BoarderProps> {
    * Generate a new access code
    */
   regenerateAccessCode(): void {
-    const newCode = `${this.props.firstName.charAt(0)}${this.props.lastName.charAt(0)}${Date.now().toString(36)}`.toUpperCase();
+    const newCode =
+      `${this.props.firstName.charAt(0)}${this.props.lastName.charAt(0)}${Date.now().toString(36)}`.toUpperCase();
     this.props.accessCode = newCode;
     this.props.updatedAt = new Date();
     // TODO: Emit AccessCodeRegeneratedEvent
   }
 
-  static create(props: Omit<BoarderProps, 'id' | 'accessCode' | 'createdAt' | 'updatedAt'>): Boarder {
-    const accessCode = `${props.firstName.charAt(0)}${props.lastName.charAt(0)}${Date.now().toString(36)}`.toUpperCase();
+  static create(
+    props: Omit<BoarderProps, "id" | "accessCode" | "createdAt" | "updatedAt">
+  ): Boarder {
+    const accessCode =
+      `${props.firstName.charAt(0)}${props.lastName.charAt(0)}${Date.now().toString(36)}`.toUpperCase();
     return new Boarder({
       ...props,
       id: crypto.randomUUID(),

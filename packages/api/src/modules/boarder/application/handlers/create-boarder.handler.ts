@@ -1,7 +1,7 @@
-import { CreateBoarderCommand } from '../commands/create-boarder.command';
-import { Boarder } from '../../domain/entities/boarder.entity';
-import { IBoarderRepository } from '../../domain/repositories/boarder.repository.interface';
-import { BoarderService } from '../../domain/services/boarder.service';
+import { CreateBoarderCommand } from "../commands/create-boarder.command";
+import { Boarder } from "../../domain/entities/boarder.entity";
+import { IBoarderRepository } from "../../domain/repositories/boarder.repository.interface";
+import { BoarderService } from "../../domain/services/boarder.service";
 
 export class CreateBoarderHandler {
   constructor(
@@ -13,7 +13,7 @@ export class CreateBoarderHandler {
     // Validate boarder data
     const validation = this.boarderService.validateBoarderData(command);
     if (!validation.valid) {
-      throw new Error(validation.errors.join(', '));
+      throw new Error(validation.errors.join(", "));
     }
 
     // Check if email is unique

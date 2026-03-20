@@ -22,8 +22,11 @@ export function filterBoarders(
     roomId?: string;
   }
 ): BoarderWithRoom[] {
-  return boarders.filter(boarder => {
-    if (filters.isActive !== undefined && isBoarderActive(boarder) !== filters.isActive) {
+  return boarders.filter((boarder) => {
+    if (
+      filters.isActive !== undefined &&
+      isBoarderActive(boarder) !== filters.isActive
+    ) {
       return false;
     }
     if (filters.roomId && boarder.roomId !== filters.roomId) {

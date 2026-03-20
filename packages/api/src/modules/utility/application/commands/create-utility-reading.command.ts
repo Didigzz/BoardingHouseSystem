@@ -11,4 +11,6 @@ export const CreateUtilityReadingCommandSchema = z.object({
   billingPeriodEnd: z.date(),
 });
 
-export type CreateUtilityReadingCommand = z.infer<typeof CreateUtilityReadingCommandSchema>;
+export type CreateUtilityReadingCommand = z.infer<
+  typeof CreateUtilityReadingCommandSchema
+>;

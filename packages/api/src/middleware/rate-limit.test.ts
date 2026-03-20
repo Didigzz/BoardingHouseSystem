@@ -1,18 +1,18 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
   createRateLimitMiddleware,
   rateLimits,
   cleanupRateLimitStore,
-} from '../middleware/rate-limit';
-import { TRPCError } from '@trpc/server';
+} from "../middleware/rate-limit";
+import { TRPCError } from "@trpc/server";
 
-describe('Rate Limit Middleware', () => {
+describe("Rate Limit Middleware", () => {
   beforeEach(() => {
     // Clear rate limit store before each test
     vi.useFakeTimers();
   });
 
-  it('should allow requests within limit', async () => {
+  it("should allow requests within limit", async () => {
     const middleware = createRateLimitMiddleware({
       windowMs: 60000, // 1 minute
       maxRequests: 5,
@@ -25,8 +25,8 @@ describe('Rate Limit Middleware', () => {
     for (let i = 0; i < 5; i++) {
       await middleware({
         ctx,
-        path: 'test.procedure',
-        type: 'query',
+        path: "test.procedure",
+        type: "query",
         next,
       });
     }
@@ -34,22 +34,32 @@ describe('Rate Limit Middleware', () => {
     expect(next).toHaveBeenCalledTimes(5);
   });
 
-  it('should block requests exceeding limit', async () => {
+  it("should block requests exceeding limit", async () => {
     const middleware = createRateLimitMiddleware({
       windowMs: 60000,
       maxRequests: 3,
-      message: 'Too many requests',
+      message: "Too many requests",
     });
 
     const next = vi.fn().mockResolvedValue({ success: true });
-    const ctx = { session: { user: { id: 'user1', role: 'BOARDER' as const, status: 'APPROVED' as const } }, db: {} as never, headers: new Headers() };
+    const ctx = {
+      session: {
+        user: {
+          id: "user1",
+          role: "BOARDER" as const,
+          status: "APPROVED" as const,
+        },
+      },
+      db: {} as never,
+      headers: new Headers(),
+    };
 
     // Make 3 successful requests
     for (let i = 0; i < 3; i++) {
       await middleware({
         ctx,
-        path: 'test.procedure',
-        type: 'query',
+        path: "test.procedure",
+        type: "query",
         next,
       });
     }
@@ -58,8 +68,8 @@ describe('Rate Limit Middleware', () => {
     await expect(
       middleware({
         ctx,
-        path: 'test.procedure',
-        type: 'query',
+        path: "test.procedure",
+        type: "query",
         next,
       })
     ).rejects.toThrow(TRPCError);
@@ -67,33 +77,43 @@ describe('Rate Limit Middleware', () => {
     await expect(
       middleware({
         ctx,
-        path: 'test.procedure',
-        type: 'query',
+        path: "test.procedure",
+        type: "query",
         next,
       })
-    ).rejects.toThrowError('Too many requests');
+    ).rejects.toThrowError("Too many requests");
   });
 
-  it('should reset after window expires', async () => {
+  it("should reset after window expires", async () => {
     const middleware = createRateLimitMiddleware({
       windowMs: 60000, // 1 minute
       maxRequests: 2,
     });
 
     const next = vi.fn().mockResolvedValue({ success: true });
-    const ctx = { session: { user: { id: 'user2', role: 'BOARDER' as const, status: 'APPROVED' as const } }, db: {} as never, headers: new Headers() };
+    const ctx = {
+      session: {
+        user: {
+          id: "user2",
+          role: "BOARDER" as const,
+          status: "APPROVED" as const,
+        },
+      },
+      db: {} as never,
+      headers: new Headers(),
+    };
 
     // Make 2 requests
     await middleware({
       ctx,
-      path: 'test.procedure',
-      type: 'query',
+      path: "test.procedure",
+      type: "query",
       next,
     });
     await middleware({
       ctx,
-      path: 'test.procedure',
-      type: 'query',
+      path: "test.procedure",
+      type: "query",
       next,
     });
 
@@ -103,15 +123,15 @@ describe('Rate Limit Middleware', () => {
     // Should allow request again
     await middleware({
       ctx,
-      path: 'test.procedure',
-      type: 'query',
+      path: "test.procedure",
+      type: "query",
       next,
     });
 
     expect(next).toHaveBeenCalledTimes(3);
   });
 
-  it('should use different limits for different users', async () => {
+  it("should use different limits for different users", async () => {
     const middleware = createRateLimitMiddleware({
       windowMs: 60000,
       maxRequests: 2,
@@ -121,32 +141,62 @@ describe('Rate Limit Middleware', () => {
 
     // User 1 makes 2 requests
     await middleware({
-      ctx: { session: { user: { id: 'user1', role: 'BOARDER' as const, status: 'APPROVED' as const } }, db: {} as never, headers: new Headers() },
-      path: 'test.procedure',
-      type: 'query',
+      ctx: {
+        session: {
+          user: {
+            id: "user1",
+            role: "BOARDER" as const,
+            status: "APPROVED" as const,
+          },
+        },
+        db: {} as never,
+        headers: new Headers(),
+      },
+      path: "test.procedure",
+      type: "query",
       next,
     });
     await middleware({
-      ctx: { session: { user: { id: 'user1', role: 'BOARDER' as const, status: 'APPROVED' as const } }, db: {} as never, headers: new Headers() },
-      path: 'test.procedure',
-      type: 'query',
+      ctx: {
+        session: {
+          user: {
+            id: "user1",
+            role: "BOARDER" as const,
+            status: "APPROVED" as const,
+          },
+        },
+        db: {} as never,
+        headers: new Headers(),
+      },
+      path: "test.procedure",
+      type: "query",
       next,
     });
 
     // User 2 should still be able to make requests
     await middleware({
-      ctx: { session: { user: { id: 'user2', role: 'BOARDER' as const, status: 'APPROVED' as const } }, db: {} as never, headers: new Headers() },
-      path: 'test.procedure',
-      type: 'query',
+      ctx: {
+        session: {
+          user: {
+            id: "user2",
+            role: "BOARDER" as const,
+            status: "APPROVED" as const,
+          },
+        },
+        db: {} as never,
+        headers: new Headers(),
+      },
+      path: "test.procedure",
+      type: "query",
       next,
     });
 
     expect(next).toHaveBeenCalledTimes(3);
   });
 
-  it('should skip rate limiting in development', async () => {
+  it("should skip rate limiting in development", async () => {
     const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
+    process.env.NODE_ENV = "development";
 
     const middleware = createRateLimitMiddleware({
       windowMs: 60000,
@@ -160,8 +210,8 @@ describe('Rate Limit Middleware', () => {
     for (let i = 0; i < 10; i++) {
       await middleware({
         ctx,
-        path: 'test.procedure',
-        type: 'query',
+        path: "test.procedure",
+        type: "query",
         next,
       });
     }
@@ -171,22 +221,22 @@ describe('Rate Limit Middleware', () => {
     process.env.NODE_ENV = originalEnv;
   });
 
-  it('should use auth rate limits for authentication', () => {
+  it("should use auth rate limits for authentication", () => {
     const authLimits = rateLimits.auth;
-    
+
     expect(authLimits.windowMs).toBe(15 * 60 * 1000); // 15 minutes
     expect(authLimits.maxRequests).toBe(5);
-    expect(authLimits.message).toContain('authentication');
+    expect(authLimits.message).toContain("authentication");
   });
 
-  it('should use standard rate limits for general API calls', () => {
+  it("should use standard rate limits for general API calls", () => {
     const standardLimits = rateLimits.standard;
-    
+
     expect(standardLimits.windowMs).toBe(60 * 1000); // 1 minute
     expect(standardLimits.maxRequests).toBe(30);
   });
 
-  it('should cleanup old entries', () => {
+  it("should cleanup old entries", () => {
     vi.useRealTimers();
 
     // Add some entries - middleware not used in this test

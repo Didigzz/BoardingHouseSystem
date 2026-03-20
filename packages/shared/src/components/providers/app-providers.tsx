@@ -50,11 +50,7 @@ export function AppProviders({
         enableSystem={theme === "system"}
         disableTransitionOnChange
       >
-        {requireAuth ? (
-          <SessionProvider>{content}</SessionProvider>
-        ) : (
-          content
-        )}
+        {requireAuth ? <SessionProvider>{content}</SessionProvider> : content}
       </ThemeProvider>
     </QueryClientProvider>
   );

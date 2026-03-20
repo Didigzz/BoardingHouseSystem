@@ -9,23 +9,31 @@ type ProtectedProcedure = {
   handler: (fn: (opts: { ctx: TRPCContext }) => Promise<unknown>) => unknown;
 };
 
-export const createDashboardRouter = (protectedProcedure: ProtectedProcedure) => {
+export const createDashboardRouter = (
+  protectedProcedure: ProtectedProcedure
+) => {
   const analyticsService = new AnalyticsService();
 
   return {
-    getStats: protectedProcedure.handler(async ({ ctx }: { ctx: TRPCContext }) => {
-      const handler = new GetDashboardStatsHandler(ctx.db, analyticsService);
-      return handler.handle({});
-    }),
+    getStats: protectedProcedure.handler(
+      async ({ ctx }: { ctx: TRPCContext }) => {
+        const handler = new GetDashboardStatsHandler(ctx.db, analyticsService);
+        return handler.handle({});
+      }
+    ),
 
-    getRecentActivity: protectedProcedure.handler(async ({ ctx }: { ctx: TRPCContext }) => {
-      const handler = new GetRecentActivityHandler(ctx.db, analyticsService);
-      return handler.handle({});
-    }),
+    getRecentActivity: protectedProcedure.handler(
+      async ({ ctx }: { ctx: TRPCContext }) => {
+        const handler = new GetRecentActivityHandler(ctx.db, analyticsService);
+        return handler.handle({});
+      }
+    ),
 
-    getUpcomingPayments: protectedProcedure.handler(async ({ ctx }: { ctx: TRPCContext }) => {
-      const handler = new GetUpcomingPaymentsHandler(ctx.db);
-      return handler.handle({});
-    }),
+    getUpcomingPayments: protectedProcedure.handler(
+      async ({ ctx }: { ctx: TRPCContext }) => {
+        const handler = new GetUpcomingPaymentsHandler(ctx.db);
+        return handler.handle({});
+      }
+    ),
   };
 };

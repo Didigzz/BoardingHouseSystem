@@ -22,17 +22,18 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-primary/10 to-background py-20 lg:py-32">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        <div className="container relative">
+      <section className="from-primary/5 via-primary/10 to-background relative overflow-hidden bg-gradient-to-br py-20 lg:py-32">
+        <div className="bg-grid-pattern absolute inset-0 opacity-5" />
+        <div className="relative container">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               Find Your Perfect{" "}
               <span className="text-primary">Boarding House</span>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground sm:text-xl">
-              Discover affordable and comfortable boarding houses near you. Browse
-              listings, compare prices, and find your ideal accommodation today.
+            <p className="text-muted-foreground mt-6 text-lg sm:text-xl">
+              Discover affordable and comfortable boarding houses near you.
+              Browse listings, compare prices, and find your ideal accommodation
+              today.
             </p>
 
             {/* Search Bar */}
@@ -43,18 +44,22 @@ export default function HomePage() {
             {/* Quick Stats */}
             <div className="mt-12 flex flex-wrap justify-center gap-8 text-center">
               <div>
-                <div className="text-3xl font-bold text-primary">500+</div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-primary text-3xl font-bold">500+</div>
+                <div className="text-muted-foreground text-sm">
                   Boarding Houses
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary">2,000+</div>
-                <div className="text-sm text-muted-foreground">Happy Boarders</div>
+                <div className="text-primary text-3xl font-bold">2,000+</div>
+                <div className="text-muted-foreground text-sm">
+                  Happy Boarders
+                </div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary">50+</div>
-                <div className="text-sm text-muted-foreground">Cities Covered</div>
+                <div className="text-primary text-3xl font-bold">50+</div>
+                <div className="text-muted-foreground text-sm">
+                  Cities Covered
+                </div>
               </div>
             </div>
           </div>
@@ -66,51 +71,51 @@ export default function HomePage() {
         <div className="container">
           <div className="text-center">
             <h2 className="text-3xl font-bold">Why Choose Us?</h2>
-            <p className="mt-4 text-muted-foreground">
+            <p className="text-muted-foreground mt-4">
               We make finding your perfect boarding house simple and hassle-free
             </p>
           </div>
 
           <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-lg border bg-card p-6 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Search className="h-6 w-6 text-primary" />
+            <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+                <Search className="text-primary h-6 w-6" />
               </div>
               <h3 className="mt-4 font-semibold">Easy Search</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-2 text-sm">
                 Find boarding houses by location, price, and amenities with our
                 powerful search
               </p>
             </div>
 
-            <div className="rounded-lg border bg-card p-6 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Shield className="h-6 w-6 text-primary" />
+            <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+                <Shield className="text-primary h-6 w-6" />
               </div>
               <h3 className="mt-4 font-semibold">Verified Listings</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-2 text-sm">
                 All our listings are verified to ensure quality and
                 trustworthiness
               </p>
             </div>
 
-            <div className="rounded-lg border bg-card p-6 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <MapPin className="h-6 w-6 text-primary" />
+            <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+                <MapPin className="text-primary h-6 w-6" />
               </div>
               <h3 className="mt-4 font-semibold">Map View</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Explore boarding houses on an interactive map to find the perfect
-                location
+              <p className="text-muted-foreground mt-2 text-sm">
+                Explore boarding houses on an interactive map to find the
+                perfect location
               </p>
             </div>
 
-            <div className="rounded-lg border bg-card p-6 text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <Clock className="h-6 w-6 text-primary" />
+            <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
+                <Clock className="text-primary h-6 w-6" />
               </div>
               <h3 className="mt-4 font-semibold">Quick Booking</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-2 text-sm">
                 Contact landlords directly and secure your room with ease
               </p>
             </div>
@@ -124,7 +129,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold">Featured Listings</h2>
-              <p className="mt-2 text-muted-foreground">
+              <p className="text-muted-foreground mt-2">
                 Top-rated boarding houses recommended for you
               </p>
             </div>
@@ -150,7 +155,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold">Recently Added</h2>
-              <p className="mt-2 text-muted-foreground">
+              <p className="text-muted-foreground mt-2">
                 New boarding houses just listed on our platform
               </p>
             </div>
@@ -171,25 +176,21 @@ export default function HomePage() {
       </section>
 
       {/* CTA - Become a Landlord */}
-      <section className="bg-primary py-20 text-primary-foreground">
+      <section className="bg-primary text-primary-foreground py-20">
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
             <Building2 className="mx-auto h-12 w-12" />
             <h2 className="mt-6 text-3xl font-bold">
               Own a Boarding House? List It Here!
             </h2>
-            <p className="mt-4 text-primary-foreground/80">
+            <p className="text-primary-foreground/80 mt-4">
               Join hundreds of landlords who trust our platform to manage their
               boarding houses. Get access to our tenant management tools, online
               payments, and reach thousands of potential boarders.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link href="/become-landlord">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="gap-2"
-                >
+                <Button size="lg" variant="secondary" className="gap-2">
                   <Home className="h-5 w-5" />
                   Become a Landlord
                 </Button>
@@ -198,7 +199,7 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-primary-foreground/20 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
+                  className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 bg-transparent"
                 >
                   Learn More
                 </Button>
@@ -213,13 +214,13 @@ export default function HomePage() {
         <div className="container">
           <div className="text-center">
             <h2 className="text-3xl font-bold">What Our Users Say</h2>
-            <p className="mt-4 text-muted-foreground">
+            <p className="text-muted-foreground mt-4">
               Hear from boarders and landlords who use our platform
             </p>
           </div>
 
           <div className="mt-12 grid gap-8 md:grid-cols-3">
-            <div className="rounded-lg border bg-card p-6">
+            <div className="bg-card rounded-lg border p-6">
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
@@ -228,22 +229,22 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <p className="mt-4 text-muted-foreground">
-                "Found my perfect boarding house within a day! The search filters
-                made it so easy to find exactly what I was looking for."
+              <p className="text-muted-foreground mt-4">
+                "Found my perfect boarding house within a day! The search
+                filters made it so easy to find exactly what I was looking for."
               </p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-muted" />
+                <div className="bg-muted h-10 w-10 rounded-full" />
                 <div>
                   <div className="font-medium">Anna Garcia</div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-muted-foreground text-sm">
                     Student, Manila
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-lg border bg-card p-6">
+            <div className="bg-card rounded-lg border p-6">
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
@@ -252,22 +253,22 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <p className="mt-4 text-muted-foreground">
-                "As a landlord, this platform has made managing my boarding house
-                so much easier. Highly recommended!"
+              <p className="text-muted-foreground mt-4">
+                "As a landlord, this platform has made managing my boarding
+                house so much easier. Highly recommended!"
               </p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-muted" />
+                <div className="bg-muted h-10 w-10 rounded-full" />
                 <div>
                   <div className="font-medium">Pedro Reyes</div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-muted-foreground text-sm">
                     Landlord, Quezon City
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-lg border bg-card p-6">
+            <div className="bg-card rounded-lg border p-6">
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
@@ -276,15 +277,15 @@ export default function HomePage() {
                   />
                 ))}
               </div>
-              <p className="mt-4 text-muted-foreground">
+              <p className="text-muted-foreground mt-4">
                 "The map feature helped me find a boarding house close to my
                 workplace. Great platform!"
               </p>
               <div className="mt-4 flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-muted" />
+                <div className="bg-muted h-10 w-10 rounded-full" />
                 <div>
                   <div className="font-medium">Lisa Chen</div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-muted-foreground text-sm">
                     Professional, Makati
                   </div>
                 </div>

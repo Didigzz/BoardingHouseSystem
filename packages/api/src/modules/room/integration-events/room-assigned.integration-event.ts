@@ -14,7 +14,9 @@ export class RoomAssignedIntegrationEvent {
     this.data = data;
   }
 
-  static create(data: RoomAssignedIntegrationEventData): RoomAssignedIntegrationEvent {
+  static create(
+    data: RoomAssignedIntegrationEventData
+  ): RoomAssignedIntegrationEvent {
     return new RoomAssignedIntegrationEvent(data);
   }
 

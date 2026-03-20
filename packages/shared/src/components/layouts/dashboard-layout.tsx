@@ -27,15 +27,13 @@ export function DashboardLayout({
     <AppProviders theme={theme} requireAuth>
       <div className="flex min-h-screen">
         {sidebar && (
-          <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-background">
+          <aside className="bg-background fixed top-0 left-0 z-40 h-screen w-64 border-r">
             {sidebar}
           </aside>
         )}
-        <div
-          className={`flex flex-1 flex-col ${sidebar ? "ml-64" : ""}`}
-        >
+        <div className={`flex flex-1 flex-col ${sidebar ? "ml-64" : ""}`}>
           {header && (
-            <header className="sticky top-0 z-30 border-b bg-background">
+            <header className="bg-background sticky top-0 z-30 border-b">
               {header}
             </header>
           )}

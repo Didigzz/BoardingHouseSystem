@@ -1,4 +1,4 @@
-import { Boarder } from '../entities/boarder.entity';
+import { Boarder } from "../entities/boarder.entity";
 
 export interface BoarderFilters {
   isActive?: boolean;

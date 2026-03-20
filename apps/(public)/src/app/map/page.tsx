@@ -3,10 +3,10 @@ import { MapContent } from "./map-content";
 
 export default function MapPage() {
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col">
+    <div className="flex h-[calc(100vh-4rem)] flex-col">
       <Suspense
         fallback={
-          <div className="flex-1 bg-muted animate-pulse flex items-center justify-center">
+          <div className="bg-muted flex flex-1 animate-pulse items-center justify-center">
             <div className="text-muted-foreground">Loading map...</div>
           </div>
         }

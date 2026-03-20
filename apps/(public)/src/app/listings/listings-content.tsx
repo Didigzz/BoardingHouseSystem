@@ -54,7 +54,7 @@ export function ListingsContent({
     <div>
       {/* Results Header */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Showing <span className="font-medium">{sortedListings.length}</span>{" "}
           results
           {query && (
@@ -78,7 +78,7 @@ export function ListingsContent({
               Map View
             </Button>
           </Link>
-          <div className="flex border rounded-md">
+          <div className="flex rounded-md border">
             <Button
               variant={view === "grid" ? "secondary" : "ghost"}
               size="sm"
@@ -114,11 +114,11 @@ export function ListingsContent({
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <div className="rounded-full bg-muted p-4">
-            <MapPin className="h-8 w-8 text-muted-foreground" />
+          <div className="bg-muted rounded-full p-4">
+            <MapPin className="text-muted-foreground h-8 w-8" />
           </div>
           <h3 className="mt-4 text-lg font-semibold">No listings found</h3>
-          <p className="mt-2 text-muted-foreground">
+          <p className="text-muted-foreground mt-2">
             Try adjusting your search filters or browse all listings
           </p>
           <Link href="/listings" className="mt-4">

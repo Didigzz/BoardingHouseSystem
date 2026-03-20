@@ -12,7 +12,10 @@ export class UtilityService {
     return reading.cost;
   }
 
-  async getLatestReading(roomId: string, type: string): Promise<UtilityReading | null> {
+  async getLatestReading(
+    roomId: string,
+    type: string
+  ): Promise<UtilityReading | null> {
     return this.repository.findLatestByRoomAndType(roomId, type);
   }
 

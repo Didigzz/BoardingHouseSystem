@@ -72,7 +72,16 @@ export const createAuditLogRouter = (
     list: adminProcedure
       .input(listAuditLogsSchema)
       .query(async ({ input }: AdminCtx<ListAuditLogsInput>) => {
-        const { page, limit, userId, action, entity, entityId, startDate, endDate } = input;
+        const {
+          page,
+          limit,
+          userId,
+          action,
+          entity,
+          entityId,
+          startDate,
+          endDate,
+        } = input;
         const skip = (page - 1) * limit;
 
         const where: {
@@ -160,56 +169,58 @@ export const createAuditLogRouter = (
      */
     getStats: adminProcedure
       .input(getStatsSchema)
-      .query(async ({ input }: AdminCtx<GetStatsInput>): Promise<AuditLogStats> => {
-        const { startDate, endDate } = input;
+      .query(
+        async ({ input }: AdminCtx<GetStatsInput>): Promise<AuditLogStats> => {
+          const { startDate, endDate } = input;
 
-        const where: {
-          timestamp?: {
-            gte?: Date;
-            lte?: Date;
+          const where: {
+            timestamp?: {
+              gte?: Date;
+              lte?: Date;
+            };
+          } = {};
+          if (startDate || endDate) {
+            where.timestamp = {};
+            if (startDate) where.timestamp.gte = startDate;
+            if (endDate) where.timestamp.lte = endDate;
+          }
+
+          const [total, byAction, byEntity, byUser] = await Promise.all([
+            db.auditLog.count({ where }),
+            db.auditLog.groupBy({
+              by: ["action"],
+              where,
+              _count: true,
+            }),
+            db.auditLog.groupBy({
+              by: ["entity"],
+              where,
+              _count: true,
+            }),
+            db.auditLog.groupBy({
+              by: ["userId"],
+              where,
+              _count: true,
+            }),
+          ]);
+
+          return {
+            total,
+            byAction: byAction.map((item) => ({
+              action: item.action,
+              count: item._count,
+            })),
+            byEntity: byEntity.map((item) => ({
+              entity: item.entity,
+              count: item._count,
+            })),
+            byUser: byUser.map((item) => ({
+              userId: item.userId,
+              count: item._count,
+            })),
           };
-        } = {};
-        if (startDate || endDate) {
-          where.timestamp = {};
-          if (startDate) where.timestamp.gte = startDate;
-          if (endDate) where.timestamp.lte = endDate;
         }
-
-        const [total, byAction, byEntity, byUser] = await Promise.all([
-          db.auditLog.count({ where }),
-          db.auditLog.groupBy({
-            by: ["action"],
-            where,
-            _count: true,
-          }),
-          db.auditLog.groupBy({
-            by: ["entity"],
-            where,
-            _count: true,
-          }),
-          db.auditLog.groupBy({
-            by: ["userId"],
-            where,
-            _count: true,
-          }),
-        ]);
-
-        return {
-          total,
-          byAction: byAction.map((item) => ({
-            action: item.action,
-            count: item._count,
-          })),
-          byEntity: byEntity.map((item) => ({
-            entity: item.entity,
-            count: item._count,
-          })),
-          byUser: byUser.map((item) => ({
-            userId: item.userId,
-            count: item._count,
-          })),
-        };
-      }),
+      ),
 
     /**
      * Get recent audit logs (last 24 hours by default)

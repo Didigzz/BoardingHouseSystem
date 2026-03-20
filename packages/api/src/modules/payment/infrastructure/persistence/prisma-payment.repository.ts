@@ -1,9 +1,14 @@
-import { Payment } from '../../domain/entities/payment.entity';
-import { PaymentStatus } from '../../domain/value-objects/payment-status.vo';
-import { PaymentType } from '../../domain/value-objects/payment-type.vo';
-import { IPaymentRepository, PaymentFilters, PaymentStats, MonthlyRevenue } from '../../domain/repositories/payment.repository.interface';
-import type { PrismaClientType } from '@havenspace/database';
-import { Prisma } from '@prisma/client';
+import { Payment } from "../../domain/entities/payment.entity";
+import { PaymentStatus } from "../../domain/value-objects/payment-status.vo";
+import { PaymentType } from "../../domain/value-objects/payment-type.vo";
+import {
+  IPaymentRepository,
+  PaymentFilters,
+  PaymentStats,
+  MonthlyRevenue,
+} from "../../domain/repositories/payment.repository.interface";
+import type { PrismaClientType } from "@havenspace/database";
+import { Prisma } from "@prisma/client";
 
 interface PaymentData {
   id: string;
@@ -55,7 +60,7 @@ export class PrismaPaymentRepository implements IPaymentRepository {
           },
         },
       },
-      orderBy: { dueDate: 'desc' },
+      orderBy: { dueDate: "desc" },
     });
 
     return paymentsData.map((payment) => this.mapToDomain(payment));
@@ -102,17 +107,17 @@ export class PrismaPaymentRepository implements IPaymentRepository {
   async getStats(): Promise<PaymentStats> {
     const [totalPending, totalPaid, totalOverdue] = await Promise.all([
       this.prisma.payment.aggregate({
-        where: { status: 'PENDING' },
+        where: { status: "PENDING" },
         _sum: { amount: true },
         _count: true,
       }),
       this.prisma.payment.aggregate({
-        where: { status: 'PAID' },
+        where: { status: "PAID" },
         _sum: { amount: true },
         _count: true,
       }),
       this.prisma.payment.aggregate({
-        where: { status: 'OVERDUE' },
+        where: { status: "OVERDUE" },
         _sum: { amount: true },
         _count: true,
       }),
@@ -137,7 +142,7 @@ export class PrismaPaymentRepository implements IPaymentRepository {
   async getMonthlyRevenue(year: number): Promise<MonthlyRevenue[]> {
     const payments = await this.prisma.payment.findMany({
       where: {
-        status: 'PAID',
+        status: "PAID",
         paidDate: {
           gte: new Date(year, 0, 1),
           lte: new Date(year, 11, 31),
@@ -150,16 +155,21 @@ export class PrismaPaymentRepository implements IPaymentRepository {
     });
 
     const monthlyData = Array.from({ length: 12 }, (_, i) => ({
-      month: new Date(year, i).toLocaleString('default', { month: 'short' }),
+      month: new Date(year, i).toLocaleString("default", { month: "short" }),
       revenue: 0,
     }));
 
-    payments.forEach((payment: { paidDate: Date | null; amount: { toNumber: () => number } }) => {
-      if (payment.paidDate) {
-        const month = payment.paidDate.getMonth();
-        monthlyData[month]!.revenue += payment.amount.toNumber();
+    payments.forEach(
+      (payment: {
+        paidDate: Date | null;
+        amount: { toNumber: () => number };
+      }) => {
+        if (payment.paidDate) {
+          const month = payment.paidDate.getMonth();
+          monthlyData[month]!.revenue += payment.amount.toNumber();
+        }
       }
-    });
+    );
 
     return monthlyData;
   }
@@ -168,7 +178,10 @@ export class PrismaPaymentRepository implements IPaymentRepository {
     return new Payment({
       id: data.id,
       boarderId: data.boarderId,
-      amount: data.amount instanceof Prisma.Decimal ? data.amount.toNumber() : data.amount,
+      amount:
+        data.amount instanceof Prisma.Decimal
+          ? data.amount.toNumber()
+          : data.amount,
       type: PaymentType.fromString(data.type),
       status: PaymentStatus.fromString(data.status),
       dueDate: data.dueDate,

@@ -52,7 +52,7 @@ export function calculateLateFee(
   lateFeeRate: number = 0.05 // 5% default
 ): number {
   if (daysOverdue <= 0) return 0;
-  
+
   // Simple flat rate for now, could be made more sophisticated
   return originalAmount * lateFeeRate;
 }
@@ -84,10 +84,10 @@ export function calculateDaysOverdue(dueDate: Date): number {
  */
 export function applyDiscount(
   amount: number,
-  discountType: 'percentage' | 'fixed',
+  discountType: "percentage" | "fixed",
   discountValue: number
 ): number {
-  if (discountType === 'percentage') {
+  if (discountType === "percentage") {
     const discountAmount = (amount * discountValue) / 100;
     return Math.max(0, amount - discountAmount);
   } else {

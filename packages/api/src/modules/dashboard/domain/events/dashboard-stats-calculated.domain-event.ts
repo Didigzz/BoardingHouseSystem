@@ -12,7 +12,9 @@ export class DashboardStatsCalculatedDomainEvent extends DomainEvent<DashboardSt
     super("DashboardStatsCalculated", data);
   }
 
-  static create(data: DashboardStatsCalculatedEventData): DashboardStatsCalculatedDomainEvent {
+  static create(
+    data: DashboardStatsCalculatedEventData
+  ): DashboardStatsCalculatedDomainEvent {
     return new DashboardStatsCalculatedDomainEvent(data);
   }
 }

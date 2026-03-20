@@ -15,7 +15,9 @@ export class PaymentReceivedIntegrationEvent {
     this.data = data;
   }
 
-  static create(data: PaymentReceivedIntegrationEventData): PaymentReceivedIntegrationEvent {
+  static create(
+    data: PaymentReceivedIntegrationEventData
+  ): PaymentReceivedIntegrationEvent {
     return new PaymentReceivedIntegrationEvent(data);
   }
 

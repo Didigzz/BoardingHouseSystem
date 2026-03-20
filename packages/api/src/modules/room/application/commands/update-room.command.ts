@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const UpdateRoomCommandSchema = z.object({
   id: z.string(),
@@ -8,7 +8,7 @@ export const UpdateRoomCommandSchema = z.object({
   monthlyRate: z.number().positive().optional(),
   description: z.string().optional(),
   amenities: z.array(z.string()).optional(),
-  status: z.enum(['AVAILABLE', 'OCCUPIED', 'MAINTENANCE']).optional(),
+  status: z.enum(["AVAILABLE", "OCCUPIED", "MAINTENANCE"]).optional(),
 });
 
 export type UpdateRoomCommand = z.infer<typeof UpdateRoomCommandSchema>;

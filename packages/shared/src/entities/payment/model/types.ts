@@ -1,7 +1,7 @@
 // Payment entity types
 
-export type PaymentStatus = 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED';
-export type PaymentType = 'RENT' | 'UTILITY' | 'DEPOSIT' | 'OTHER';
+export type PaymentStatus = "PENDING" | "PAID" | "OVERDUE" | "CANCELLED";
+export type PaymentType = "RENT" | "UTILITY" | "DEPOSIT" | "OTHER";
 
 export interface Boarder {
   id: string;

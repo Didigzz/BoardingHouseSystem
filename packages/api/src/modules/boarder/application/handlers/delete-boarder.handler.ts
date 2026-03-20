@@ -1,5 +1,5 @@
-import { DeleteBoarderCommand } from '../commands/delete-boarder.command';
-import { IBoarderRepository } from '../../domain/repositories/boarder.repository.interface';
+import { DeleteBoarderCommand } from "../commands/delete-boarder.command";
+import { IBoarderRepository } from "../../domain/repositories/boarder.repository.interface";
 
 export class DeleteBoarderHandler {
   constructor(private boarderRepository: IBoarderRepository) {}
@@ -13,7 +13,9 @@ export class DeleteBoarderHandler {
 
     // Check if boarder is active
     if (boarder.isActive) {
-      throw new Error('Cannot delete an active boarder. Deactivate them first.');
+      throw new Error(
+        "Cannot delete an active boarder. Deactivate them first."
+      );
     }
 
     // Delete boarder

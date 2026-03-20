@@ -1,9 +1,9 @@
-import csrf from 'csrf';
+import csrf from "csrf";
 
 const CSRF_SECRET = process.env.CSRF_SECRET;
 
 if (!CSRF_SECRET) {
-  throw new Error('CSRF_SECRET environment variable is required');
+  throw new Error("CSRF_SECRET environment variable is required");
 }
 
 const tokens = new csrf();
@@ -15,7 +15,10 @@ const tokens = new csrf();
  * 2. A token is generated and sent to the client
  * 3. Client sends token in header, secret is validated from session
  */
-export function generateCSRFToken(secret?: string): { secret: string; token: string } {
+export function generateCSRFToken(secret?: string): {
+  secret: string;
+  token: string;
+} {
   const tokenSecret = secret || tokens.secretSync();
   const token = tokens.create(tokenSecret);
   return { secret: tokenSecret, token };
@@ -47,7 +50,9 @@ export function createCSRFTokenForSession(): string {
 /**
  * Parse CSRF token pair from session storage
  */
-export function parseCSRFTokenPair(sessionData: string): { secret: string; token: string } | null {
+export function parseCSRFTokenPair(
+  sessionData: string
+): { secret: string; token: string } | null {
   try {
     return JSON.parse(sessionData);
   } catch {

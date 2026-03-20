@@ -1,5 +1,5 @@
-import { AggregateRoot } from '../../../../shared/kernel/domain/aggregate-root';
-import { RoomStatus } from '../value-objects/room-status.vo';
+import { AggregateRoot } from "../../../../shared/kernel/domain/aggregate-root";
+import { RoomStatus } from "../value-objects/room-status.vo";
 
 export interface RoomProps {
   id: string;
@@ -105,7 +105,9 @@ export class Room extends AggregateRoot<RoomProps> {
   /**
    * Update room details
    */
-  updateDetails(details: Partial<Omit<RoomProps, 'id' | 'createdAt' | 'status'>>): void {
+  updateDetails(
+    details: Partial<Omit<RoomProps, "id" | "createdAt" | "status">>
+  ): void {
     this.props = {
       ...this.props,
       ...details,
@@ -120,7 +122,9 @@ export class Room extends AggregateRoot<RoomProps> {
     return currentOccupancy >= this.props.capacity;
   }
 
-  static create(props: Omit<RoomProps, 'id' | 'createdAt' | 'updatedAt'>): Room {
+  static create(
+    props: Omit<RoomProps, "id" | "createdAt" | "updatedAt">
+  ): Room {
     return new Room({
       ...props,
       id: crypto.randomUUID(),

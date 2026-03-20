@@ -1,6 +1,6 @@
-import { GetRoomQuery } from '../queries/get-room.query';
-import { Room } from '../../domain/entities/room.entity';
-import { IRoomRepository } from '../../domain/repositories/room.repository.interface';
+import { GetRoomQuery } from "../queries/get-room.query";
+import { Room } from "../../domain/entities/room.entity";
+import { IRoomRepository } from "../../domain/repositories/room.repository.interface";
 
 export class GetRoomHandler {
   constructor(private roomRepository: IRoomRepository) {}

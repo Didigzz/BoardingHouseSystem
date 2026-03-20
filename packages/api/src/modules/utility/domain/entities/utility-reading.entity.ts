@@ -59,7 +59,9 @@ export class UtilityReading extends Entity<UtilityReadingProps> {
     super(props.id, props);
   }
 
-  static create(props: Omit<UtilityReadingProps, "id" | "createdAt" | "updatedAt">): UtilityReading {
+  static create(
+    props: Omit<UtilityReadingProps, "id" | "createdAt" | "updatedAt">
+  ): UtilityReading {
     return new UtilityReading({
       ...props,
       id: crypto.randomUUID(),

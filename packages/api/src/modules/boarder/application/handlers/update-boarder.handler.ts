@@ -1,7 +1,7 @@
-import { UpdateBoarderCommand } from '../commands/update-boarder.command';
-import { Boarder } from '../../domain/entities/boarder.entity';
-import { IBoarderRepository } from '../../domain/repositories/boarder.repository.interface';
-import { BoarderService } from '../../domain/services/boarder.service';
+import { UpdateBoarderCommand } from "../commands/update-boarder.command";
+import { Boarder } from "../../domain/entities/boarder.entity";
+import { IBoarderRepository } from "../../domain/repositories/boarder.repository.interface";
+import { BoarderService } from "../../domain/services/boarder.service";
 
 export class UpdateBoarderHandler {
   constructor(
@@ -25,7 +25,7 @@ export class UpdateBoarderHandler {
         moveInDate: command.moveInDate || boarder.moveInDate,
       });
       if (!validation.valid) {
-        throw new Error(validation.errors.join(', '));
+        throw new Error(validation.errors.join(", "));
       }
 
       // Check if email is unique (excluding current boarder)

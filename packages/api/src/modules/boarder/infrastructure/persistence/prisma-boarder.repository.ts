@@ -1,6 +1,10 @@
-import { Boarder } from '../../domain/entities/boarder.entity';
-import { IBoarderRepository, BoarderFilters, BoarderStats } from '../../domain/repositories/boarder.repository.interface';
-import { PrismaClientType } from '@havenspace/database';
+import { Boarder } from "../../domain/entities/boarder.entity";
+import {
+  IBoarderRepository,
+  BoarderFilters,
+  BoarderStats,
+} from "../../domain/repositories/boarder.repository.interface";
+import { PrismaClientType } from "@havenspace/database";
 
 export class PrismaBoarderRepository implements IBoarderRepository {
   constructor(private prisma: PrismaClientType) {}
@@ -36,9 +40,9 @@ export class PrismaBoarderRepository implements IBoarderRepository {
         roomId: filters?.roomId,
         OR: filters?.search
           ? [
-              { firstName: { contains: filters.search, mode: 'insensitive' } },
-              { lastName: { contains: filters.search, mode: 'insensitive' } },
-              { email: { contains: filters.search, mode: 'insensitive' } },
+              { firstName: { contains: filters.search, mode: "insensitive" } },
+              { lastName: { contains: filters.search, mode: "insensitive" } },
+              { email: { contains: filters.search, mode: "insensitive" } },
             ]
           : undefined,
       },
@@ -50,7 +54,7 @@ export class PrismaBoarderRepository implements IBoarderRepository {
           select: { payments: true },
         },
       },
-      orderBy: { lastName: 'asc' },
+      orderBy: { lastName: "asc" },
     });
 
     return boardersData.map((boarder: unknown) => this.mapToDomain(boarder));
@@ -115,7 +119,7 @@ export class PrismaBoarderRepository implements IBoarderRepository {
       where: {
         email: {
           equals: email,
-          mode: 'insensitive',
+          mode: "insensitive",
         },
         id: excludeId ? { not: excludeId } : undefined,
       },

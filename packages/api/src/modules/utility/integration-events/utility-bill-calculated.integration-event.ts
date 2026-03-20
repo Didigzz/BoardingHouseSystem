@@ -15,7 +15,9 @@ export class UtilityBillCalculatedIntegrationEvent {
     this.data = data;
   }
 
-  static create(data: UtilityBillCalculatedIntegrationEventData): UtilityBillCalculatedIntegrationEvent {
+  static create(
+    data: UtilityBillCalculatedIntegrationEventData
+  ): UtilityBillCalculatedIntegrationEvent {
     return new UtilityBillCalculatedIntegrationEvent(data);
   }
 

@@ -1,5 +1,5 @@
-import { createTRPCRouter, defaultAuthMiddleware } from './trpc';
-import type { AnyRouter } from '@trpc/server';
+import { createTRPCRouter, defaultAuthMiddleware } from "./trpc";
+import type { AnyRouter } from "@trpc/server";
 import {
   createBoarderRouter,
   createPaymentRouter,
@@ -10,8 +10,8 @@ import {
   createAdminRouter,
   createPropertyRouter,
   createBookingRouter,
-} from './routers/index';
-import type { MiddlewareFn } from './types/index';
+} from "./routers/index";
+import type { MiddlewareFn } from "./types/index";
 
 // tRPC procedure type - using any due to complex generic requirements
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,9 +40,16 @@ export const createAppRouter = (
     utility: createUtilityRouter(protectedProcedure),
     user: createUserRouter(protectedProcedure),
     dashboard: createDashboardRouter(protectedProcedure),
-    admin: createAdminRouter(protectedProcedure, adminProcedure || protectedProcedure),
+    admin: createAdminRouter(
+      protectedProcedure,
+      adminProcedure || protectedProcedure
+    ),
     property: createPropertyRouter(protectedProcedure, landlordProcedure),
-    booking: createBookingRouter(protectedProcedure, boarderProcedure, landlordProcedure),
+    booking: createBookingRouter(
+      protectedProcedure,
+      boarderProcedure,
+      landlordProcedure
+    ),
   }) as AnyRouter;
 };
 

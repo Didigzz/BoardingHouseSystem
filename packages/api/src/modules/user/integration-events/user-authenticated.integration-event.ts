@@ -12,7 +12,9 @@ export class UserAuthenticatedIntegrationEvent {
     this.data = data;
   }
 
-  static create(data: UserAuthenticatedIntegrationEventData): UserAuthenticatedIntegrationEvent {
+  static create(
+    data: UserAuthenticatedIntegrationEventData
+  ): UserAuthenticatedIntegrationEvent {
     return new UserAuthenticatedIntegrationEvent(data);
   }
 

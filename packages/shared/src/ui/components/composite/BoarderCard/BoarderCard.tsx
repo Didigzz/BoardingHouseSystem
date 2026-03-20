@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../../primitives/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../primitives/card";
 import { Badge } from "../../primitives/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../../primitives/avatar";
 import { Phone, Mail, DoorOpen } from "lucide-react";
@@ -27,10 +32,15 @@ function BoarderStatusBadge({ isActive }: { isActive: boolean }) {
   );
 }
 
-function BoarderAvatar({ firstName, lastName, image, className }: { 
-  firstName: string; 
-  lastName: string; 
-  image?: string | null; 
+function BoarderAvatar({
+  firstName,
+  lastName,
+  image,
+  className,
+}: {
+  firstName: string;
+  lastName: string;
+  image?: string | null;
   className?: string;
 }) {
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
@@ -63,23 +73,23 @@ export function BoarderCard({ boarder, onClick }: BoarderCardProps) {
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-2 text-sm">
           <Mail className="h-4 w-4" />
           <span>{boarder.email}</span>
         </div>
         {boarder.phone && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
             <Phone className="h-4 w-4" />
             <span>{boarder.phone}</span>
           </div>
         )}
         {boarder.room && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
             <DoorOpen className="h-4 w-4" />
             <span>Room {boarder.room.roomNumber}</span>
           </div>
         )}
-        <div className="text-xs text-muted-foreground">
+        <div className="text-muted-foreground text-xs">
           Move-in: {formatDate(boarder.moveInDate)}
         </div>
       </CardContent>

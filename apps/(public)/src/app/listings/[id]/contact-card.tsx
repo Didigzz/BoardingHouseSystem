@@ -14,9 +14,9 @@ export function ContactCard({ listing }: ContactCardProps) {
   return (
     <div className="sticky top-24 space-y-6">
       {/* Contact Card */}
-      <div className="rounded-xl border bg-card p-6 shadow-lg">
+      <div className="bg-card rounded-xl border p-6 shadow-lg">
         <h3 className="text-lg font-semibold">Interested in this place?</h3>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-sm">
           Contact the landlord to schedule a visit or ask questions
         </p>
 
@@ -32,13 +32,15 @@ export function ContactCard({ listing }: ContactCardProps) {
                 className="rounded-full object-cover"
               />
             ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <User className="h-6 w-6 text-primary" />
+              <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-full">
+                <User className="text-primary h-6 w-6" />
               </div>
             )}
             <div>
               <div className="font-medium">{listing.landlord.name}</div>
-              <div className="text-sm text-muted-foreground">Property Owner</div>
+              <div className="text-muted-foreground text-sm">
+                Property Owner
+              </div>
             </div>
           </div>
         )}
@@ -69,16 +71,18 @@ export function ContactCard({ listing }: ContactCardProps) {
           </Link>
         </div>
 
-        <p className="mt-4 text-center text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-4 text-center text-xs">
           Sign in to contact the landlord and request bookings
         </p>
       </div>
 
       {/* Safety Tips */}
-      <div className="rounded-lg border bg-muted/50 p-4">
-        <h4 className="font-medium text-sm">Safety Tips</h4>
-        <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
-          <li>• Always visit the property in person before making a decision</li>
+      <div className="bg-muted/50 rounded-lg border p-4">
+        <h4 className="text-sm font-medium">Safety Tips</h4>
+        <ul className="text-muted-foreground mt-2 space-y-1 text-xs">
+          <li>
+            • Always visit the property in person before making a decision
+          </li>
           <li>• Never send money without seeing the place first</li>
           <li>• Ask for a proper contract or agreement</li>
           <li>• Verify the landlord's identity</li>

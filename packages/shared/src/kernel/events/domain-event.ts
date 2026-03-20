@@ -1,6 +1,6 @@
 /**
  * Domain Event Base Class
- * 
+ *
  * Domain events represent something meaningful that happened in the domain.
  * They are immutable and contain all the data related to the event.
  */

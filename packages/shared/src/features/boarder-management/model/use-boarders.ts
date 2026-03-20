@@ -29,5 +29,10 @@ export function useBoarder(_id: string) {
 }
 
 export function useBoarderStats() {
-  return { data: { total: 0, active: 0, inactive: 0 }, isLoading: false, isError: false, error: null };
+  return {
+    data: { total: 0, active: 0, inactive: 0 },
+    isLoading: false,
+    isError: false,
+    error: null,
+  };
 }

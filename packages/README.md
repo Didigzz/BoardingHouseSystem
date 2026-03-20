@@ -17,6 +17,7 @@ packages/
 ## Core Packages
 
 ### 🔧 API (`packages/api/`)
+
 - tRPC v11 and ORPC v1 routers and procedures
 - Feature-based API modules (boarder, dashboard, payment, room, user, admin, property, booking)
 - Middleware (rate limiting, authentication, authorization)
@@ -25,6 +26,7 @@ packages/
 - Used by: apps/server, all frontend apps
 
 ### 💾 Database (`packages/database/`)
+
 - Prisma ORM v7 client and schema
 - PostgreSQL and Neon Database adapters
 - Database types and utilities
@@ -32,18 +34,22 @@ packages/
 - Used by: apps/server, packages/api, packages/auth
 
 ### 🔐 Auth (`packages/auth/`)
+
 - NextAuth.js v5 configuration
 - Role-based access control (BOARDER, LANDLORD, ADMIN)
 - Authentication middleware
 - Used by: apps/server, apps/(public)
 
 ### ✅ Validation (`packages/validation/`)
+
 - Zod schemas for input/output validation
 - Shared validation utilities
 - Used by: packages/api, apps/server
 
 ### 🔄 Shared (`packages/shared/`)
+
 **Consolidated package** containing:
+
 - Business logic utilities (features, components)
 - Shared UI components (Radix UI based)
 - Layout components (`DashboardLayout`, `AuthLayout`, `PublicLayout`)
@@ -54,6 +60,7 @@ packages/
 ## Configuration Packages
 
 ### ⚙️ Config (`packages/config/`)
+
 - ESLint configurations (`eslint/base.js`, `eslint/next.js`, `eslint/react.js`)
 - Tailwind CSS configurations
 - TypeScript configurations
@@ -76,26 +83,31 @@ packages/shared  → @havenspace/database, @havenspace/validation
 ## Development
 
 ### Install Dependencies
+
 ```bash
 bun install
 ```
 
 ### Build All Packages
+
 ```bash
 bun run build
 ```
 
 ### Type Check All Packages
+
 ```bash
 bun run typecheck
 ```
 
 ### Lint All Packages
+
 ```bash
 bun run lint
 ```
 
 ### Test All Packages
+
 ```bash
 bun run test
 ```

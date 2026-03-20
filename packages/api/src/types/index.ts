@@ -68,7 +68,9 @@ export type MiddlewareFn = (opts: {
 /**
  * Auth middleware factory type
  */
-export type AuthMiddlewareFactory = (getSession: (ctx: TRPCContext) => Promise<HavenSession | null>) => MiddlewareFn;
+export type AuthMiddlewareFactory = (
+  getSession: (ctx: TRPCContext) => Promise<HavenSession | null>
+) => MiddlewareFn;
 
 /**
  * Role-based middleware type
@@ -78,7 +80,9 @@ export type RoleMiddlewareFactory = (requiredRole: UserRole) => MiddlewareFn;
 /**
  * Status-based middleware type
  */
-export type StatusMiddlewareFactory = (requiredStatus: UserStatus | UserStatus[]) => MiddlewareFn;
+export type StatusMiddlewareFactory = (
+  requiredStatus: UserStatus | UserStatus[]
+) => MiddlewareFn;
 
 /**
  * Protected procedure context (with authenticated session)
@@ -125,7 +129,9 @@ export interface BoarderTRPCContext extends ProtectedTRPCContext {
 /**
  * Helper type to extract Zod schema input type
  */
-export type InferInput<T> = T extends import("zod").ZodType<infer U> ? U : never;
+export type InferInput<T> = T extends import("zod").ZodType<infer U>
+  ? U
+  : never;
 
 /**
  * Error handler for TRPC procedures

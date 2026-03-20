@@ -73,10 +73,7 @@ export const UploadPresets = {
 /**
  * Validate file size
  */
-export function validateFileSize(
-  file: FileMetadata,
-  maxSize: number
-): void {
+export function validateFileSize(file: FileMetadata, maxSize: number): void {
   if (file.size > maxSize) {
     const maxSizeMB = (maxSize / (1024 * 1024)).toFixed(2);
     throw new TRPCError({
@@ -153,7 +150,9 @@ export async function validateImageDimensions(
 
   // For now, we'll skip actual dimension validation
   // This should be implemented when integrating with actual file storage
-  console.warn("[Upload] Image dimension validation not implemented - skipping");
+  console.warn(
+    "[Upload] Image dimension validation not implemented - skipping"
+  );
 }
 
 /**
@@ -207,7 +206,10 @@ export async function validateFileUpload(
   validateFileExtension(file, allowedExtensions);
 
   // Validate image dimensions if applicable
-  if (file.type.startsWith("image/") && (maxWidth || maxHeight || minDimensions)) {
+  if (
+    file.type.startsWith("image/") &&
+    (maxWidth || maxHeight || minDimensions)
+  ) {
     await validateImageDimensions(file, {
       maxWidth,
       maxHeight,
@@ -240,7 +242,9 @@ export const fileUploadSchema = z.object({
 /**
  * Create a Zod schema for multiple file uploads
  */
-export function createMultipleFileUploadSchema(options: UploadValidationOptions) {
+export function createMultipleFileUploadSchema(
+  options: UploadValidationOptions
+) {
   return z.object({
     files: z
       .array(fileUploadSchema)
@@ -274,8 +278,10 @@ export function getFileExtension(fileName: string): string {
  * Validate that a file is an image
  */
 export function isImageFile(file: FileMetadata): boolean {
-  return file.type.startsWith("image/") || 
-         /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i.test(file.name);
+  return (
+    file.type.startsWith("image/") ||
+    /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i.test(file.name)
+  );
 }
 
 /**
@@ -285,7 +291,8 @@ export function isDocumentFile(file: FileMetadata): boolean {
   return (
     file.type === "application/pdf" ||
     file.type === "application/msword" ||
-    file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+    file.type ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
     /\.(pdf|doc|docx|txt|rtf)$/i.test(file.name)
   );
 }

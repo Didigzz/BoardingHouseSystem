@@ -1,6 +1,6 @@
-import { GetRoomStatsQuery } from '../queries/get-room-stats.query';
-import { RoomStats } from '../queries/get-room-stats.query';
-import { IRoomRepository } from '../../domain/repositories/room.repository.interface';
+import { GetRoomStatsQuery } from "../queries/get-room-stats.query";
+import { RoomStats } from "../queries/get-room-stats.query";
+import { IRoomRepository } from "../../domain/repositories/room.repository.interface";
 
 export class GetRoomStatsHandler {
   constructor(private roomRepository: IRoomRepository) {}

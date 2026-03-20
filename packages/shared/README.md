@@ -24,10 +24,16 @@ import { ... } from '@havenspace/shared';
 ### Utilities
 
 ```typescript
-import { cn, debounce, throttle, formatDate, formatCurrency } from '@havenspace/shared';
+import {
+  cn,
+  debounce,
+  throttle,
+  formatDate,
+  formatCurrency,
+} from "@havenspace/shared";
 
 // Class name merging (Tailwind)
-const className = cn('base-class', isActive && 'active-class');
+const className = cn("base-class", isActive && "active-class");
 
 // Debounce function
 const debouncedSearch = debounce((query: string) => {
@@ -41,13 +47,13 @@ const throttledScroll = throttle(() => {
 
 // Formatters
 const formattedDate = formatDate(new Date());
-const formattedCurrency = formatCurrency(1000, 'PHP');
+const formattedCurrency = formatCurrency(1000, "PHP");
 ```
 
 ### Types
 
 ```typescript
-import { PaginationParams, ApiResponse, UserRole } from '@havenspace/shared';
+import { PaginationParams, ApiResponse, UserRole } from "@havenspace/shared";
 
 const params: PaginationParams = {
   page: 1,
@@ -63,13 +69,18 @@ const response: ApiResponse<User[]> = {
 ### Domain Entities
 
 ```typescript
-import { User, Boarder, Room, Payment } from '@havenspace/shared/entities';
+import { User, Boarder, Room, Payment } from "@havenspace/shared/entities";
 ```
 
 ### DDD Base Classes
 
 ```typescript
-import { Entity, ValueObject, AggregateRoot, DomainEvent } from '@havenspace/shared/kernel';
+import {
+  Entity,
+  ValueObject,
+  AggregateRoot,
+  DomainEvent,
+} from "@havenspace/shared/kernel";
 ```
 
 ## Package Structure
@@ -108,4 +119,3 @@ shared/
 - `@havenspace/api` - Uses shared types and entities
 - `@havenspace/validation` - Used for input validation
 - `@havenspace/database` - Used for database types
-

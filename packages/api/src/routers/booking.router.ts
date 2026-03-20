@@ -151,7 +151,12 @@ export const createBookingRouter = (
 
         const where: {
           boarderId: string;
-          status?: "PENDING" | "CONFIRMED" | "ACTIVE" | "COMPLETED" | "CANCELLED";
+          status?:
+            | "PENDING"
+            | "CONFIRMED"
+            | "ACTIVE"
+            | "COMPLETED"
+            | "CANCELLED";
         } = { boarderId: boarder.id };
         if (input.status) where.status = input.status;
 
@@ -195,7 +200,12 @@ export const createBookingRouter = (
         const where: {
           property: { landlordId: string };
           propertyId?: string;
-          status?: "PENDING" | "CONFIRMED" | "ACTIVE" | "COMPLETED" | "CANCELLED";
+          status?:
+            | "PENDING"
+            | "CONFIRMED"
+            | "ACTIVE"
+            | "COMPLETED"
+            | "CANCELLED";
         } = {
           property: { landlordId: landlordProfile.id },
         };

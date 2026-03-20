@@ -3,7 +3,7 @@ import { createTRPCRouter } from "../trpc";
 import {
   createRoomSchema,
   updateRoomSchema,
-  RoomStatusEnum
+  RoomStatusEnum,
 } from "@havenspace/validation";
 import type { ProtectedTRPCContext } from "../types/index";
 
@@ -38,26 +38,28 @@ export const createRoomRouter = (protectedProcedure: Procedure) => {
   return createTRPCRouter({
     getAll: protectedProcedure
       .input(getAllRoomsSchema.optional())
-      .query(async ({ ctx, input }: AuthenticatedCtx<GetAllInput | undefined>) => {
-        return ctx.db.room.findMany({
-          where: {
-            status: input?.status,
-            roomNumber: input?.search
-              ? { contains: input.search, mode: "insensitive" }
-              : undefined,
-          },
-          include: {
-            boarders: {
-              where: { isActive: true },
-              select: { id: true, firstName: true, lastName: true },
+      .query(
+        async ({ ctx, input }: AuthenticatedCtx<GetAllInput | undefined>) => {
+          return ctx.db.room.findMany({
+            where: {
+              status: input?.status,
+              roomNumber: input?.search
+                ? { contains: input.search, mode: "insensitive" }
+                : undefined,
             },
-            _count: {
-              select: { boarders: { where: { isActive: true } } },
+            include: {
+              boarders: {
+                where: { isActive: true },
+                select: { id: true, firstName: true, lastName: true },
+              },
+              _count: {
+                select: { boarders: { where: { isActive: true } } },
+              },
             },
-          },
-          orderBy: { roomNumber: "asc" },
-        });
-      }),
+            orderBy: { roomNumber: "asc" },
+          });
+        }
+      ),
 
     getById: protectedProcedure
       .input(getRoomByIdSchema)
@@ -100,15 +102,17 @@ export const createRoomRouter = (protectedProcedure: Procedure) => {
         });
       }),
 
-    getStats: protectedProcedure.query(async ({ ctx }: AuthenticatedCtx<void>) => {
-      const [total, available, occupied, maintenance] = await Promise.all([
-        ctx.db.room.count(),
-        ctx.db.room.count({ where: { status: "AVAILABLE" } }),
-        ctx.db.room.count({ where: { status: "OCCUPIED" } }),
-        ctx.db.room.count({ where: { status: "MAINTENANCE" } }),
-      ]);
+    getStats: protectedProcedure.query(
+      async ({ ctx }: AuthenticatedCtx<void>) => {
+        const [total, available, occupied, maintenance] = await Promise.all([
+          ctx.db.room.count(),
+          ctx.db.room.count({ where: { status: "AVAILABLE" } }),
+          ctx.db.room.count({ where: { status: "OCCUPIED" } }),
+          ctx.db.room.count({ where: { status: "MAINTENANCE" } }),
+        ]);
 
-      return { total, available, occupied, maintenance };
-    }),
+        return { total, available, occupied, maintenance };
+      }
+    ),
   });
 };

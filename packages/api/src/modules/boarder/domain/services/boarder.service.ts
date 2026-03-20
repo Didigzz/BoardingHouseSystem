@@ -1,4 +1,4 @@
-import { IBoarderRepository } from '../repositories/boarder.repository.interface';
+import { IBoarderRepository } from "../repositories/boarder.repository.interface";
 
 /**
  * Boarder Domain Service
@@ -19,19 +19,19 @@ export class BoarderService {
     const errors: string[] = [];
 
     if (!data.firstName || data.firstName.trim().length === 0) {
-      errors.push('First name is required');
+      errors.push("First name is required");
     }
 
     if (!data.lastName || data.lastName.trim().length === 0) {
-      errors.push('Last name is required');
+      errors.push("Last name is required");
     }
 
     if (!data.email || !this.isValidEmail(data.email)) {
-      errors.push('Invalid email address');
+      errors.push("Invalid email address");
     }
 
     if (!data.moveInDate || data.moveInDate > new Date()) {
-      errors.push('Move-in date cannot be in the future');
+      errors.push("Move-in date cannot be in the future");
     }
 
     return {

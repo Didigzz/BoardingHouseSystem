@@ -1,7 +1,7 @@
-import { AssignRoomCommand } from '../commands/assign-room.command';
-import { Boarder } from '../../domain/entities/boarder.entity';
-import { IBoarderRepository } from '../../domain/repositories/boarder.repository.interface';
-import { BoarderService } from '../../domain/services/boarder.service';
+import { AssignRoomCommand } from "../commands/assign-room.command";
+import { Boarder } from "../../domain/entities/boarder.entity";
+import { IBoarderRepository } from "../../domain/repositories/boarder.repository.interface";
+import { BoarderService } from "../../domain/services/boarder.service";
 
 export class AssignRoomHandler {
   constructor(
@@ -23,7 +23,7 @@ export class AssignRoomHandler {
         command.roomId
       );
       if (!canAssign) {
-        throw new Error('Boarder cannot be assigned to a room');
+        throw new Error("Boarder cannot be assigned to a room");
       }
       boarder.assignRoom(command.roomId);
     } else {

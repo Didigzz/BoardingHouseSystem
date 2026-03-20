@@ -52,116 +52,120 @@ export const createPropertyRouter = (
     // Get all properties (public - for browsing)
     getAll: publicProcedure
       .input(getAllInputSchema)
-      .query(async ({ ctx, input }: { ctx: TRPCContext; input: GetAllInput }) => {
-        const { page, limit, query, city, priceMin, priceMax, amenities } =
-          input;
-        const skip = (page - 1) * limit;
+      .query(
+        async ({ ctx, input }: { ctx: TRPCContext; input: GetAllInput }) => {
+          const { page, limit, query, city, priceMin, priceMax, amenities } =
+            input;
+          const skip = (page - 1) * limit;
 
-        const where: {
-          isActive: boolean;
-          OR?: Array<{
-            name?: { contains: string; mode: "insensitive" };
-            description?: { contains: string; mode: "insensitive" };
-            address?: { contains: string; mode: "insensitive" };
-          }>;
-          monthlyRent?: {
-            gte?: number;
-            lte?: number;
+          const where: {
+            isActive: boolean;
+            OR?: Array<{
+              name?: { contains: string; mode: "insensitive" };
+              description?: { contains: string; mode: "insensitive" };
+              address?: { contains: string; mode: "insensitive" };
+            }>;
+            monthlyRent?: {
+              gte?: number;
+              lte?: number;
+            };
+            city?: { equals: string; mode: "insensitive" };
+            amenities?: { hasEvery: string[] };
+          } = {
+            isActive: true,
           };
-          city?: { equals: string; mode: "insensitive" };
-          amenities?: { hasEvery: string[] };
-        } = {
-          isActive: true,
-        };
 
-        if (query) {
-          where.OR = [
-            { name: { contains: query, mode: "insensitive" } },
-            { description: { contains: query, mode: "insensitive" } },
-            { address: { contains: query, mode: "insensitive" } },
-          ];
+          if (query) {
+            where.OR = [
+              { name: { contains: query, mode: "insensitive" } },
+              { description: { contains: query, mode: "insensitive" } },
+              { address: { contains: query, mode: "insensitive" } },
+            ];
+          }
+
+          if (priceMin !== undefined || priceMax !== undefined) {
+            where.monthlyRent = {};
+            if (priceMin !== undefined) where.monthlyRent.gte = priceMin;
+            if (priceMax !== undefined) where.monthlyRent.lte = priceMax;
+          }
+
+          if (city) {
+            where.city = { equals: city, mode: "insensitive" };
+          }
+
+          if (amenities && amenities.length > 0) {
+            where.amenities = { hasEvery: amenities };
+          }
+
+          const [properties, total] = await Promise.all([
+            ctx.db.property.findMany({
+              where,
+              skip,
+              take: limit,
+              orderBy: { createdAt: "desc" },
+              include: {
+                landlord: {
+                  select: {
+                    user: {
+                      select: {
+                        name: true,
+                        image: true,
+                      },
+                    },
+                  },
+                },
+              },
+            }),
+            ctx.db.property.count({ where }),
+          ]);
+
+          return {
+            properties,
+            pagination: {
+              page,
+              limit,
+              total,
+              totalPages: Math.ceil(total / limit),
+            },
+          };
         }
+      ),
 
-        if (priceMin !== undefined || priceMax !== undefined) {
-          where.monthlyRent = {};
-          if (priceMin !== undefined) where.monthlyRent.gte = priceMin;
-          if (priceMax !== undefined) where.monthlyRent.lte = priceMax;
-        }
-
-        if (city) {
-          where.city = { equals: city, mode: "insensitive" };
-        }
-
-        if (amenities && amenities.length > 0) {
-          where.amenities = { hasEvery: amenities };
-        }
-
-        const [properties, total] = await Promise.all([
-          ctx.db.property.findMany({
-            where,
-            skip,
-            take: limit,
-            orderBy: { createdAt: "desc" },
+    // Get single property by ID (public)
+    getById: publicProcedure
+      .input(getPropertyByIdSchema)
+      .query(
+        async ({ ctx, input }: { ctx: TRPCContext; input: GetByIdInput }) => {
+          const property = await ctx.db.property.findUnique({
+            where: { id: input.id },
             include: {
               landlord: {
                 select: {
                   user: {
                     select: {
+                      id: true,
                       name: true,
+                      email: true,
+                      phone: true,
                       image: true,
                     },
                   },
+                  businessName: true,
                 },
               },
             },
-          }),
-          ctx.db.property.count({ where }),
-        ]);
-
-        return {
-          properties,
-          pagination: {
-            page,
-            limit,
-            total,
-            totalPages: Math.ceil(total / limit),
-          },
-        };
-      }),
-
-    // Get single property by ID (public)
-    getById: publicProcedure
-      .input(getPropertyByIdSchema)
-      .query(async ({ ctx, input }: { ctx: TRPCContext; input: GetByIdInput }) => {
-        const property = await ctx.db.property.findUnique({
-          where: { id: input.id },
-          include: {
-            landlord: {
-              select: {
-                user: {
-                  select: {
-                    id: true,
-                    name: true,
-                    email: true,
-                    phone: true,
-                    image: true,
-                  },
-                },
-                businessName: true,
-              },
-            },
-          },
-        });
-
-        if (!property) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Property not found",
           });
-        }
 
-        return property;
-      }),
+          if (!property) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "Property not found",
+            });
+          }
+
+          return property;
+        }
+      ),
 
     // Get landlord's own properties
     getMyProperties: landlordProc.query(async ({ ctx }: LandlordCtx<void>) => {

@@ -1,6 +1,6 @@
-import { AggregateRoot } from '../../../../shared/kernel/domain/aggregate-root';
-import { PaymentStatus } from '../value-objects/payment-status.vo';
-import { PaymentType } from '../value-objects/payment-type.vo';
+import { AggregateRoot } from "../../../../shared/kernel/domain/aggregate-root";
+import { PaymentStatus } from "../value-objects/payment-status.vo";
+import { PaymentType } from "../value-objects/payment-type.vo";
 
 export interface PaymentProps {
   id: string;
@@ -96,7 +96,7 @@ export class Payment extends AggregateRoot<PaymentProps> {
    */
   cancel(): void {
     if (this.props.status.isPaid()) {
-      throw new Error('Cannot cancel a paid payment');
+      throw new Error("Cannot cancel a paid payment");
     }
     this.props.status = PaymentStatus.Cancelled;
     this.props.updatedAt = new Date();
@@ -106,7 +106,14 @@ export class Payment extends AggregateRoot<PaymentProps> {
   /**
    * Update payment details
    */
-  updateDetails(details: Partial<Omit<PaymentProps, 'id' | 'status' | 'paidDate' | 'receiptNumber' | 'createdAt'>>): void {
+  updateDetails(
+    details: Partial<
+      Omit<
+        PaymentProps,
+        "id" | "status" | "paidDate" | "receiptNumber" | "createdAt"
+      >
+    >
+  ): void {
     this.props = {
       ...this.props,
       ...details,
@@ -118,7 +125,10 @@ export class Payment extends AggregateRoot<PaymentProps> {
    * Check if payment is overdue
    */
   isOverdue(): boolean {
-    return this.props.status.isOverdue() || (this.props.status.isPending() && this.props.dueDate < new Date());
+    return (
+      this.props.status.isOverdue() ||
+      (this.props.status.isPending() && this.props.dueDate < new Date())
+    );
   }
 
   /**
@@ -131,7 +141,9 @@ export class Payment extends AggregateRoot<PaymentProps> {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 
-  static create(props: Omit<PaymentProps, 'id' | 'status' | 'createdAt' | 'updatedAt'>): Payment {
+  static create(
+    props: Omit<PaymentProps, "id" | "status" | "createdAt" | "updatedAt">
+  ): Payment {
     return new Payment({
       ...props,
       id: crypto.randomUUID(),

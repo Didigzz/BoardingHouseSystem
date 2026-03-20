@@ -29,6 +29,10 @@ const timingMiddleware = o.middleware(async ({ next }) => {
 export const publicProcedure = o.use(timingMiddleware);
 
 // Base protected procedure - platforms can extend this with their auth
-export const createProtectedProcedure = <T extends ReturnType<typeof os.middleware>>(authMiddleware: T) => {
+export const createProtectedProcedure = <
+  T extends ReturnType<typeof os.middleware>,
+>(
+  authMiddleware: T
+) => {
   return o.use(timingMiddleware).use(authMiddleware);
 };

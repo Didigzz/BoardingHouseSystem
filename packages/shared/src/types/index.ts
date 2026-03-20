@@ -36,7 +36,7 @@ export interface FilterOption extends SelectOption {
 
 export interface SortOption {
   field: string;
-  direction: 'asc' | 'desc';
+  direction: "asc" | "desc";
 }
 
 export interface DateRange {

@@ -1,15 +1,17 @@
-import { ValueObject } from '../../../../shared/kernel/domain/value-object';
+import { ValueObject } from "../../../../shared/kernel/domain/value-object";
 
 /**
  * Payment Status Value Object
  */
-export class PaymentStatus extends ValueObject<'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED'> {
-  public static readonly PENDING = 'PENDING' as const;
-  public static readonly PAID = 'PAID' as const;
-  public static readonly OVERDUE = 'OVERDUE' as const;
-  public static readonly CANCELLED = 'CANCELLED' as const;
+export class PaymentStatus extends ValueObject<
+  "PENDING" | "PAID" | "OVERDUE" | "CANCELLED"
+> {
+  public static readonly PENDING = "PENDING" as const;
+  public static readonly PAID = "PAID" as const;
+  public static readonly OVERDUE = "OVERDUE" as const;
+  public static readonly CANCELLED = "CANCELLED" as const;
 
-  private constructor(value: 'PENDING' | 'PAID' | 'OVERDUE' | 'CANCELLED') {
+  private constructor(value: "PENDING" | "PAID" | "OVERDUE" | "CANCELLED") {
     super(value);
   }
 

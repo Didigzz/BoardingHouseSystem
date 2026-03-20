@@ -8,7 +8,10 @@ export class UserService {
     return bcrypt.hash(password, 12);
   }
 
-  async verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+  async verifyPassword(
+    password: string,
+    hashedPassword: string
+  ): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
   }
 
@@ -19,7 +22,11 @@ export class UserService {
     }
   }
 
-  async updatePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+  async updatePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<void> {
     const user = await this.repository.findById(userId);
     if (!user) {
       throw new Error("User not found");

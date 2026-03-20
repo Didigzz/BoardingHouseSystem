@@ -4,4 +4,6 @@ export const GetUtilityReadingQuerySchema = z.object({
   id: z.string(),
 });
 
-export type GetUtilityReadingQuery = z.infer<typeof GetUtilityReadingQuerySchema>;
+export type GetUtilityReadingQuery = z.infer<
+  typeof GetUtilityReadingQuerySchema
+>;

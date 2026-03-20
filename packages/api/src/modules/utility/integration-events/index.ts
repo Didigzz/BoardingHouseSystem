@@ -1,1 +1,1 @@
-export { UtilityBillCalculatedIntegrationEvent } from './utility-bill-calculated.integration-event';
+export { UtilityBillCalculatedIntegrationEvent } from "./utility-bill-calculated.integration-event";

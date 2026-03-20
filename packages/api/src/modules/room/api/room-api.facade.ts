@@ -1,10 +1,10 @@
-import { IRoomApi } from './room-api.interface';
-import { RoomModule } from '../room.module';
-import { Room } from '../domain/entities/room.entity';
-import { RoomStats } from '../domain/repositories/room.repository.interface';
-import type { CreateRoomCommand } from '../application/commands/create-room.command';
-import type { UpdateRoomCommand } from '../application/commands/update-room.command';
-import type { ListRoomsQuery } from '../application/queries/list-rooms.query';
+import { IRoomApi } from "./room-api.interface";
+import { RoomModule } from "../room.module";
+import { Room } from "../domain/entities/room.entity";
+import { RoomStats } from "../domain/repositories/room.repository.interface";
+import type { CreateRoomCommand } from "../application/commands/create-room.command";
+import type { UpdateRoomCommand } from "../application/commands/update-room.command";
+import type { ListRoomsQuery } from "../application/queries/list-rooms.query";
 
 export class RoomApiFacade implements IRoomApi {
   private static instance: RoomApiFacade;
@@ -25,7 +25,9 @@ export class RoomApiFacade implements IRoomApi {
 
   async updateRoom(id: string, data: Partial<Room>): Promise<Room> {
     const module = RoomModule.getInstance();
-    return module.getHandlers().updateRoom.handle({ id, ...data } as UpdateRoomCommand);
+    return module
+      .getHandlers()
+      .updateRoom.handle({ id, ...data } as UpdateRoomCommand);
   }
 
   async deleteRoom(id: string): Promise<void> {
@@ -45,6 +47,8 @@ export class RoomApiFacade implements IRoomApi {
 
   async getRoomStats(): Promise<RoomStats> {
     const module = RoomModule.getInstance();
-    return module.getHandlers().getRoomStats.handle({} as Record<string, never>);
+    return module
+      .getHandlers()
+      .getRoomStats.handle({} as Record<string, never>);
   }
 }

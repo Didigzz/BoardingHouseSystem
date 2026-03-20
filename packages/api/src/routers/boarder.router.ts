@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter } from "../trpc";
 import {
   createBoarderSchema,
-  updateBoarderSchema
+  updateBoarderSchema,
 } from "@havenspace/validation";
 import { TRPCError } from "@trpc/server";
 import type { ProtectedTRPCContext } from "../types/index";
@@ -42,168 +42,232 @@ const assignRoomSchema = z.object({
 // For Next.js, this will include NextAuth session middleware
 export const createBoarderRouter = (protectedProcedure: Procedure) => {
   return createTRPCRouter({
-    getCurrent: protectedProcedure.query(async ({ ctx }: { ctx: ProtectedTRPCContext }) => {
-      if (!ctx.session?.user?.id) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "User not authenticated",
-        });
-      }
+    getCurrent: protectedProcedure.query(
+      async ({ ctx }: { ctx: ProtectedTRPCContext }) => {
+        if (!ctx.session?.user?.id) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User not authenticated",
+          });
+        }
 
-      const boarder = await ctx.db.boarder.findUnique({
-        where: { userId: ctx.session.user.id },
-        include: {
-          room: {
-            select: {
-              id: true,
-              roomNumber: true,
-              monthlyRate: true,
-              floor: true,
-              amenities: true,
-              status: true,
+        const boarder = await ctx.db.boarder.findUnique({
+          where: { userId: ctx.session.user.id },
+          include: {
+            room: {
+              select: {
+                id: true,
+                roomNumber: true,
+                monthlyRate: true,
+                floor: true,
+                amenities: true,
+                status: true,
+              },
+            },
+            payments: {
+              orderBy: { dueDate: "desc" },
+              take: 1,
             },
           },
-          payments: {
-            orderBy: { dueDate: "desc" },
-            take: 1,
-          },
-        },
-      });
-
-      if (!boarder) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Boarder profile not found",
         });
-      }
 
-      return boarder;
-    }),
+        if (!boarder) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Boarder profile not found",
+          });
+        }
+
+        return boarder;
+      }
+    ),
 
     getAll: protectedProcedure
       .input(getAllBoardersSchema.optional())
-      .query(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input?: GetAllInput }) => {
-        return ctx.db.boarder.findMany({
-          where: {
-            isActive: input?.isActive,
-            roomId: input?.roomId,
-            OR: input?.search
-              ? [
-                  { firstName: { contains: input.search, mode: "insensitive" } },
-                  { lastName: { contains: input.search, mode: "insensitive" } },
-                  { email: { contains: input.search, mode: "insensitive" } },
-                ]
-              : undefined,
-          },
-          include: {
-            room: {
-              select: { id: true, roomNumber: true, monthlyRate: true },
+      .query(
+        async ({
+          ctx,
+          input,
+        }: {
+          ctx: ProtectedTRPCContext;
+          input?: GetAllInput;
+        }) => {
+          return ctx.db.boarder.findMany({
+            where: {
+              isActive: input?.isActive,
+              roomId: input?.roomId,
+              OR: input?.search
+                ? [
+                    {
+                      firstName: {
+                        contains: input.search,
+                        mode: "insensitive",
+                      },
+                    },
+                    {
+                      lastName: { contains: input.search, mode: "insensitive" },
+                    },
+                    { email: { contains: input.search, mode: "insensitive" } },
+                  ]
+                : undefined,
             },
-            _count: {
-              select: { payments: true },
+            include: {
+              room: {
+                select: { id: true, roomNumber: true, monthlyRate: true },
+              },
+              _count: {
+                select: { payments: true },
+              },
             },
-          },
-          orderBy: { lastName: "asc" },
-        });
-      }),
+            orderBy: { lastName: "asc" },
+          });
+        }
+      ),
 
     getById: protectedProcedure
       .input(getBoarderByIdSchema)
-      .query(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: GetByIdInput }) => {
-        return ctx.db.boarder.findUnique({
-          where: { id: input.id },
-          include: {
-            room: true,
-            payments: {
-              orderBy: { dueDate: "desc" },
-              take: 10,
+      .query(
+        async ({
+          ctx,
+          input,
+        }: {
+          ctx: ProtectedTRPCContext;
+          input: GetByIdInput;
+        }) => {
+          return ctx.db.boarder.findUnique({
+            where: { id: input.id },
+            include: {
+              room: true,
+              payments: {
+                orderBy: { dueDate: "desc" },
+                take: 10,
+              },
             },
-          },
-        });
-      }),
+          });
+        }
+      ),
 
     create: protectedProcedure
       .input(createBoarderSchema)
-      .mutation(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: CreateBoarderInput }) => {
-        const accessCode = `${input.firstName.charAt(0)}${input.lastName.charAt(0)}${Date.now().toString(36)}`.toUpperCase();
+      .mutation(
+        async ({
+          ctx,
+          input,
+        }: {
+          ctx: ProtectedTRPCContext;
+          input: CreateBoarderInput;
+        }) => {
+          const accessCode =
+            `${input.firstName.charAt(0)}${input.lastName.charAt(0)}${Date.now().toString(36)}`.toUpperCase();
 
-        const boarder = await ctx.db.boarder.create({
-          data: {
-            ...input,
-            accessCode,
-          },
-        });
-
-        // Update room status if assigned
-        if (input.roomId) {
-          const room = await ctx.db.room.findUnique({
-            where: { id: input.roomId },
-            include: { _count: { select: { boarders: { where: { isActive: true } } } } },
+          const boarder = await ctx.db.boarder.create({
+            data: {
+              ...input,
+              accessCode,
+            },
           });
 
-          if (room && room._count.boarders >= room.capacity) {
-            await ctx.db.room.update({
+          // Update room status if assigned
+          if (input.roomId) {
+            const room = await ctx.db.room.findUnique({
               where: { id: input.roomId },
-              data: { status: "OCCUPIED" },
+              include: {
+                _count: { select: { boarders: { where: { isActive: true } } } },
+              },
             });
-          }
-        }
 
-        return boarder;
-      }),
+            if (room && room._count.boarders >= room.capacity) {
+              await ctx.db.room.update({
+                where: { id: input.roomId },
+                data: { status: "OCCUPIED" },
+              });
+            }
+          }
+
+          return boarder;
+        }
+      ),
 
     update: protectedProcedure
       .input(updateBoarderSchema)
-      .mutation(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: UpdateBoarderInput }) => {
-        const { id, ...data } = input;
-        return ctx.db.boarder.update({
-          where: { id },
-          data,
-        });
-      }),
+      .mutation(
+        async ({
+          ctx,
+          input,
+        }: {
+          ctx: ProtectedTRPCContext;
+          input: UpdateBoarderInput;
+        }) => {
+          const { id, ...data } = input;
+          return ctx.db.boarder.update({
+            where: { id },
+            data,
+          });
+        }
+      ),
 
     delete: protectedProcedure
       .input(deleteBoarderSchema)
-      .mutation(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: DeleteBoarderInput }) => {
-        return ctx.db.boarder.delete({
-          where: { id: input.id },
-        });
-      }),
+      .mutation(
+        async ({
+          ctx,
+          input,
+        }: {
+          ctx: ProtectedTRPCContext;
+          input: DeleteBoarderInput;
+        }) => {
+          return ctx.db.boarder.delete({
+            where: { id: input.id },
+          });
+        }
+      ),
 
     assignRoom: protectedProcedure
       .input(assignRoomSchema)
-      .mutation(async ({ ctx, input }: { ctx: ProtectedTRPCContext; input: AssignRoomInput }) => {
-        const boarder = await ctx.db.boarder.update({
-          where: { id: input.boarderId },
-          data: { roomId: input.roomId },
-        });
-
-        // Update room statuses
-        if (input.roomId) {
-          const room = await ctx.db.room.findUnique({
-            where: { id: input.roomId },
-            include: { _count: { select: { boarders: { where: { isActive: true } } } } },
+      .mutation(
+        async ({
+          ctx,
+          input,
+        }: {
+          ctx: ProtectedTRPCContext;
+          input: AssignRoomInput;
+        }) => {
+          const boarder = await ctx.db.boarder.update({
+            where: { id: input.boarderId },
+            data: { roomId: input.roomId },
           });
 
-          if (room && room._count.boarders >= room.capacity) {
-            await ctx.db.room.update({
+          // Update room statuses
+          if (input.roomId) {
+            const room = await ctx.db.room.findUnique({
               where: { id: input.roomId },
-              data: { status: "OCCUPIED" },
+              include: {
+                _count: { select: { boarders: { where: { isActive: true } } } },
+              },
             });
+
+            if (room && room._count.boarders >= room.capacity) {
+              await ctx.db.room.update({
+                where: { id: input.roomId },
+                data: { status: "OCCUPIED" },
+              });
+            }
           }
+
+          return boarder;
         }
+      ),
 
-        return boarder;
-      }),
+    getStats: protectedProcedure.query(
+      async ({ ctx }: { ctx: ProtectedTRPCContext }) => {
+        const [total, active, inactive] = await Promise.all([
+          ctx.db.boarder.count(),
+          ctx.db.boarder.count({ where: { isActive: true } }),
+          ctx.db.boarder.count({ where: { isActive: false } }),
+        ]);
 
-    getStats: protectedProcedure.query(async ({ ctx }: { ctx: ProtectedTRPCContext }) => {
-      const [total, active, inactive] = await Promise.all([
-        ctx.db.boarder.count(),
-        ctx.db.boarder.count({ where: { isActive: true } }),
-        ctx.db.boarder.count({ where: { isActive: false } }),
-      ]);
-
-      return { total, active, inactive };
-    }),
+        return { total, active, inactive };
+      }
+    ),
   });
 };

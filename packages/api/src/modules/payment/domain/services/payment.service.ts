@@ -1,4 +1,4 @@
-import { IPaymentRepository } from '../repositories/payment.repository.interface';
+import { IPaymentRepository } from "../repositories/payment.repository.interface";
 
 /**
  * Payment Domain Service
@@ -17,15 +17,15 @@ export class PaymentService {
     const errors: string[] = [];
 
     if (!data.boarderId || data.boarderId.trim().length === 0) {
-      errors.push('Boarder ID is required');
+      errors.push("Boarder ID is required");
     }
 
     if (data.amount <= 0) {
-      errors.push('Amount must be a positive number');
+      errors.push("Amount must be a positive number");
     }
 
     if (!data.dueDate || data.dueDate < new Date()) {
-      errors.push('Due date cannot be in the past');
+      errors.push("Due date cannot be in the past");
     }
 
     return {

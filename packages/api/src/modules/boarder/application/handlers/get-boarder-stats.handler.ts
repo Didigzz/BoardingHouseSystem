@@ -1,6 +1,6 @@
-import { GetBoarderStatsQuery } from '../queries/get-boarder-stats.query';
-import { BoarderStats } from '../queries/get-boarder-stats.query';
-import { IBoarderRepository } from '../../domain/repositories/boarder.repository.interface';
+import { GetBoarderStatsQuery } from "../queries/get-boarder-stats.query";
+import { BoarderStats } from "../queries/get-boarder-stats.query";
+import { IBoarderRepository } from "../../domain/repositories/boarder.repository.interface";
 
 export class GetBoarderStatsHandler {
   constructor(private boarderRepository: IBoarderRepository) {}

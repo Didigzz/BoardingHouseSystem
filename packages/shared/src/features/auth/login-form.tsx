@@ -49,11 +49,16 @@ export function LoginForm() {
       }
 
       // Fetch session to get user role and status
-      const sessionRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006"}/api/auth/session`);
+      const sessionRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006"}/api/auth/session`
+      );
       const session = await sessionRes.json();
 
       if (session?.user) {
-        const redirectUrl = getRedirectUrl(session.user.role, session.user.status);
+        const redirectUrl = getRedirectUrl(
+          session.user.role,
+          session.user.status
+        );
 
         // Check if redirect is to an external URL (different port)
         if (redirectUrl.startsWith("http")) {
@@ -73,7 +78,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {error && (
-        <div className="flex items-center gap-2 p-3 text-sm text-destructive bg-destructive/10 rounded-lg">
+        <div className="text-destructive bg-destructive/10 flex items-center gap-2 rounded-lg p-3 text-sm">
           <AlertCircle className="h-4 w-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -91,7 +96,7 @@ export function LoginForm() {
           className={errors.email ? "border-destructive" : ""}
         />
         {errors.email && (
-          <p className="text-sm text-destructive">{errors.email.message}</p>
+          <p className="text-destructive text-sm">{errors.email.message}</p>
         )}
       </div>
 
@@ -110,7 +115,7 @@ export function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
             tabIndex={-1}
           >
             {showPassword ? (
@@ -121,7 +126,7 @@ export function LoginForm() {
           </button>
         </div>
         {errors.password && (
-          <p className="text-sm text-destructive">{errors.password.message}</p>
+          <p className="text-destructive text-sm">{errors.password.message}</p>
         )}
       </div>
 

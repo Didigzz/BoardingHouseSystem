@@ -1,8 +1,12 @@
-import { Room } from '../../domain/entities/room.entity';
-import { RoomStatus } from '../../domain/value-objects/room-status.vo';
-import { IRoomRepository, RoomFilters, RoomStats } from '../../domain/repositories/room.repository.interface';
-import type { PrismaClientType } from '@havenspace/database';
-import { Prisma } from '@prisma/client';
+import { Room } from "../../domain/entities/room.entity";
+import { RoomStatus } from "../../domain/value-objects/room-status.vo";
+import {
+  IRoomRepository,
+  RoomFilters,
+  RoomStats,
+} from "../../domain/repositories/room.repository.interface";
+import type { PrismaClientType } from "@havenspace/database";
+import { Prisma } from "@prisma/client";
 
 interface RoomData {
   id: string;
@@ -37,7 +41,7 @@ export class PrismaRoomRepository implements IRoomRepository {
       where: {
         status: filters?.status ? filters.status.value : undefined,
         roomNumber: filters?.search
-          ? { contains: filters.search, mode: 'insensitive' }
+          ? { contains: filters.search, mode: "insensitive" }
           : undefined,
         floor: filters?.floor,
       },
@@ -50,7 +54,7 @@ export class PrismaRoomRepository implements IRoomRepository {
           select: { boarders: { where: { isActive: true } } },
         },
       },
-      orderBy: { roomNumber: 'asc' },
+      orderBy: { roomNumber: "asc" },
     });
 
     return roomsData.map((room) => this.mapToDomain(room));
@@ -95,20 +99,23 @@ export class PrismaRoomRepository implements IRoomRepository {
   async getStats(): Promise<RoomStats> {
     const [total, available, occupied, maintenance] = await Promise.all([
       this.prisma.room.count(),
-      this.prisma.room.count({ where: { status: 'AVAILABLE' } }),
-      this.prisma.room.count({ where: { status: 'OCCUPIED' } }),
-      this.prisma.room.count({ where: { status: 'MAINTENANCE' } }),
+      this.prisma.room.count({ where: { status: "AVAILABLE" } }),
+      this.prisma.room.count({ where: { status: "OCCUPIED" } }),
+      this.prisma.room.count({ where: { status: "MAINTENANCE" } }),
     ]);
 
     return { total, available, occupied, maintenance };
   }
 
-  async existsByRoomNumber(roomNumber: string, excludeId?: string): Promise<boolean> {
+  async existsByRoomNumber(
+    roomNumber: string,
+    excludeId?: string
+  ): Promise<boolean> {
     const room = await this.prisma.room.findFirst({
       where: {
         roomNumber: {
           equals: roomNumber,
-          mode: 'insensitive',
+          mode: "insensitive",
         },
         id: excludeId ? { not: excludeId } : undefined,
       },
@@ -123,7 +130,10 @@ export class PrismaRoomRepository implements IRoomRepository {
       roomNumber: data.roomNumber,
       floor: data.floor,
       capacity: data.capacity,
-      monthlyRate: data.monthlyRate instanceof Prisma.Decimal ? data.monthlyRate.toNumber() : data.monthlyRate,
+      monthlyRate:
+        data.monthlyRate instanceof Prisma.Decimal
+          ? data.monthlyRate.toNumber()
+          : data.monthlyRate,
       description: data.description ?? undefined,
       amenities: data.amenities,
       status: RoomStatus.fromString(data.status),

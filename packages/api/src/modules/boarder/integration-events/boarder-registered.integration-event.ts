@@ -15,7 +15,9 @@ export class BoarderRegisteredIntegrationEvent {
     this.data = data;
   }
 
-  static create(data: BoarderRegisteredIntegrationEventData): BoarderRegisteredIntegrationEvent {
+  static create(
+    data: BoarderRegisteredIntegrationEventData
+  ): BoarderRegisteredIntegrationEvent {
     return new BoarderRegisteredIntegrationEvent(data);
   }
 

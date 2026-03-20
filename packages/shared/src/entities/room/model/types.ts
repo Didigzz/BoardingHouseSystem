@@ -1,6 +1,6 @@
 // Room entity types
 
-export type RoomStatus = 'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE';
+export type RoomStatus = "AVAILABLE" | "OCCUPIED" | "MAINTENANCE";
 
 export interface Boarder {
   id: string;
@@ -12,7 +12,7 @@ export interface Boarder {
 
 export interface UtilityReading {
   id: string;
-  type: 'ELECTRICITY' | 'WATER' | 'INTERNET' | 'OTHER';
+  type: "ELECTRICITY" | "WATER" | "INTERNET" | "OTHER";
   previousReading: number | { toNumber(): number };
   currentReading: number | { toNumber(): number };
   ratePerUnit: number | { toNumber(): number };

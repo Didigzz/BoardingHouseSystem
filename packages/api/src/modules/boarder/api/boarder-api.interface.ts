@@ -1,5 +1,5 @@
-import { Boarder } from '../domain/entities/boarder.entity';
-import { BoarderStats } from '../domain/repositories/boarder.repository.interface';
+import { Boarder } from "../domain/entities/boarder.entity";
+import { BoarderStats } from "../domain/repositories/boarder.repository.interface";
 
 export interface IBoarderApi {
   createBoarder(data: unknown): Promise<Boarder>;

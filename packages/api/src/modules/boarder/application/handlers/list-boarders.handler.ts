@@ -1,6 +1,9 @@
-import { ListBoardersQuery } from '../queries/list-boarders.query';
-import { Boarder } from '../../domain/entities/boarder.entity';
-import { IBoarderRepository, BoarderFilters } from '../../domain/repositories/boarder.repository.interface';
+import { ListBoardersQuery } from "../queries/list-boarders.query";
+import { Boarder } from "../../domain/entities/boarder.entity";
+import {
+  IBoarderRepository,
+  BoarderFilters,
+} from "../../domain/repositories/boarder.repository.interface";
 
 export class ListBoardersHandler {
   constructor(private boarderRepository: IBoarderRepository) {}

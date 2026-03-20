@@ -29,7 +29,10 @@ export interface SearchFiltersState {
   amenities: string[];
 }
 
-export function SearchFilters({ onSearch, compact = false }: SearchFiltersProps) {
+export function SearchFilters({
+  onSearch,
+  compact = false,
+}: SearchFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -87,28 +90,36 @@ export function SearchFilters({ onSearch, compact = false }: SearchFiltersProps)
 
   if (compact) {
     return (
-      <div className="flex w-full max-w-3xl items-center gap-2 rounded-full border bg-background p-2 shadow-lg">
+      <div className="bg-background flex w-full max-w-3xl items-center gap-2 rounded-full border p-2 shadow-lg">
         <div className="flex flex-1 items-center gap-2 px-3">
-          <Search className="h-5 w-5 text-muted-foreground" />
+          <Search className="text-muted-foreground h-5 w-5" />
           <input
             type="text"
             placeholder="Search boarding houses..."
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            className="placeholder:text-muted-foreground flex-1 bg-transparent text-sm outline-none"
             value={filters.query}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilters({ ...filters, query: e.target.value })}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleSearch()}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFilters({ ...filters, query: e.target.value })
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              e.key === "Enter" && handleSearch()
+            }
           />
         </div>
-        <div className="hidden h-8 w-px bg-border sm:block" />
+        <div className="bg-border hidden h-8 w-px sm:block" />
         <div className="hidden flex-1 items-center gap-2 px-3 sm:flex">
-          <MapPin className="h-5 w-5 text-muted-foreground" />
+          <MapPin className="text-muted-foreground h-5 w-5" />
           <input
             type="text"
             placeholder="Location"
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            className="placeholder:text-muted-foreground flex-1 bg-transparent text-sm outline-none"
             value={filters.location}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilters({ ...filters, location: e.target.value })}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleSearch()}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFilters({ ...filters, location: e.target.value })
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              e.key === "Enter" && handleSearch()
+            }
           />
         </div>
         <Button onClick={handleSearch} className="rounded-full" size="sm">
@@ -124,23 +135,31 @@ export function SearchFilters({ onSearch, compact = false }: SearchFiltersProps)
       {/* Main Search Bar */}
       <div className="flex flex-col gap-4 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search boarding houses..."
             className="pl-10"
             value={filters.query}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilters({ ...filters, query: e.target.value })}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleSearch()}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFilters({ ...filters, query: e.target.value })
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              e.key === "Enter" && handleSearch()
+            }
           />
         </div>
         <div className="relative flex-1">
-          <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <MapPin className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Location"
             className="pl-10"
             value={filters.location}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilters({ ...filters, location: e.target.value })}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && handleSearch()}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setFilters({ ...filters, location: e.target.value })
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              e.key === "Enter" && handleSearch()
+            }
           />
         </div>
         <div className="flex gap-2">
@@ -152,7 +171,7 @@ export function SearchFilters({ onSearch, compact = false }: SearchFiltersProps)
             <SlidersHorizontal className="h-4 w-4" />
             Filters
             {hasActiveFilters && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+              <span className="bg-primary text-primary-foreground flex h-5 w-5 items-center justify-center rounded-full text-xs">
                 {filters.amenities.length +
                   (filters.priceMin ? 1 : 0) +
                   (filters.priceMax ? 1 : 0)}
@@ -165,7 +184,7 @@ export function SearchFilters({ onSearch, compact = false }: SearchFiltersProps)
 
       {/* Expanded Filters */}
       {isExpanded && (
-        <div className="rounded-lg border bg-card p-4 space-y-4">
+        <div className="bg-card space-y-4 rounded-lg border p-4">
           {/* Price Range */}
           <div className="space-y-2">
             <Label>Price Range (per month)</Label>
@@ -201,7 +220,9 @@ export function SearchFilters({ onSearch, compact = false }: SearchFiltersProps)
               {AMENITIES.map((amenity) => (
                 <Button
                   key={amenity}
-                  variant={filters.amenities.includes(amenity) ? "default" : "outline"}
+                  variant={
+                    filters.amenities.includes(amenity) ? "default" : "outline"
+                  }
                   size="sm"
                   onClick={() => toggleAmenity(amenity)}
                 >
@@ -213,7 +234,12 @@ export function SearchFilters({ onSearch, compact = false }: SearchFiltersProps)
 
           {/* Clear Filters */}
           {hasActiveFilters && (
-            <Button variant="ghost" size="sm" onClick={clearFilters} className="gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="gap-2"
+            >
               <X className="h-4 w-4" />
               Clear all filters
             </Button>

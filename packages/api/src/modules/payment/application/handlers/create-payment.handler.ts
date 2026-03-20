@@ -1,8 +1,8 @@
-import { CreatePaymentCommand } from '../commands/create-payment.command';
-import { Payment } from '../../domain/entities/payment.entity';
-import { PaymentType } from '../../domain/value-objects/payment-type.vo';
-import { IPaymentRepository } from '../../domain/repositories/payment.repository.interface';
-import { PaymentService } from '../../domain/services/payment.service';
+import { CreatePaymentCommand } from "../commands/create-payment.command";
+import { Payment } from "../../domain/entities/payment.entity";
+import { PaymentType } from "../../domain/value-objects/payment-type.vo";
+import { IPaymentRepository } from "../../domain/repositories/payment.repository.interface";
+import { PaymentService } from "../../domain/services/payment.service";
 
 export class CreatePaymentHandler {
   constructor(
@@ -14,7 +14,7 @@ export class CreatePaymentHandler {
     // Validate payment data
     const validation = this.paymentService.validatePaymentData(command);
     if (!validation.valid) {
-      throw new Error(validation.errors.join(', '));
+      throw new Error(validation.errors.join(", "));
     }
 
     // Create payment entity

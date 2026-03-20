@@ -1,20 +1,22 @@
-import { Entity, EntityProps } from './entity';
-import { DomainEvent } from '../events/domain-event';
+import { Entity, EntityProps } from "./entity";
+import { DomainEvent } from "../events/domain-event";
 
 /**
  * Aggregate Root Base Class
- * 
+ *
  * An aggregate root is a special entity that maintains the consistency
  * of all entities and value objects within its boundary.
  * It is the entry point for all operations on the aggregate.
- * 
+ *
  * Key responsibilities:
  * - Maintain invariant consistency
  * - Collect and clear domain events
  * - Control access to child entities
  */
 
-export abstract class AggregateRoot<TProps extends EntityProps = EntityProps> extends Entity<TProps> {
+export abstract class AggregateRoot<
+  TProps extends EntityProps = EntityProps,
+> extends Entity<TProps> {
   private _domainEvents: DomainEvent[] = [];
 
   constructor(id: string, props: TProps) {

@@ -1,6 +1,6 @@
 /**
  * Entity Base Class
- * 
+ *
  * Entities are objects that have a distinct identity that runs through
  * time and different states. They are defined by their identity, not their attributes.
  */

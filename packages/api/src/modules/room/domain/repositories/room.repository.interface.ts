@@ -1,5 +1,5 @@
-import { Room } from '../entities/room.entity';
-import { RoomStatus } from '../value-objects/room-status.vo';
+import { Room } from "../entities/room.entity";
+import { RoomStatus } from "../value-objects/room-status.vo";
 
 export interface RoomFilters {
   status?: RoomStatus;

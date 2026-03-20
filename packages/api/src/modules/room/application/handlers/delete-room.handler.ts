@@ -1,5 +1,5 @@
-import { DeleteRoomCommand } from '../commands/delete-room.command';
-import { IRoomRepository } from '../../domain/repositories/room.repository.interface';
+import { DeleteRoomCommand } from "../commands/delete-room.command";
+import { IRoomRepository } from "../../domain/repositories/room.repository.interface";
 
 export class DeleteRoomHandler {
   constructor(private roomRepository: IRoomRepository) {}
@@ -13,7 +13,7 @@ export class DeleteRoomHandler {
 
     // Check if room has active boarders
     if (room.status.isOccupied()) {
-      throw new Error('Cannot delete a room with active boarders');
+      throw new Error("Cannot delete a room with active boarders");
     }
 
     // Delete room

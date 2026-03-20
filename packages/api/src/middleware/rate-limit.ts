@@ -30,7 +30,9 @@ function getRedisClient(): Redis | null {
           maxRetriesPerRequest: 3,
           retryStrategy: (times) => {
             if (times > 3) {
-              console.warn("[Rate Limit] Redis connection failed, falling back to memory");
+              console.warn(
+                "[Rate Limit] Redis connection failed, falling back to memory"
+              );
               return null; // Fall back to memory
             }
             return Math.min(times * 200, 2000);
@@ -65,9 +67,18 @@ const rateLimitStore = new Map<string, RateLimitData>();
  * @returns tRPC-compatible middleware function
  */
 export function createRateLimitMiddleware(options: RateLimitOptions) {
-  const { windowMs, maxRequests, message = "Too many requests, please try again later." } = options;
+  const {
+    windowMs,
+    maxRequests,
+    message = "Too many requests, please try again later.",
+  } = options;
 
-  return async (opts: { next: () => Promise<unknown>; ctx: TRPCContext; path: string; type: string }) => {
+  return async (opts: {
+    next: () => Promise<unknown>;
+    ctx: TRPCContext;
+    path: string;
+    type: string;
+  }) => {
     const { next, ctx, path } = opts;
 
     // Skip rate limiting in development
@@ -76,7 +87,8 @@ export function createRateLimitMiddleware(options: RateLimitOptions) {
     }
 
     // Create a unique key based on user/session and procedure
-    const identifier = ctx.session?.user?.id || ctx.session?.user?.email || "anonymous";
+    const identifier =
+      ctx.session?.user?.id || ctx.session?.user?.email || "anonymous";
     const key = `ratelimit:${identifier}:${path}`;
 
     const now = Date.now();
@@ -115,7 +127,10 @@ export function createRateLimitMiddleware(options: RateLimitOptions) {
         }
 
         // Redis error, fall back to memory
-        console.warn("[Rate Limit] Redis failed, falling back to memory:", error);
+        console.warn(
+          "[Rate Limit] Redis failed, falling back to memory:",
+          error
+        );
       }
     }
 
@@ -164,7 +179,8 @@ export const rateLimits = {
   auth: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 5, // 5 attempts per 15 minutes
-    message: "Too many authentication attempts. Please try again in 15 minutes.",
+    message:
+      "Too many authentication attempts. Please try again in 15 minutes.",
   },
 
   // Standard limits for general API calls
@@ -192,7 +208,8 @@ export const rateLimits = {
   sensitive: {
     windowMs: 60 * 60 * 1000, // 1 hour
     maxRequests: 3, // 3 operations per hour
-    message: "Too many sensitive operations. Please contact support if you need assistance.",
+    message:
+      "Too many sensitive operations. Please contact support if you need assistance.",
   },
 };
 

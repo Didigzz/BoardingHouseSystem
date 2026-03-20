@@ -46,7 +46,9 @@ export const createTRPCRouter = t.router;
 const rateLimitMiddleware = createRateLimitMiddleware(rateLimits.standard);
 const authRateLimitMiddleware = createRateLimitMiddleware(rateLimits.auth);
 const writeRateLimitMiddleware = createRateLimitMiddleware(rateLimits.write);
-const sensitiveRateLimitMiddleware = createRateLimitMiddleware(rateLimits.sensitive);
+const sensitiveRateLimitMiddleware = createRateLimitMiddleware(
+  rateLimits.sensitive
+);
 
 const timingMiddleware = t.middleware(async ({ next }) => {
   if (process.env.NODE_ENV === "development") {
@@ -63,33 +65,33 @@ const timingMiddleware = t.middleware(async ({ next }) => {
  */
 const csrfMiddleware = t.middleware(async ({ next, ctx, type }) => {
   // Skip CSRF check for queries (GET requests)
-  if (type === 'query') {
+  if (type === "query") {
     return next();
   }
 
   const headers = ctx.headers as Headers;
-  const csrfToken = headers.get('x-csrf-token');
+  const csrfToken = headers.get("x-csrf-token");
   const csrfSecret = ctx.csrfSecret; // Get secret from server-side session
 
   if (!csrfToken) {
     throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'Missing CSRF token'
+      code: "FORBIDDEN",
+      message: "Missing CSRF token",
     });
   }
 
   if (!csrfSecret) {
     throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'CSRF secret not found in session. Please refresh the page.'
+      code: "FORBIDDEN",
+      message: "CSRF secret not found in session. Please refresh the page.",
     });
   }
 
   const isValid = verifyCSRFToken(csrfSecret, csrfToken);
   if (!isValid) {
     throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'Invalid CSRF token'
+      code: "FORBIDDEN",
+      message: "Invalid CSRF token",
     });
   }
 
@@ -104,7 +106,8 @@ export const defaultAuthMiddleware = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session?.user) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
-      message: "Authentication required. Please log in to access this resource.",
+      message:
+        "Authentication required. Please log in to access this resource.",
     });
   }
 
@@ -119,7 +122,9 @@ export const defaultAuthMiddleware = t.middleware(async ({ ctx, next }) => {
 /**
  * Role-based authorization middleware factory
  */
-export const createRoleMiddleware = (requiredRole: HavenSession["user"]["role"]) => {
+export const createRoleMiddleware = (
+  requiredRole: HavenSession["user"]["role"]
+) => {
   return t.middleware(async ({ ctx, next }) => {
     if (!ctx.session?.user) {
       throw new TRPCError({
@@ -148,7 +153,9 @@ export const createRoleMiddleware = (requiredRole: HavenSession["user"]["role"])
  * Status-based authorization middleware factory
  */
 export const createStatusMiddleware = (
-  requiredStatus: HavenSession["user"]["status"] | HavenSession["user"]["status"][]
+  requiredStatus:
+    | HavenSession["user"]["status"]
+    | HavenSession["user"]["status"][]
 ) => {
   return t.middleware(async ({ ctx, next }) => {
     if (!ctx.session?.user) {
@@ -183,7 +190,7 @@ export const createStatusMiddleware = (
  */
 export const adminMiddleware = t.middleware(async (opts) => {
   const { ctx, next } = opts;
-  
+
   if (!ctx.session?.user) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
@@ -246,7 +253,7 @@ export const landlordMiddleware = t.middleware(async (opts) => {
  */
 export const boarderMiddleware = t.middleware(async (opts) => {
   const { ctx, next } = opts;
-  
+
   if (!ctx.session?.user) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
@@ -330,7 +337,9 @@ export const sensitiveProcedure = t.procedure
   .use(defaultAuthMiddleware);
 
 // Legacy exports for backward compatibility
-export const createProtectedProcedure = (authMiddleware?: typeof defaultAuthMiddleware) => {
+export const createProtectedProcedure = (
+  authMiddleware?: typeof defaultAuthMiddleware
+) => {
   return t.procedure
     .use(rateLimitMiddleware as never)
     .use(writeRateLimitMiddleware as never)
@@ -339,7 +348,9 @@ export const createProtectedProcedure = (authMiddleware?: typeof defaultAuthMidd
     .use(authMiddleware || defaultAuthMiddleware);
 };
 
-export const createAuthProcedure = (authMiddleware?: typeof defaultAuthMiddleware) => {
+export const createAuthProcedure = (
+  authMiddleware?: typeof defaultAuthMiddleware
+) => {
   return t.procedure
     .use(authRateLimitMiddleware as never)
     .use(timingMiddleware)
@@ -347,7 +358,9 @@ export const createAuthProcedure = (authMiddleware?: typeof defaultAuthMiddlewar
     .use(authMiddleware || defaultAuthMiddleware);
 };
 
-export const createSensitiveProcedure = (authMiddleware?: typeof defaultAuthMiddleware) => {
+export const createSensitiveProcedure = (
+  authMiddleware?: typeof defaultAuthMiddleware
+) => {
   return t.procedure
     .use(sensitiveRateLimitMiddleware as never)
     .use(writeRateLimitMiddleware as never)

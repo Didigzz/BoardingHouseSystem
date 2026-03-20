@@ -3,7 +3,7 @@ import { createTRPCRouter } from "../trpc";
 import {
   createUtilityReadingSchema,
   updateUtilityReadingSchema,
-  UtilityTypeEnum
+  UtilityTypeEnum,
 } from "@havenspace/validation";
 import type { ProtectedTRPCContext } from "../types/index";
 
@@ -53,24 +53,26 @@ export const createUtilityRouter = (protectedProcedure: Procedure) => {
   return createTRPCRouter({
     getAll: protectedProcedure
       .input(getAllUtilityReadingsSchema.optional())
-      .query(async ({ ctx, input }: AuthenticatedCtx<GetAllInput | undefined>) => {
-        return ctx.db.utilityReading.findMany({
-          where: {
-            type: input?.type,
-            roomId: input?.roomId,
-            readingDate: {
-              gte: input?.startDate,
-              lte: input?.endDate,
+      .query(
+        async ({ ctx, input }: AuthenticatedCtx<GetAllInput | undefined>) => {
+          return ctx.db.utilityReading.findMany({
+            where: {
+              type: input?.type,
+              roomId: input?.roomId,
+              readingDate: {
+                gte: input?.startDate,
+                lte: input?.endDate,
+              },
             },
-          },
-          include: {
-            room: {
-              select: { id: true, roomNumber: true },
+            include: {
+              room: {
+                select: { id: true, roomNumber: true },
+              },
             },
-          },
-          orderBy: { readingDate: "desc" },
-        });
-      }),
+            orderBy: { readingDate: "desc" },
+          });
+        }
+      ),
 
     getById: protectedProcedure
       .input(getUtilityReadingByIdSchema)
@@ -83,29 +85,35 @@ export const createUtilityRouter = (protectedProcedure: Procedure) => {
 
     create: protectedProcedure
       .input(createUtilityReadingSchema)
-      .mutation(async ({ ctx, input }: AuthenticatedCtx<CreateUtilityReadingInput>) => {
-        return ctx.db.utilityReading.create({
-          data: input,
-        });
-      }),
+      .mutation(
+        async ({ ctx, input }: AuthenticatedCtx<CreateUtilityReadingInput>) => {
+          return ctx.db.utilityReading.create({
+            data: input,
+          });
+        }
+      ),
 
     update: protectedProcedure
       .input(updateUtilityReadingSchema)
-      .mutation(async ({ ctx, input }: AuthenticatedCtx<UpdateUtilityReadingInput>) => {
-        const { id, ...data } = input;
-        return ctx.db.utilityReading.update({
-          where: { id },
-          data,
-        });
-      }),
+      .mutation(
+        async ({ ctx, input }: AuthenticatedCtx<UpdateUtilityReadingInput>) => {
+          const { id, ...data } = input;
+          return ctx.db.utilityReading.update({
+            where: { id },
+            data,
+          });
+        }
+      ),
 
     delete: protectedProcedure
       .input(deleteUtilityReadingSchema)
-      .mutation(async ({ ctx, input }: AuthenticatedCtx<DeleteUtilityReadingInput>) => {
-        return ctx.db.utilityReading.delete({
-          where: { id: input.id },
-        });
-      }),
+      .mutation(
+        async ({ ctx, input }: AuthenticatedCtx<DeleteUtilityReadingInput>) => {
+          return ctx.db.utilityReading.delete({
+            where: { id: input.id },
+          });
+        }
+      ),
 
     getLatestByRoom: protectedProcedure
       .input(getLatestByRoomSchema)
@@ -121,31 +129,38 @@ export const createUtilityRouter = (protectedProcedure: Procedure) => {
 
     getConsumptionSummary: protectedProcedure
       .input(getConsumptionSummarySchema)
-      .query(async ({ ctx, input }: AuthenticatedCtx<GetConsumptionSummaryInput>) => {
-        const startDate = new Date();
-        startDate.setMonth(startDate.getMonth() - input.months);
+      .query(
+        async ({
+          ctx,
+          input,
+        }: AuthenticatedCtx<GetConsumptionSummaryInput>) => {
+          const startDate = new Date();
+          startDate.setMonth(startDate.getMonth() - input.months);
 
-        const readings = await ctx.db.utilityReading.findMany({
-          where: {
-            roomId: input.roomId,
-            type: input.type,
-            readingDate: { gte: startDate },
-          },
-          include: { room: { select: { roomNumber: true } } },
-          orderBy: { readingDate: "asc" },
-        });
+          const readings = await ctx.db.utilityReading.findMany({
+            where: {
+              roomId: input.roomId,
+              type: input.type,
+              readingDate: { gte: startDate },
+            },
+            include: { room: { select: { roomNumber: true } } },
+            orderBy: { readingDate: "asc" },
+          });
 
-        return readings.map((reading) => ({
-          id: reading.id,
-          room: reading.room.roomNumber,
-          type: reading.type,
-          consumption:
-            reading.currentReading.toNumber() - reading.previousReading.toNumber(),
-          cost:
-            (reading.currentReading.toNumber() - reading.previousReading.toNumber()) *
-            reading.ratePerUnit.toNumber(),
-          date: reading.readingDate,
-        }));
-      }),
+          return readings.map((reading) => ({
+            id: reading.id,
+            room: reading.room.roomNumber,
+            type: reading.type,
+            consumption:
+              reading.currentReading.toNumber() -
+              reading.previousReading.toNumber(),
+            cost:
+              (reading.currentReading.toNumber() -
+                reading.previousReading.toNumber()) *
+              reading.ratePerUnit.toNumber(),
+            date: reading.readingDate,
+          }));
+        }
+      ),
   });
 };

@@ -11,9 +11,9 @@ export class CreateUtilityReadingHandler {
 
   async handle(command: CreateUtilityReadingCommand): Promise<UtilityReading> {
     const reading = UtilityReading.create(command);
-    
+
     this.service.validateReading(reading);
-    
+
     return this.repository.save(reading);
   }
 }

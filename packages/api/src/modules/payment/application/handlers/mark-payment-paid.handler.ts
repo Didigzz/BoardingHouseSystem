@@ -1,7 +1,7 @@
-import { MarkPaymentPaidCommand } from '../commands/mark-payment-paid.command';
-import { Payment } from '../../domain/entities/payment.entity';
-import { IPaymentRepository } from '../../domain/repositories/payment.repository.interface';
-import { PaymentService } from '../../domain/services/payment.service';
+import { MarkPaymentPaidCommand } from "../commands/mark-payment-paid.command";
+import { Payment } from "../../domain/entities/payment.entity";
+import { IPaymentRepository } from "../../domain/repositories/payment.repository.interface";
+import { PaymentService } from "../../domain/services/payment.service";
 
 export class MarkPaymentPaidHandler {
   constructor(
@@ -19,7 +19,7 @@ export class MarkPaymentPaidHandler {
     // Check if payment can be marked as paid
     const canMarkAsPaid = await this.paymentService.canMarkAsPaid(command.id);
     if (!canMarkAsPaid) {
-      throw new Error('Payment cannot be marked as paid');
+      throw new Error("Payment cannot be marked as paid");
     }
 
     // Mark as paid

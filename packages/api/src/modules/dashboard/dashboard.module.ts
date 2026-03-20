@@ -1,8 +1,8 @@
-import { AnalyticsService } from './domain/services/analytics.service';
-import { GetDashboardStatsHandler } from './application/handlers/get-dashboard-stats.handler';
-import { GetRecentActivityHandler } from './application/handlers/get-recent-activity.handler';
-import { GetUpcomingPaymentsHandler } from './application/handlers/get-upcoming-payments.handler';
-import type { PrismaClientType } from '@havenspace/database';
+import { AnalyticsService } from "./domain/services/analytics.service";
+import { GetDashboardStatsHandler } from "./application/handlers/get-dashboard-stats.handler";
+import { GetRecentActivityHandler } from "./application/handlers/get-recent-activity.handler";
+import { GetUpcomingPaymentsHandler } from "./application/handlers/get-upcoming-payments.handler";
+import type { PrismaClientType } from "@havenspace/database";
 
 export class DashboardModule {
   private static instance: DashboardModule;
@@ -31,7 +31,9 @@ export class DashboardModule {
 
   static getInstance(): DashboardModule {
     if (!DashboardModule.instance) {
-      throw new Error('DashboardModule not initialized. Call initialize() first.');
+      throw new Error(
+        "DashboardModule not initialized. Call initialize() first."
+      );
     }
     return DashboardModule.instance;
   }

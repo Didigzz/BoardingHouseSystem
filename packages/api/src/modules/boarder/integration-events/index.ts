@@ -1,1 +1,1 @@
-export { BoarderRegisteredIntegrationEvent } from './boarder-registered.integration-event';
+export { BoarderRegisteredIntegrationEvent } from "./boarder-registered.integration-event";

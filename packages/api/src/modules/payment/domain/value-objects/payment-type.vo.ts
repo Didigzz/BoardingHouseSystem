@@ -1,15 +1,17 @@
-import { ValueObject } from '../../../../shared/kernel/domain/value-object';
+import { ValueObject } from "../../../../shared/kernel/domain/value-object";
 
 /**
  * Payment Type Value Object
  */
-export class PaymentType extends ValueObject<'RENT' | 'UTILITY' | 'DEPOSIT' | 'OTHER'> {
-  public static readonly RENT = 'RENT' as const;
-  public static readonly UTILITY = 'UTILITY' as const;
-  public static readonly DEPOSIT = 'DEPOSIT' as const;
-  public static readonly OTHER = 'OTHER' as const;
+export class PaymentType extends ValueObject<
+  "RENT" | "UTILITY" | "DEPOSIT" | "OTHER"
+> {
+  public static readonly RENT = "RENT" as const;
+  public static readonly UTILITY = "UTILITY" as const;
+  public static readonly DEPOSIT = "DEPOSIT" as const;
+  public static readonly OTHER = "OTHER" as const;
 
-  private constructor(value: 'RENT' | 'UTILITY' | 'DEPOSIT' | 'OTHER') {
+  private constructor(value: "RENT" | "UTILITY" | "DEPOSIT" | "OTHER") {
     super(value);
   }
 

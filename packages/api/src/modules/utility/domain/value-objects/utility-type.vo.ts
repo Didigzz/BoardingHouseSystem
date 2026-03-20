@@ -1,7 +1,12 @@
 import { ValueObject } from "../../../../shared/kernel/domain/value-object";
 
 export class UtilityType extends ValueObject<string> {
-  private static readonly VALID_TYPES = ["ELECTRICITY", "WATER", "INTERNET", "OTHER"] as const;
+  private static readonly VALID_TYPES = [
+    "ELECTRICITY",
+    "WATER",
+    "INTERNET",
+    "OTHER",
+  ] as const;
 
   private constructor(value: string) {
     super(value);

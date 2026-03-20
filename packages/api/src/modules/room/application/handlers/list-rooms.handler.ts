@@ -1,7 +1,10 @@
-import { ListRoomsQuery } from '../queries/list-rooms.query';
-import { Room } from '../../domain/entities/room.entity';
-import { RoomStatus } from '../../domain/value-objects/room-status.vo';
-import { IRoomRepository, RoomFilters } from '../../domain/repositories/room.repository.interface';
+import { ListRoomsQuery } from "../queries/list-rooms.query";
+import { Room } from "../../domain/entities/room.entity";
+import { RoomStatus } from "../../domain/value-objects/room-status.vo";
+import {
+  IRoomRepository,
+  RoomFilters,
+} from "../../domain/repositories/room.repository.interface";
 
 export class ListRoomsHandler {
   constructor(private roomRepository: IRoomRepository) {}

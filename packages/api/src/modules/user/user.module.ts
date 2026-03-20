@@ -1,6 +1,6 @@
-import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.repository';
-import { UserService } from './domain/services/user.service';
-import type { PrismaClientType } from '@havenspace/database';
+import { PrismaUserRepository } from "./infrastructure/persistence/prisma-user.repository";
+import { UserService } from "./domain/services/user.service";
+import type { PrismaClientType } from "@havenspace/database";
 
 export class UserModule {
   private static instance: UserModule;
@@ -21,7 +21,7 @@ export class UserModule {
 
   static getInstance(): UserModule {
     if (!UserModule.instance) {
-      throw new Error('UserModule not initialized. Call initialize() first.');
+      throw new Error("UserModule not initialized. Call initialize() first.");
     }
     return UserModule.instance;
   }

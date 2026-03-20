@@ -1,10 +1,10 @@
-import { IBoarderApi } from './boarder-api.interface';
-import { BoarderModule } from '../boarder.module';
-import { Boarder } from '../domain/entities/boarder.entity';
-import { BoarderStats } from '../domain/repositories/boarder.repository.interface';
-import type { CreateBoarderCommand } from '../application/commands/create-boarder.command';
-import type { UpdateBoarderCommand } from '../application/commands/update-boarder.command';
-import type { ListBoardersQuery } from '../application/queries/list-boarders.query';
+import { IBoarderApi } from "./boarder-api.interface";
+import { BoarderModule } from "../boarder.module";
+import { Boarder } from "../domain/entities/boarder.entity";
+import { BoarderStats } from "../domain/repositories/boarder.repository.interface";
+import type { CreateBoarderCommand } from "../application/commands/create-boarder.command";
+import type { UpdateBoarderCommand } from "../application/commands/update-boarder.command";
+import type { ListBoardersQuery } from "../application/queries/list-boarders.query";
 
 export class BoarderApiFacade implements IBoarderApi {
   private static instance: BoarderApiFacade;
@@ -23,7 +23,10 @@ export class BoarderApiFacade implements IBoarderApi {
     return module.getHandlers().createBoarder.handle(data);
   }
 
-  async updateBoarder(id: string, data: Omit<UpdateBoarderCommand, 'id'>): Promise<Boarder> {
+  async updateBoarder(
+    id: string,
+    data: Omit<UpdateBoarderCommand, "id">
+  ): Promise<Boarder> {
     const module = BoarderModule.getInstance();
     return module.getHandlers().updateBoarder.handle({ id, ...data });
   }

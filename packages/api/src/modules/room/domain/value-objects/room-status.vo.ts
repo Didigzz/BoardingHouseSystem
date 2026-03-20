@@ -1,15 +1,17 @@
-import { ValueObject } from '../../../../shared/kernel/domain/value-object';
+import { ValueObject } from "../../../../shared/kernel/domain/value-object";
 
 /**
  * Room Status Value Object
  * Represents the current state of a room
  */
-export class RoomStatus extends ValueObject<'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE'> {
-  public static readonly AVAILABLE = 'AVAILABLE' as const;
-  public static readonly OCCUPIED = 'OCCUPIED' as const;
-  public static readonly MAINTENANCE = 'MAINTENANCE' as const;
+export class RoomStatus extends ValueObject<
+  "AVAILABLE" | "OCCUPIED" | "MAINTENANCE"
+> {
+  public static readonly AVAILABLE = "AVAILABLE" as const;
+  public static readonly OCCUPIED = "OCCUPIED" as const;
+  public static readonly MAINTENANCE = "MAINTENANCE" as const;
 
-  private constructor(value: 'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE') {
+  private constructor(value: "AVAILABLE" | "OCCUPIED" | "MAINTENANCE") {
     super(value);
   }
 

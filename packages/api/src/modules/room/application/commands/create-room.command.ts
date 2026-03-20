@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const CreateRoomCommandSchema = z.object({
   roomNumber: z.string().min(1, "Room number is required"),

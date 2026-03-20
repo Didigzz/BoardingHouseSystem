@@ -36,7 +36,9 @@ export class User extends Entity<UserProps> {
     super(props.id, props);
   }
 
-  static create(props: Omit<UserProps, "id" | "createdAt" | "updatedAt">): User {
+  static create(
+    props: Omit<UserProps, "id" | "createdAt" | "updatedAt">
+  ): User {
     return new User({
       ...props,
       id: crypto.randomUUID(),

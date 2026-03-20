@@ -6,4 +6,6 @@ export const GetConsumptionSummaryQuerySchema = z.object({
   months: z.number().default(6),
 });
 
-export type GetConsumptionSummaryQuery = z.infer<typeof GetConsumptionSummaryQuerySchema>;
+export type GetConsumptionSummaryQuery = z.infer<
+  typeof GetConsumptionSummaryQuerySchema
+>;

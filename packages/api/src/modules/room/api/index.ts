@@ -1,2 +1,2 @@
-export type { IRoomApi } from './room-api.interface';
-export { RoomApiFacade } from './room-api.facade';
+export type { IRoomApi } from "./room-api.interface";
+export { RoomApiFacade } from "./room-api.facade";

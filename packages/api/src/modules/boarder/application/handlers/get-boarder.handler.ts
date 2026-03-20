@@ -1,6 +1,6 @@
-import { GetBoarderQuery } from '../queries/get-boarder.query';
-import { Boarder } from '../../domain/entities/boarder.entity';
-import { IBoarderRepository } from '../../domain/repositories/boarder.repository.interface';
+import { GetBoarderQuery } from "../queries/get-boarder.query";
+import { Boarder } from "../../domain/entities/boarder.entity";
+import { IBoarderRepository } from "../../domain/repositories/boarder.repository.interface";
 
 export class GetBoarderHandler {
   constructor(private boarderRepository: IBoarderRepository) {}

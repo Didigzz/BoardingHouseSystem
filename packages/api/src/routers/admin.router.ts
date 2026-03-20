@@ -121,31 +121,33 @@ export const createAdminRouter = (
       }),
 
     // Get pending landlord approvals
-    getPendingLandlords: adminProcedure.query(async ({ ctx }: AdminCtx<void>) => {
-      return ctx.db.user.findMany({
-        where: {
-          role: "LANDLORD",
-          status: "PENDING",
-        },
-        orderBy: { createdAt: "asc" },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          phone: true,
-          createdAt: true,
-          landlordProfile: {
-            select: {
-              businessName: true,
-              businessType: true,
-              yearsExperience: true,
-              description: true,
-              applicationNotes: true,
+    getPendingLandlords: adminProcedure.query(
+      async ({ ctx }: AdminCtx<void>) => {
+        return ctx.db.user.findMany({
+          where: {
+            role: "LANDLORD",
+            status: "PENDING",
+          },
+          orderBy: { createdAt: "asc" },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            phone: true,
+            createdAt: true,
+            landlordProfile: {
+              select: {
+                businessName: true,
+                businessType: true,
+                yearsExperience: true,
+                description: true,
+                applicationNotes: true,
+              },
             },
           },
-        },
-      });
-    }),
+        });
+      }
+    ),
 
     // Approve a landlord
     approveLandlord: adminProcedure

@@ -1,13 +1,13 @@
-import { PrismaBoarderRepository } from './infrastructure/persistence/prisma-boarder.repository';
-import { BoarderService } from './domain/services/boarder.service';
-import { CreateBoarderHandler } from './application/handlers/create-boarder.handler';
-import { UpdateBoarderHandler } from './application/handlers/update-boarder.handler';
-import { DeleteBoarderHandler } from './application/handlers/delete-boarder.handler';
-import { AssignRoomHandler } from './application/handlers/assign-room.handler';
-import { GetBoarderHandler } from './application/handlers/get-boarder.handler';
-import { ListBoardersHandler } from './application/handlers/list-boarders.handler';
-import { GetBoarderStatsHandler } from './application/handlers/get-boarder-stats.handler';
-import type { PrismaClientType } from '@havenspace/database';
+import { PrismaBoarderRepository } from "./infrastructure/persistence/prisma-boarder.repository";
+import { BoarderService } from "./domain/services/boarder.service";
+import { CreateBoarderHandler } from "./application/handlers/create-boarder.handler";
+import { UpdateBoarderHandler } from "./application/handlers/update-boarder.handler";
+import { DeleteBoarderHandler } from "./application/handlers/delete-boarder.handler";
+import { AssignRoomHandler } from "./application/handlers/assign-room.handler";
+import { GetBoarderHandler } from "./application/handlers/get-boarder.handler";
+import { ListBoardersHandler } from "./application/handlers/list-boarders.handler";
+import { GetBoarderStatsHandler } from "./application/handlers/get-boarder-stats.handler";
+import type { PrismaClientType } from "@havenspace/database";
 
 export class BoarderModule {
   private static instance: BoarderModule;
@@ -46,7 +46,9 @@ export class BoarderModule {
 
   static getInstance(): BoarderModule {
     if (!BoarderModule.instance) {
-      throw new Error('BoarderModule not initialized. Call initialize() first.');
+      throw new Error(
+        "BoarderModule not initialized. Call initialize() first."
+      );
     }
     return BoarderModule.instance;
   }

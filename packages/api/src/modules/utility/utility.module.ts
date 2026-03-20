@@ -1,11 +1,11 @@
-import { PrismaUtilityRepository } from './infrastructure/persistence/prisma-utility.repository';
-import { UtilityService } from './domain/services/utility.service';
-import { CreateUtilityReadingHandler } from './application/handlers/create-utility-reading.handler';
-import { GetUtilityReadingHandler } from './application/handlers/get-utility-reading.handler';
-import { ListUtilityReadingsHandler } from './application/handlers/list-utility-readings.handler';
-import { GetLatestReadingHandler } from './application/handlers/get-latest-reading.handler';
-import { GetConsumptionSummaryHandler } from './application/handlers/get-consumption-summary.handler';
-import type { PrismaClientType } from '@havenspace/database';
+import { PrismaUtilityRepository } from "./infrastructure/persistence/prisma-utility.repository";
+import { UtilityService } from "./domain/services/utility.service";
+import { CreateUtilityReadingHandler } from "./application/handlers/create-utility-reading.handler";
+import { GetUtilityReadingHandler } from "./application/handlers/get-utility-reading.handler";
+import { ListUtilityReadingsHandler } from "./application/handlers/list-utility-readings.handler";
+import { GetLatestReadingHandler } from "./application/handlers/get-latest-reading.handler";
+import { GetConsumptionSummaryHandler } from "./application/handlers/get-consumption-summary.handler";
+import type { PrismaClientType } from "@havenspace/database";
 
 export class UtilityModule {
   private static instance: UtilityModule;
@@ -23,7 +23,10 @@ export class UtilityModule {
     this.repository = new PrismaUtilityRepository(db);
     this.service = new UtilityService(this.repository);
     this.handlers = {
-      createUtilityReading: new CreateUtilityReadingHandler(this.repository, this.service),
+      createUtilityReading: new CreateUtilityReadingHandler(
+        this.repository,
+        this.service
+      ),
       getUtilityReading: new GetUtilityReadingHandler(this.repository),
       listUtilityReadings: new ListUtilityReadingsHandler(this.repository),
       getLatestReading: new GetLatestReadingHandler(this.repository),
@@ -40,7 +43,9 @@ export class UtilityModule {
 
   static getInstance(): UtilityModule {
     if (!UtilityModule.instance) {
-      throw new Error('UtilityModule not initialized. Call initialize() first.');
+      throw new Error(
+        "UtilityModule not initialized. Call initialize() first."
+      );
     }
     return UtilityModule.instance;
   }

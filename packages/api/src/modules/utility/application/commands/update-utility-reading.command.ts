@@ -12,4 +12,6 @@ export const UpdateUtilityReadingCommandSchema = z.object({
   billingPeriodEnd: z.date().optional(),
 });
 
-export type UpdateUtilityReadingCommand = z.infer<typeof UpdateUtilityReadingCommandSchema>;
+export type UpdateUtilityReadingCommand = z.infer<
+  typeof UpdateUtilityReadingCommandSchema
+>;

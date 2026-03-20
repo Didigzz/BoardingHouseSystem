@@ -71,7 +71,10 @@ export class AnalyticsService {
     });
   }
 
-  mergeActivities(payments: PaymentRecord[], boarders: BoarderRecord[]): Activity[] {
+  mergeActivities(
+    payments: PaymentRecord[],
+    boarders: BoarderRecord[]
+  ): Activity[] {
     const activities = [
       ...payments.map((p) => ({
         id: p.id,

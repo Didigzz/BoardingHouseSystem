@@ -1,1 +1,1 @@
-export { UserAuthenticatedIntegrationEvent } from './user-authenticated.integration-event';
+export { UserAuthenticatedIntegrationEvent } from "./user-authenticated.integration-event";

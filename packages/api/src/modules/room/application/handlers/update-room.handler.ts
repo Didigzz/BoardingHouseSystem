@@ -1,8 +1,8 @@
-import { UpdateRoomCommand } from '../commands/update-room.command';
-import { Room } from '../../domain/entities/room.entity';
-import { RoomStatus } from '../../domain/value-objects/room-status.vo';
-import { IRoomRepository } from '../../domain/repositories/room.repository.interface';
-import { RoomService } from '../../domain/services/room.service';
+import { UpdateRoomCommand } from "../commands/update-room.command";
+import { Room } from "../../domain/entities/room.entity";
+import { RoomStatus } from "../../domain/value-objects/room-status.vo";
+import { IRoomRepository } from "../../domain/repositories/room.repository.interface";
+import { RoomService } from "../../domain/services/room.service";
 
 export class UpdateRoomHandler {
   constructor(
@@ -18,7 +18,12 @@ export class UpdateRoomHandler {
     }
 
     // Validate room data if provided
-    if (command.roomNumber || command.floor || command.capacity || command.monthlyRate) {
+    if (
+      command.roomNumber ||
+      command.floor ||
+      command.capacity ||
+      command.monthlyRate
+    ) {
       const validation = this.roomService.validateRoomData({
         roomNumber: command.roomNumber || room.roomNumber,
         floor: command.floor || room.floor,
@@ -26,7 +31,7 @@ export class UpdateRoomHandler {
         monthlyRate: command.monthlyRate || room.monthlyRate,
       });
       if (!validation.valid) {
-        throw new Error(validation.errors.join(', '));
+        throw new Error(validation.errors.join(", "));
       }
     }
 

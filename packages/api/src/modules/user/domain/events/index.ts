@@ -1,1 +1,1 @@
-export { UserRegisteredDomainEvent } from './user-registered.domain-event';
+export { UserRegisteredDomainEvent } from "./user-registered.domain-event";

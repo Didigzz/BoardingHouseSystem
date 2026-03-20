@@ -1,4 +1,4 @@
-import { IRoomRepository } from '../repositories/room.repository.interface';
+import { IRoomRepository } from "../repositories/room.repository.interface";
 
 /**
  * Room Domain Service
@@ -10,7 +10,10 @@ export class RoomService {
   /**
    * Check if a room can be assigned to a boarder
    */
-  async canAssignBoarder(roomId: string, currentOccupancy: number): Promise<boolean> {
+  async canAssignBoarder(
+    roomId: string,
+    currentOccupancy: number
+  ): Promise<boolean> {
     const room = await this.roomRepository.findById(roomId);
     if (!room) {
       return false;
@@ -21,8 +24,14 @@ export class RoomService {
   /**
    * Check if room number is unique
    */
-  async isRoomNumberUnique(roomNumber: string, excludeId?: string): Promise<boolean> {
-    return !(await this.roomRepository.existsByRoomNumber(roomNumber, excludeId));
+  async isRoomNumberUnique(
+    roomNumber: string,
+    excludeId?: string
+  ): Promise<boolean> {
+    return !(await this.roomRepository.existsByRoomNumber(
+      roomNumber,
+      excludeId
+    ));
   }
 
   /**
@@ -37,19 +46,19 @@ export class RoomService {
     const errors: string[] = [];
 
     if (!data.roomNumber || data.roomNumber.trim().length === 0) {
-      errors.push('Room number is required');
+      errors.push("Room number is required");
     }
 
     if (data.floor <= 0) {
-      errors.push('Floor must be a positive number');
+      errors.push("Floor must be a positive number");
     }
 
     if (data.capacity <= 0) {
-      errors.push('Capacity must be a positive number');
+      errors.push("Capacity must be a positive number");
     }
 
     if (data.monthlyRate <= 0) {
-      errors.push('Monthly rate must be a positive number');
+      errors.push("Monthly rate must be a positive number");
     }
 
     return {

@@ -5,7 +5,10 @@ export interface IUtilityRepository {
   findByRoomId(roomId: string): Promise<UtilityReading[]>;
   findByType(type: string): Promise<UtilityReading[]>;
   findByRoomAndType(roomId: string, type: string): Promise<UtilityReading[]>;
-  findLatestByRoomAndType(roomId: string, type: string): Promise<UtilityReading | null>;
+  findLatestByRoomAndType(
+    roomId: string,
+    type: string
+  ): Promise<UtilityReading | null>;
   findConsumptionSummary(
     roomId?: string,
     type?: string,

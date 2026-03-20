@@ -14,7 +14,9 @@ export class UtilityReadingRecordedDomainEvent extends DomainEvent<UtilityReadin
     super("UtilityReadingRecorded", data);
   }
 
-  static create(data: UtilityReadingRecordedEventData): UtilityReadingRecordedDomainEvent {
+  static create(
+    data: UtilityReadingRecordedEventData
+  ): UtilityReadingRecordedDomainEvent {
     return new UtilityReadingRecordedDomainEvent(data);
   }
 }

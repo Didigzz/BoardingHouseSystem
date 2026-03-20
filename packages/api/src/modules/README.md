@@ -31,24 +31,28 @@ module-name/
 ### Layers
 
 #### Domain Layer
+
 - **Pure business logic**
 - No external dependencies
 - Contains entities, value objects, domain services, and repository interfaces
 - Framework-agnostic
 
 #### Application Layer
+
 - **Use cases and orchestration**
 - Commands (write operations) and Queries (read operations)
 - Handlers that coordinate domain logic
 - No framework dependencies
 
 #### Infrastructure Layer
+
 - **External integrations**
 - Database access (Prisma implementations)
 - Event publishing
 - Can be swapped without affecting domain logic
 
 #### Presentation Layer
+
 - **API contracts**
 - oRPC routers
 - HTTP concerns only
@@ -85,17 +89,17 @@ The Room module demonstrates the complete modular monolith structure:
 
 ```typescript
 // Domain
-import { Room } from './modules/room/domain/entities/room.entity';
-import { RoomService } from './modules/room/domain/services/room.service';
+import { Room } from "./modules/room/domain/entities/room.entity";
+import { RoomService } from "./modules/room/domain/services/room.service";
 
 // Application
-import { CreateRoomHandler } from './modules/room/application/handlers/create-room.handler';
+import { CreateRoomHandler } from "./modules/room/application/handlers/create-room.handler";
 
 // Infrastructure
-import { PrismaRoomRepository } from './modules/room/infrastructure/persistence/prisma-room.repository';
+import { PrismaRoomRepository } from "./modules/room/infrastructure/persistence/prisma-room.repository";
 
 // Presentation
-import { createRoomRouter } from './modules/room/presentation/room.router';
+import { createRoomRouter } from "./modules/room/presentation/room.router";
 ```
 
 ### Next Steps

@@ -13,7 +13,7 @@ export function getRedisClient(): Redis | null {
   }
 
   const redisUrl = process.env.REDIS_URL;
-  
+
   if (!redisUrl) {
     console.warn("[Redis] REDIS_URL not configured, caching disabled");
     return null;
@@ -235,12 +235,12 @@ export function withCacheInvalidate<Args extends unknown[], Result>(
 ): (...args: Args) => Promise<Result> {
   return async (...args: Args) => {
     const result = await fn(...args);
-    
+
     // Invalidate all patterns after successful mutation
     for (const pattern of invalidatePatterns) {
       await cacheDeletePattern(pattern, options);
     }
-    
+
     return result;
   };
 }

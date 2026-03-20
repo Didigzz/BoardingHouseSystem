@@ -44,40 +44,40 @@ export const AuditActions = {
   USER_DELETED: "USER_DELETED",
   USER_SUSPENDED: "USER_SUSPENDED",
   USER_APPROVED: "USER_APPROVED",
-  
+
   // Landlord management
   LANDLORD_APPLICATION_SUBMITTED: "LANDLORD_APPLICATION_SUBMITTED",
   LANDLORD_APPLICATION_APPROVED: "LANDLORD_APPLICATION_APPROVED",
   LANDLORD_APPLICATION_REJECTED: "LANDLORD_APPLICATION_REJECTED",
   LANDLORD_SUSPENDED: "LANDLORD_SUSPENDED",
-  
+
   // Property management
   PROPERTY_CREATED: "PROPERTY_CREATED",
   PROPERTY_UPDATED: "PROPERTY_UPDATED",
   PROPERTY_DELETED: "PROPERTY_DELETED",
   PROPERTY_PUBLISHED: "PROPERTY_PUBLISHED",
   PROPERTY_UNPUBLISHED: "PROPERTY_UNPUBLISHED",
-  
+
   // Booking management
   BOOKING_CREATED: "BOOKING_CREATED",
   BOOKING_UPDATED: "BOOKING_UPDATED",
   BOOKING_CANCELLED: "BOOKING_CANCELLED",
   BOOKING_APPROVED: "BOOKING_APPROVED",
   BOOKING_REJECTED: "BOOKING_REJECTED",
-  
+
   // Payment management
   PAYMENT_CREATED: "PAYMENT_CREATED",
   PAYMENT_UPDATED: "PAYMENT_UPDATED",
   PAYMENT_DELETED: "PAYMENT_DELETED",
   PAYMENT_PROCESSED: "PAYMENT_PROCESSED",
   PAYMENT_REFUNDED: "PAYMENT_REFUNDED",
-  
+
   // Admin actions
   ADMIN_LOGIN: "ADMIN_LOGIN",
   ADMIN_LOGOUT: "ADMIN_LOGOUT",
   SETTINGS_UPDATED: "SETTINGS_UPDATED",
   DATA_EXPORTED: "DATA_EXPORTED",
-  
+
   // Security
   PASSWORD_CHANGED: "PASSWORD_CHANGED",
   PASSWORD_RESET_REQUESTED: "PASSWORD_RESET_REQUESTED",
@@ -108,12 +108,12 @@ export function createChangeLog<T extends Record<string, unknown>>(
   sensitiveFields: string[] = ["password", "access_token", "refresh_token"]
 ): Record<string, unknown> {
   const changes: Record<string, unknown> = {};
-  
+
   if (!oldData) {
     changes.created = newData;
     return changes;
   }
-  
+
   const updated: Record<string, unknown> = {};
 
   for (const key in newData) {
@@ -128,10 +128,10 @@ export function createChangeLog<T extends Record<string, unknown>>(
       };
     }
   }
-  
+
   if (Object.keys(updated).length > 0) {
     changes.updated = updated;
   }
-  
+
   return changes;
 }

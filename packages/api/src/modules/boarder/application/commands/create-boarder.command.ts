@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const CreateBoarderCommandSchema = z.object({
   firstName: z.string().min(1, "First name is required"),

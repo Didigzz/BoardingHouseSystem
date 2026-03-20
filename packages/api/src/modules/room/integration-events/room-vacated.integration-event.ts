@@ -14,7 +14,9 @@ export class RoomVacatedIntegrationEvent {
     this.data = data;
   }
 
-  static create(data: RoomVacatedIntegrationEventData): RoomVacatedIntegrationEvent {
+  static create(
+    data: RoomVacatedIntegrationEventData
+  ): RoomVacatedIntegrationEvent {
     return new RoomVacatedIntegrationEvent(data);
   }
 

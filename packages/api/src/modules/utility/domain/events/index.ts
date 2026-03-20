@@ -1,1 +1,1 @@
-export { UtilityReadingRecordedDomainEvent } from './utility-reading-recorded.domain-event';
+export { UtilityReadingRecordedDomainEvent } from "./utility-reading-recorded.domain-event";

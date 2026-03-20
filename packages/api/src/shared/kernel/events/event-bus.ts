@@ -1,4 +1,4 @@
-import { IEventBus } from '../infrastructure/messaging/event-bus.interface';
+import { IEventBus } from "../infrastructure/messaging/event-bus.interface";
 
 export class EventBus implements IEventBus {
   private static instance: EventBus;
@@ -20,20 +20,24 @@ export class EventBus implements IEventBus {
     const handlers = this.handlers.get(eventType);
 
     if (handlers) {
-      await Promise.all(
-        Array.from(handlers).map(handler => handler(event))
-      );
+      await Promise.all(Array.from(handlers).map((handler) => handler(event)));
     }
   }
 
-  public subscribe(eventType: string, handler: (event: unknown) => Promise<void>): void {
+  public subscribe(
+    eventType: string,
+    handler: (event: unknown) => Promise<void>
+  ): void {
     if (!this.handlers.has(eventType)) {
       this.handlers.set(eventType, new Set());
     }
     this.handlers.get(eventType)!.add(handler);
   }
 
-  public unsubscribe(eventType: string, handler: (event: unknown) => Promise<void>): void {
+  public unsubscribe(
+    eventType: string,
+    handler: (event: unknown) => Promise<void>
+  ): void {
     const handlers = this.handlers.get(eventType);
     if (handlers) {
       handlers.delete(handler);

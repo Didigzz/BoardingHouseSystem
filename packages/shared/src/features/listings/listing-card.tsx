@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Card, CardContent, CardFooter } from "@havenspace/ui";
+import { Card, CardContent, CardFooter } from "../../ui/components/primitives/card";
 import { MapPin, Users, Wifi, Car, Utensils, Bath, Star } from "lucide-react";
-import { Badge } from "@havenspace/ui";
-import { formatCurrency } from "../../lib/utils";
+import { Badge } from "../../ui/components/primitives/badge";
+import { formatCurrency } from "../../lib/formatters";
 
 export interface BoardingHouse {
   id: string;

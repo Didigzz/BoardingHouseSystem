@@ -25,7 +25,7 @@ import { ... } from '@havenspace/shared/kernel';
 Entities are objects with a distinct identity that persists through different states:
 
 ```typescript
-import { Entity } from '@havenspace/shared/kernel';
+import { Entity } from "@havenspace/shared/kernel";
 
 interface UserProps {
   id: string;
@@ -58,7 +58,7 @@ export class User extends Entity<UserProps> {
 Value objects are immutable objects defined by their attributes, not identity:
 
 ```typescript
-import { ValueObject } from '@havenspace/shared/kernel';
+import { ValueObject } from "@havenspace/shared/kernel";
 
 interface MoneyProps {
   amount: number;
@@ -80,7 +80,7 @@ export class Money extends ValueObject<MoneyProps> {
 
   add(other: Money): Money {
     if (this.props.currency !== other.props.currency) {
-      throw new Error('Cannot add money with different currencies');
+      throw new Error("Cannot add money with different currencies");
     }
     return new Money({
       amount: this.props.amount + other.props.amount,
@@ -144,7 +144,7 @@ export class Order extends AggregateRoot<OrderProps> {
 Domain events represent something meaningful that happened in the domain:
 
 ```typescript
-import { DomainEvent } from '@havenspace/shared/kernel';
+import { DomainEvent } from "@havenspace/shared/kernel";
 
 interface PaymentProcessedEventData {
   paymentId: string;
@@ -155,7 +155,7 @@ interface PaymentProcessedEventData {
 
 export class PaymentProcessedDomainEvent extends DomainEvent<PaymentProcessedEventData> {
   constructor(data: PaymentProcessedEventData) {
-    super('PaymentProcessed', data);
+    super("PaymentProcessed", data);
   }
 
   static create(data: PaymentProcessedEventData): PaymentProcessedDomainEvent {
@@ -190,4 +190,3 @@ kernel/
 - `@havenspace/api` - Uses kernel classes in domain modules
 - `@havenspace/database` - Persistence layer for aggregates
 - `@havenspace/validation` - Validation schemas for domain objects
-

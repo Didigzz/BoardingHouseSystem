@@ -1,6 +1,6 @@
 /**
  * Value Object Base Class
- * 
+ *
  * Value objects are immutable objects that describe characteristics or attributes.
  * They are defined by their attributes, not by an identity.
  * Two value objects are equal if all their attributes are equal.
@@ -37,18 +37,24 @@ export abstract class ValueObject<TProps = unknown> {
       return false;
     }
 
-    return this.shallowEqual(this.props as Record<string, unknown>, vo.props as Record<string, unknown>);
+    return this.shallowEqual(
+      this.props as Record<string, unknown>,
+      vo.props as Record<string, unknown>
+    );
   }
 
   /**
    * Shallow equality check for objects
    */
-  private shallowEqual(obj1: Record<string, unknown>, obj2: Record<string, unknown>): boolean {
+  private shallowEqual(
+    obj1: Record<string, unknown>,
+    obj2: Record<string, unknown>
+  ): boolean {
     if (obj1 === obj2) {
       return true;
     }
 
-    if (typeof obj1 !== 'object' || typeof obj2 !== 'object') {
+    if (typeof obj1 !== "object" || typeof obj2 !== "object") {
       return obj1 === obj2;
     }
 

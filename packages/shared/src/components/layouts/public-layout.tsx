@@ -26,12 +26,12 @@ export function PublicLayout({
     <PublicProviders theme={theme}>
       <div className="flex min-h-screen flex-col">
         {header && (
-          <header className="sticky top-0 z-30 border-b bg-background">
+          <header className="bg-background sticky top-0 z-30 border-b">
             {header}
           </header>
         )}
         <main className="flex-1">{children}</main>
-        {footer && <footer className="border-t bg-background">{footer}</footer>}
+        {footer && <footer className="bg-background border-t">{footer}</footer>}
       </div>
     </PublicProviders>
   );

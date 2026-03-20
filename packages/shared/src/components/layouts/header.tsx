@@ -13,12 +13,12 @@ export function Header({ showAuthButtons = true }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Home className="h-5 w-5 text-primary-foreground" />
+          <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
+            <Home className="text-primary-foreground h-5 w-5" />
           </div>
           <span className="text-xl font-bold">BoardingHouse</span>
         </Link>
@@ -27,20 +27,20 @@ export function Header({ showAuthButtons = true }: HeaderProps) {
         <nav className="hidden items-center space-x-6 md:flex">
           <Link
             href="/listings"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="hover:text-primary text-sm font-medium transition-colors"
           >
             Browse Listings
           </Link>
           <Link
             href="/map"
-            className="flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary"
+            className="hover:text-primary flex items-center gap-1 text-sm font-medium transition-colors"
           >
             <MapPin className="h-4 w-4" />
             Map View
           </Link>
           <Link
             href="/become-landlord"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className="hover:text-primary text-sm font-medium transition-colors"
           >
             Become a Landlord
           </Link>
@@ -80,14 +80,14 @@ export function Header({ showAuthButtons = true }: HeaderProps) {
           <nav className="container flex flex-col space-y-4 py-4">
             <Link
               href="/listings"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              className="hover:text-primary text-sm font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Browse Listings
             </Link>
             <Link
               href="/map"
-              className="flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary"
+              className="hover:text-primary flex items-center gap-1 text-sm font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               <MapPin className="h-4 w-4" />
@@ -95,13 +95,13 @@ export function Header({ showAuthButtons = true }: HeaderProps) {
             </Link>
             <Link
               href="/become-landlord"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              className="hover:text-primary text-sm font-medium transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Become a Landlord
             </Link>
             {showAuthButtons && (
-              <div className="flex items-center space-x-4 pt-4 border-t">
+              <div className="flex items-center space-x-4 border-t pt-4">
                 <Link href="/login" className="flex-1">
                   <Button variant="outline" className="w-full" size="sm">
                     Log in

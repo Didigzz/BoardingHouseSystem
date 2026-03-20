@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../../primitives/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../primitives/card";
 import { Badge } from "../../primitives/badge";
 import { Users, DoorOpen } from "lucide-react";
 import { formatCurrency } from "@havenspace/shared";
@@ -17,7 +22,11 @@ interface RoomCardProps {
   onClick?: () => void;
 }
 
-function RoomStatusBadge({ status }: { status: "AVAILABLE" | "OCCUPIED" | "MAINTENANCE" }) {
+function RoomStatusBadge({
+  status,
+}: {
+  status: "AVAILABLE" | "OCCUPIED" | "MAINTENANCE";
+}) {
   const statusConfig = {
     AVAILABLE: { label: "Available", variant: "success" as const },
     OCCUPIED: { label: "Occupied", variant: "default" as const },
@@ -29,7 +38,10 @@ function RoomStatusBadge({ status }: { status: "AVAILABLE" | "OCCUPIED" | "MAINT
 }
 
 export function RoomCard({ room, onClick }: RoomCardProps) {
-  const monthlyRate = typeof room.monthlyRate === 'number' ? room.monthlyRate : room.monthlyRate.toNumber();
+  const monthlyRate =
+    typeof room.monthlyRate === "number"
+      ? room.monthlyRate
+      : room.monthlyRate.toNumber();
 
   return (
     <Card
@@ -43,7 +55,7 @@ export function RoomCard({ room, onClick }: RoomCardProps) {
         <RoomStatusBadge status={room.status} />
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-4 text-sm">
           <div className="flex items-center gap-1">
             <DoorOpen className="h-4 w-4" />
             <span>Floor {room.floor}</span>
@@ -63,13 +75,13 @@ export function RoomCard({ room, onClick }: RoomCardProps) {
             {room.amenities.slice(0, 3).map((amenity) => (
               <span
                 key={amenity}
-                className="text-xs bg-muted px-2 py-0.5 rounded"
+                className="bg-muted rounded px-2 py-0.5 text-xs"
               >
                 {amenity}
               </span>
             ))}
             {room.amenities.length > 3 && (
-              <span className="text-xs text-muted-foreground">
+              <span className="text-muted-foreground text-xs">
                 +{room.amenities.length - 3} more
               </span>
             )}

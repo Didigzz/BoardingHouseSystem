@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../../primitives/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../primitives/card";
 import { Badge } from "../../primitives/badge";
 import { formatCurrency, formatDate } from "@havenspace/shared";
 
@@ -19,7 +24,11 @@ interface PaymentCardProps {
   onClick?: () => void;
 }
 
-function PaymentStatusBadge({ status }: { status: "PENDING" | "PAID" | "OVERDUE" | "CANCELLED" }) {
+function PaymentStatusBadge({
+  status,
+}: {
+  status: "PENDING" | "PAID" | "OVERDUE" | "CANCELLED";
+}) {
   const statusConfig = {
     PENDING: { label: "Pending", variant: "warning" as const },
     PAID: { label: "Paid", variant: "success" as const },
@@ -32,7 +41,10 @@ function PaymentStatusBadge({ status }: { status: "PENDING" | "PAID" | "OVERDUE"
 }
 
 export function PaymentCard({ payment, onClick }: PaymentCardProps) {
-  const amount = typeof payment.amount === 'number' ? payment.amount : payment.amount.toNumber();
+  const amount =
+    typeof payment.amount === "number"
+      ? payment.amount
+      : payment.amount.toNumber();
 
   return (
     <Card
@@ -51,12 +63,13 @@ export function PaymentCard({ payment, onClick }: PaymentCardProps) {
             {payment.boarder.firstName} {payment.boarder.lastName}
             {payment.boarder.room && (
               <span className="text-muted-foreground">
-                {" "}- Room {payment.boarder.room.roomNumber}
+                {" "}
+                - Room {payment.boarder.room.roomNumber}
               </span>
             )}
           </div>
         )}
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           {payment.type} • Due: {formatDate(payment.dueDate)}
         </div>
         {payment.paidDate && (

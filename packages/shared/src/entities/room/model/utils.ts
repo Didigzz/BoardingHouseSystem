@@ -1,10 +1,10 @@
-import type { Room, RoomWithBoarders, RoomStatus } from './types';
+import type { Room, RoomWithBoarders, RoomStatus } from "./types";
 
 /**
  * Check if a room is available for new boarders
  */
 export function isRoomAvailable(room: RoomWithBoarders): boolean {
-  return room.status === 'AVAILABLE' && room._count.boarders < room.capacity;
+  return room.status === "AVAILABLE" && room._count.boarders < room.capacity;
 }
 
 /**
@@ -20,11 +20,11 @@ export function getRoomOccupancyRate(room: RoomWithBoarders): number {
  */
 export function getRoomDisplayStatus(room: RoomWithBoarders): RoomStatus {
   // Auto-update status based on occupancy
-  if (room._count.boarders >= room.capacity && room.status === 'AVAILABLE') {
-    return 'OCCUPIED';
+  if (room._count.boarders >= room.capacity && room.status === "AVAILABLE") {
+    return "OCCUPIED";
   }
-  if (room._count.boarders === 0 && room.status === 'OCCUPIED') {
-    return 'AVAILABLE';
+  if (room._count.boarders === 0 && room.status === "OCCUPIED") {
+    return "AVAILABLE";
   }
   return room.status;
 }
@@ -33,8 +33,8 @@ export function getRoomDisplayStatus(room: RoomWithBoarders): RoomStatus {
  * Calculate monthly revenue potential for a room
  */
 export function getRoomMonthlyRevenue(room: Room): number {
-  return typeof room.monthlyRate === 'number' 
-    ? room.monthlyRate 
+  return typeof room.monthlyRate === "number"
+    ? room.monthlyRate
     : room.monthlyRate.toNumber();
 }
 
@@ -77,9 +77,12 @@ export function filterRooms(
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       const roomNumber = room.roomNumber.toLowerCase();
-      const description = room.description?.toLowerCase() || '';
-      
-      if (!roomNumber.includes(searchLower) && !description.includes(searchLower)) {
+      const description = room.description?.toLowerCase() || "";
+
+      if (
+        !roomNumber.includes(searchLower) &&
+        !description.includes(searchLower)
+      ) {
         return false;
       }
     }
@@ -96,11 +99,11 @@ export function sortRoomsByNumber(rooms: Room[]): Room[] {
     // Try to sort numerically if possible, otherwise alphabetically
     const aNum = parseInt(a.roomNumber);
     const bNum = parseInt(b.roomNumber);
-    
+
     if (!isNaN(aNum) && !isNaN(bNum)) {
       return aNum - bNum;
     }
-    
+
     return a.roomNumber.localeCompare(b.roomNumber);
   });
 }
@@ -109,14 +112,17 @@ export function sortRoomsByNumber(rooms: Room[]): Room[] {
  * Group rooms by floor
  */
 export function groupRoomsByFloor(rooms: Room[]): Record<number, Room[]> {
-  return rooms.reduce((groups, room) => {
-    const floorKey = room.floor;
-    if (!groups[floorKey]) {
-      groups[floorKey] = [];
-    }
-    groups[floorKey].push(room);
-    return groups;
-  }, {} as Record<number, Room[]>);
+  return rooms.reduce(
+    (groups, room) => {
+      const floorKey = room.floor;
+      if (!groups[floorKey]) {
+        groups[floorKey] = [];
+      }
+      groups[floorKey].push(room);
+      return groups;
+    },
+    {} as Record<number, Room[]>
+  );
 }
 
 /**
@@ -139,7 +145,7 @@ export function getTotalOccupied(rooms: RoomWithBoarders[]): number {
 export function getOverallOccupancyRate(rooms: RoomWithBoarders[]): number {
   const totalCapacity = getTotalCapacity(rooms);
   const totalOccupied = getTotalOccupied(rooms);
-  
+
   if (totalCapacity === 0) return 0;
   return (totalOccupied / totalCapacity) * 100;
 }

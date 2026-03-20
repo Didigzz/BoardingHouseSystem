@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Card, CardContent, CardFooter } from "../../ui/components/primitives/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+} from "../../ui/components/primitives/card";
 import { MapPin, Users, Wifi, Car, Utensils, Bath, Star } from "lucide-react";
 import { Badge } from "../../ui/components/primitives/badge";
 import { formatCurrency } from "../../lib/formatters";
@@ -45,16 +49,17 @@ export function ListingCard({ listing }: ListingCardProps) {
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           {listing.availableRooms > 0 ? (
-            <Badge className="absolute left-3 top-3 bg-green-500 hover:bg-green-600">
-              {listing.availableRooms} room{listing.availableRooms > 1 ? "s" : ""} available
+            <Badge className="absolute top-3 left-3 bg-green-500 hover:bg-green-600">
+              {listing.availableRooms} room
+              {listing.availableRooms > 1 ? "s" : ""} available
             </Badge>
           ) : (
-            <Badge variant="secondary" className="absolute left-3 top-3">
+            <Badge variant="secondary" className="absolute top-3 left-3">
               Fully Occupied
             </Badge>
           )}
           {listing.rating && (
-            <div className="absolute right-3 top-3 flex items-center gap-1 rounded-md bg-white/90 px-2 py-1 text-sm font-medium">
+            <div className="absolute top-3 right-3 flex items-center gap-1 rounded-md bg-white/90 px-2 py-1 text-sm font-medium">
               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
               {listing.rating.toFixed(1)}
             </div>
@@ -63,26 +68,26 @@ export function ListingCard({ listing }: ListingCardProps) {
 
         <CardContent className="p-4">
           {/* Title & Location */}
-          <h3 className="font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors">
+          <h3 className="group-hover:text-primary line-clamp-1 text-lg font-semibold transition-colors">
             {listing.name}
           </h3>
-          <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+          <div className="text-muted-foreground mt-1 flex items-center gap-1 text-sm">
             <MapPin className="h-4 w-4" />
             <span className="line-clamp-1">{listing.address}</span>
           </div>
 
           {/* Price */}
           <div className="mt-3">
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-primary text-2xl font-bold">
               {formatCurrency(listing.priceMin)}
             </span>
             {listing.priceMax > listing.priceMin && (
-              <span className="text-lg text-muted-foreground">
+              <span className="text-muted-foreground text-lg">
                 {" "}
                 - {formatCurrency(listing.priceMax)}
               </span>
             )}
-            <span className="text-sm text-muted-foreground"> / month</span>
+            <span className="text-muted-foreground text-sm"> / month</span>
           </div>
 
           {/* Amenities */}
@@ -90,14 +95,14 @@ export function ListingCard({ listing }: ListingCardProps) {
             {displayAmenities.map((amenity) => (
               <div
                 key={amenity}
-                className="flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-xs"
+                className="bg-muted flex items-center gap-1 rounded-full px-2.5 py-1 text-xs"
               >
                 {amenityIcons[amenity.toLowerCase()] || null}
                 <span className="capitalize">{amenity}</span>
               </div>
             ))}
             {remainingCount > 0 && (
-              <div className="flex items-center rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground">
+              <div className="bg-muted text-muted-foreground flex items-center rounded-full px-2.5 py-1 text-xs">
                 +{remainingCount} more
               </div>
             )}
@@ -105,7 +110,7 @@ export function ListingCard({ listing }: ListingCardProps) {
         </CardContent>
 
         <CardFooter className="border-t px-4 py-3">
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-1 text-sm">
             <Users className="h-4 w-4" />
             <span>{listing.totalRooms} total rooms</span>
           </div>

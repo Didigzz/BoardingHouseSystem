@@ -1,10 +1,10 @@
-export type { 
-  Payment, 
-  PaymentWithBoarder, 
-  PaymentStatus, 
-  PaymentType, 
-  PaymentFilters, 
-  PaymentStats, 
+export type {
+  Payment,
+  PaymentWithBoarder,
+  PaymentStatus,
+  PaymentType,
+  PaymentFilters,
+  PaymentStats,
   MonthlyRevenue,
-  Boarder
-} from './model';
+  Boarder,
+} from "./model";

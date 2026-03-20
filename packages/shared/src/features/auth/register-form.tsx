@@ -7,20 +7,35 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/zod";
 import { z } from "zod";
 import { Button, Input, Label } from "../../ui";
-import { Eye, EyeOff, Loader2, AlertCircle, User, Building } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  AlertCircle,
+  User,
+  Building,
+} from "lucide-react";
 import { getRedirectUrl } from "@havenspace/auth";
 
-const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Please enter a valid phone number").optional().or(z.literal("")),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string(),
-  role: z.enum(["BOARDER", "LANDLORD"], { message: "Please select an account type" }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    phone: z
+      .string()
+      .min(10, "Please enter a valid phone number")
+      .optional()
+      .or(z.literal("")),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+    role: z.enum(["BOARDER", "LANDLORD"], {
+      message: "Please select an account type",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -52,19 +67,22 @@ export function RegisterForm() {
 
     try {
       // Call the register API on the server
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006"}/api/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          phone: data.phone || undefined,
-          password: data.password,
-          role: data.role,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006"}/api/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            phone: data.phone || undefined,
+            password: data.password,
+            role: data.role,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -88,11 +106,16 @@ export function RegisterForm() {
       }
 
       // Fetch session to get user role and status
-      const sessionRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006"}/api/auth/session`);
+      const sessionRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006"}/api/auth/session`
+      );
       const session = await sessionRes.json();
 
       if (session?.user) {
-        const redirectUrl = getRedirectUrl(session.user.role, session.user.status);
+        const redirectUrl = getRedirectUrl(
+          session.user.role,
+          session.user.status
+        );
 
         // Check if redirect is to an external URL (different port)
         if (redirectUrl.startsWith("http")) {
@@ -112,7 +135,7 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {error && (
-        <div className="flex items-center gap-2 p-3 text-sm text-destructive bg-destructive/10 rounded-lg">
+        <div className="text-destructive bg-destructive/10 flex items-center gap-2 rounded-lg p-3 text-sm">
           <AlertCircle className="h-4 w-4 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -125,52 +148,65 @@ export function RegisterForm() {
           <button
             type="button"
             onClick={() => setValue("role", "BOARDER")}
-            className={`p-4 rounded-lg border-2 transition-all ${
+            className={`rounded-lg border-2 p-4 transition-all ${
               selectedRole === "BOARDER"
                 ? "border-primary bg-primary/5"
                 : "border-border hover:border-primary/50"
             }`}
           >
-            <User className={`h-6 w-6 mx-auto mb-2 ${
-              selectedRole === "BOARDER" ? "text-primary" : "text-muted-foreground"
-            }`} />
-            <p className={`text-sm font-medium ${
-              selectedRole === "BOARDER" ? "text-primary" : "text-foreground"
-            }`}>
+            <User
+              className={`mx-auto mb-2 h-6 w-6 ${
+                selectedRole === "BOARDER"
+                  ? "text-primary"
+                  : "text-muted-foreground"
+              }`}
+            />
+            <p
+              className={`text-sm font-medium ${
+                selectedRole === "BOARDER" ? "text-primary" : "text-foreground"
+              }`}
+            >
               Find a place
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-xs">
               Browse & book rooms
             </p>
           </button>
           <button
             type="button"
             onClick={() => setValue("role", "LANDLORD")}
-            className={`p-4 rounded-lg border-2 transition-all ${
+            className={`rounded-lg border-2 p-4 transition-all ${
               selectedRole === "LANDLORD"
                 ? "border-primary bg-primary/5"
                 : "border-border hover:border-primary/50"
             }`}
           >
-            <Building className={`h-6 w-6 mx-auto mb-2 ${
-              selectedRole === "LANDLORD" ? "text-primary" : "text-muted-foreground"
-            }`} />
-            <p className={`text-sm font-medium ${
-              selectedRole === "LANDLORD" ? "text-primary" : "text-foreground"
-            }`}>
+            <Building
+              className={`mx-auto mb-2 h-6 w-6 ${
+                selectedRole === "LANDLORD"
+                  ? "text-primary"
+                  : "text-muted-foreground"
+              }`}
+            />
+            <p
+              className={`text-sm font-medium ${
+                selectedRole === "LANDLORD" ? "text-primary" : "text-foreground"
+              }`}
+            >
               List property
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-xs">
               Manage your listings
             </p>
           </button>
         </div>
         {errors.role && (
-          <p className="text-sm text-destructive">{errors.role.message}</p>
+          <p className="text-destructive text-sm">{errors.role.message}</p>
         )}
         {selectedRole === "LANDLORD" && (
-          <p className="text-xs text-amber-600 bg-amber-50 p-2 rounded">
-            Note: Landlord accounts require admin approval before you can manage listings.
+          <p className="rounded bg-amber-50 p-2 text-xs text-amber-600">
+            Note: Landlord accounts require admin approval before you can manage
+            listings.
           </p>
         )}
       </div>
@@ -187,7 +223,7 @@ export function RegisterForm() {
           className={errors.name ? "border-destructive" : ""}
         />
         {errors.name && (
-          <p className="text-sm text-destructive">{errors.name.message}</p>
+          <p className="text-destructive text-sm">{errors.name.message}</p>
         )}
       </div>
 
@@ -203,7 +239,7 @@ export function RegisterForm() {
           className={errors.email ? "border-destructive" : ""}
         />
         {errors.email && (
-          <p className="text-sm text-destructive">{errors.email.message}</p>
+          <p className="text-destructive text-sm">{errors.email.message}</p>
         )}
       </div>
 
@@ -219,7 +255,7 @@ export function RegisterForm() {
           className={errors.phone ? "border-destructive" : ""}
         />
         {errors.phone && (
-          <p className="text-sm text-destructive">{errors.phone.message}</p>
+          <p className="text-destructive text-sm">{errors.phone.message}</p>
         )}
       </div>
 
@@ -238,7 +274,7 @@ export function RegisterForm() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
             tabIndex={-1}
           >
             {showPassword ? (
@@ -249,7 +285,7 @@ export function RegisterForm() {
           </button>
         </div>
         {errors.password && (
-          <p className="text-sm text-destructive">{errors.password.message}</p>
+          <p className="text-destructive text-sm">{errors.password.message}</p>
         )}
       </div>
 
@@ -263,12 +299,14 @@ export function RegisterForm() {
             autoComplete="new-password"
             disabled={isLoading}
             {...register("confirmPassword")}
-            className={errors.confirmPassword ? "border-destructive pr-10" : "pr-10"}
+            className={
+              errors.confirmPassword ? "border-destructive pr-10" : "pr-10"
+            }
           />
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
             tabIndex={-1}
           >
             {showConfirmPassword ? (
@@ -279,7 +317,9 @@ export function RegisterForm() {
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
+          <p className="text-destructive text-sm">
+            {errors.confirmPassword.message}
+          </p>
         )}
       </div>
 
@@ -294,13 +334,13 @@ export function RegisterForm() {
         )}
       </Button>
 
-      <p className="text-xs text-center text-muted-foreground">
+      <p className="text-muted-foreground text-center text-xs">
         By creating an account, you agree to our{" "}
-        <a href="#" className="underline hover:text-foreground">
+        <a href="#" className="hover:text-foreground underline">
           Terms of Service
         </a>{" "}
         and{" "}
-        <a href="#" className="underline hover:text-foreground">
+        <a href="#" className="hover:text-foreground underline">
           Privacy Policy
         </a>
       </p>

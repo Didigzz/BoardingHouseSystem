@@ -61,7 +61,13 @@
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
     "docker:build:api": "docker build -f apps/server/Dockerfile -t havenspace-api .",
-    "docker:clean": "docker system prune -f"
+    "docker:clean": "docker system prune -f",
+    "deploy:vercel": "bun scripts/deploy-vercel.ts",
+    "deploy:vercel:public": "cd apps/(public) && vercel --prod",
+    "deploy:vercel:admin": "cd apps/admin && vercel --prod",
+    "deploy:vercel:boarder": "cd apps/boarder && vercel --prod",
+    "deploy:vercel:landlord": "cd apps/landlord && vercel --prod",
+    "deploy:vercel:api": "cd apps/server && vercel --prod"
   },
   "workspaces": [
     "apps/*",

@@ -50,3 +50,5 @@ coverage
 
 # Presentation assets (allow images for haven-space-pitch.html)
 !assets/
+
+.vercel

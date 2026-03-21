@@ -28,17 +28,31 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  // For serverless environments using driver adapters
-  if (process.env.DATABASE_URL) {
+  const databaseUrl = process.env.DATABASE_URL;
+
+  // For Prisma Accelerate URLs
+  if (databaseUrl?.includes("accelerate.prisma-data.net")) {
+    return new PrismaClient({
+      datasourceUrl: databaseUrl,
+      log:
+        process.env.NODE_ENV === "development"
+          ? ["error", "warn"]
+          : ["error"],
+    });
+  }
+
+  // For serverless environments using driver adapters with standard PostgreSQL
+  if (databaseUrl) {
     try {
       // Try using pg adapter for PostgreSQL
       const { Pool } = require("pg");
-      const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+      const pool = new Pool({ connectionString: databaseUrl });
       const adapter = new PrismaPg(pool);
       return new PrismaClient({ adapter });
     } catch {
       // Fallback to direct connection for non-serverless
       return new PrismaClient({
+        datasourceUrl: databaseUrl,
         log:
           process.env.NODE_ENV === "development"
             ? ["query", "error", "warn"]

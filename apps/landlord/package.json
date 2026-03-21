@@ -12,7 +12,7 @@
   "dependencies": {
     "@havenspace/shared": "workspace:*",
     "@havenspace/validation": "workspace:*",
-    "@hookform/resolvers": "3.9.0",
+    "@hookform/resolvers": "5.2.2",
     "@orpc/client": "^1.13.4",
     "@orpc/react": "^1.13.4",
     "@orpc/react-query": "^1.13.4",

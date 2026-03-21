@@ -33,7 +33,7 @@ function createPrismaClient() {
   // For Prisma Accelerate URLs
   if (databaseUrl?.includes("accelerate.prisma-data.net")) {
     return new PrismaClient({
-      datasourceUrl: databaseUrl,
+      accelerateUrl: databaseUrl,
       log:
         process.env.NODE_ENV === "development"
           ? ["error", "warn"]
@@ -51,13 +51,10 @@ function createPrismaClient() {
       return new PrismaClient({ adapter });
     } catch {
       // Fallback to direct connection for non-serverless
-      return new PrismaClient({
-        datasourceUrl: databaseUrl,
-        log:
-          process.env.NODE_ENV === "development"
-            ? ["query", "error", "warn"]
-            : ["error"],
-      });
+      const { Pool } = require("pg");
+      const pool = new Pool({ connectionString: databaseUrl });
+      const adapter = new PrismaPg(pool);
+      return new PrismaClient({ adapter });
     }
   }
 

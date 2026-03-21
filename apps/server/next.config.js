@@ -4,9 +4,7 @@ const nextConfig = {
   transpilePackages: ["@havenspace/api", "@havenspace/shared", "@havenspace/validation", "@havenspace/auth", "@havenspace/database"],
   output: 'standalone',
   // Bun runtime optimization for Vercel deployment
-  experimental: {
-    outputFileTracingRoot: '../../',
-  },
+  outputFileTracingRoot: '../../',
   // API-only app, no pages needed
   async headers() {
     return [

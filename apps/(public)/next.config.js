@@ -15,9 +15,7 @@ const nextConfig = {
     ],
   },
   // Bun runtime optimization for Vercel deployment
-  experimental: {
-    outputFileTracingRoot: '../../',
-  },
+  outputFileTracingRoot: '../../',
 };
 
 module.exports = nextConfig;

@@ -350,7 +350,7 @@ export const createBookingRouter = (
         }
 
         // Use transaction to ensure data consistency
-        return ctx.db.$transaction(async (tx) => {
+        return ctx.db.$transaction(async (tx: typeof ctx.db) => {
           // If confirmed, increment available rooms
           if (booking.status === "CONFIRMED") {
             await tx.property.update({

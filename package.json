@@ -15,7 +15,8 @@
     "prettier-plugin-prisma": "^5.0.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "turbo": "^2.0.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vercel": "^50.34.2"
   },
   "packageManager": "bun@1.1.0",
   "private": true,
@@ -32,6 +33,8 @@
     "build:landlord": "turbo run build --filter=@havenspace/landlord",
     "build:admin": "turbo run build --filter=@havenspace/admin",
     "build:public": "turbo run build --filter=@havenspace/public",
+    "dev:bun": "turbo run dev -- --bun",
+    "build:bun": "turbo run build -- --bun",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint -- --fix",
     "typecheck": "turbo run typecheck",
@@ -67,7 +70,14 @@
     "deploy:vercel:admin": "cd apps/admin && vercel --prod",
     "deploy:vercel:boarder": "cd apps/boarder && vercel --prod",
     "deploy:vercel:landlord": "cd apps/landlord && vercel --prod",
-    "deploy:vercel:api": "cd apps/server && vercel --prod"
+    "deploy:vercel:api": "cd apps/server && vercel --prod",
+    "vercel:build": "vercel build",
+    "vercel:build:prod": "vercel build --prod",
+    "vercel:build:public": "cd apps/(public) && vercel build",
+    "vercel:build:admin": "cd apps/admin && vercel build",
+    "vercel:build:boarder": "cd apps/boarder && vercel build",
+    "vercel:build:landlord": "cd apps/landlord && vercel build",
+    "vercel:build:api": "cd apps/server && vercel build"
   },
   "workspaces": [
     "apps/*",

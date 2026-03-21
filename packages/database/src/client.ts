@@ -43,32 +43,40 @@ function createPrismaClient() {
 
   // For serverless environments using driver adapters with standard PostgreSQL
   if (databaseUrl) {
-    try {
-      // Try using pg adapter for PostgreSQL
-      const { Pool } = require("pg");
-      const pool = new Pool({ connectionString: databaseUrl });
-      const adapter = new PrismaPg(pool);
-      return new PrismaClient({ adapter });
-    } catch {
-      // Fallback to direct connection for non-serverless
-      const { Pool } = require("pg");
-      const pool = new Pool({ connectionString: databaseUrl });
-      const adapter = new PrismaPg(pool);
-      return new PrismaClient({ adapter });
-    }
+    const { Pool } = require("pg");
+    const pool = new Pool({ connectionString: databaseUrl });
+    const adapter = new PrismaPg(pool);
+    return new PrismaClient({ adapter });
   }
 
-  return new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
-  });
+  // No database URL available
+  throw new Error(
+    "DATABASE_URL environment variable is not set. " +
+      "Please ensure DATABASE_URL is configured in your environment."
+  );
 }
 
-export const db = globalForPrisma.prisma ?? createPrismaClient();
+// Lazy initialization - PrismaClient is only created when first accessed
+function getPrismaClient() {
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = createPrismaClient();
+  }
+  return globalForPrisma.prisma;
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+// Create a proxy that lazily initializes the PrismaClient on first access
+// This allows the module to be imported at build time without requiring DATABASE_URL
+export const db = new Proxy({} as PrismaClient, {
+  get(target, prop) {
+    const client = getPrismaClient();
+    return (client as any)[prop];
+  },
+});
+
+// Keep the hot-reload for development
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = getPrismaClient();
+}
 
 // Re-export Prisma types
 export type {
